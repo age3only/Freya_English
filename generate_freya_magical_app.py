@@ -87,21 +87,30 @@ html_code = """<!DOCTYPE html>
   /* ---------- TOP BAR ---------- */
   .topbar{
     display:flex; align-items:center; justify-content:space-between;
-    margin-bottom:14px;
+    margin-bottom:14px; gap:8px;
   }
   .topbar .stars{
-    background:#FFFFFF; border-radius:999px; padding:7px 18px;
-    font-weight:800; font-size:15px;
+    background:#FFFFFF; border-radius:999px; padding:7px 16px;
+    font-weight:800; font-size:14.5px;
     border:2.5px solid var(--pink-soft);
     box-shadow:0 4px 12px rgba(231, 84, 128, 0.15);
     display:flex; align-items:center; gap:6px; color:var(--pink-dark);
   }
   .name-badge{
     background:linear-gradient(135deg, #FFB6C1, #FF69B4);
-    color:#fff; padding:6px 16px; border-radius:999px; font-weight:800;
+    color:#fff; padding:6px 14px; border-radius:999px; font-weight:800;
     font-size:13px; letter-spacing:0.5px; box-shadow:0 3px 8px rgba(255, 105, 180, 0.35);
     display:flex; align-items:center; gap:5px;
   }
+  .voice-btn{
+    background:#FFFFFF; border-radius:999px; padding:6px 14px;
+    font-weight:800; font-size:13px; border:2.5px solid var(--pink-soft);
+    box-shadow:0 3px 8px rgba(231, 84, 128, 0.15);
+    display:flex; align-items:center; gap:5px; color:var(--pink-dark);
+    transition:transform .12s ease;
+  }
+  .voice-btn:active{ transform:scale(0.96); }
+
   .backbtn{
     background:#FFFFFF; width:44px; height:44px; border-radius:50%;
     font-size:22px; border:2.5px solid var(--pink-soft);
@@ -259,7 +268,7 @@ html_code = """<!DOCTYPE html>
     font-size:12px; font-weight:900; text-transform:uppercase; letter-spacing:0.5px;
     margin-bottom:5px; display:flex; align-items:center; justify-content:space-between;
   }
-  .speaker-sound-icon{ font-size:14px; background:rgba(255,255,255,0.7); padding:2px 8px; border-radius:999px; }
+  .speaker-sound-icon{ font-size:13px; background:rgba(255,255,255,0.75); padding:2px 8px; border-radius:999px; font-weight:800; }
   .bubble.speaker-a{
     background:#F5EEFD; color:#5B2C6F; border-bottom-left-radius:6px;
     border:2px solid #E4D0FC;
@@ -371,6 +380,50 @@ html_code = """<!DOCTYPE html>
   }
   .result-buttons{ display:flex; flex-direction:column; gap:13px; margin-top:22px; }
 
+  /* ---------- VOICE SETTINGS MODAL ---------- */
+  .modal-overlay{
+    position:fixed; inset:0; background:rgba(43, 34, 80, 0.55);
+    backdrop-filter:blur(5px); -webkit-backdrop-filter:blur(5px);
+    z-index:100; display:flex; align-items:center; justify-content:center;
+    padding:20px 16px; animation:fadeIn .2s ease;
+  }
+  @keyframes fadeIn{ from{opacity:0;} to{opacity:1;} }
+  .modal-card{
+    background:#FFFFFF; border-radius:30px; padding:24px 22px; max-width:440px; width:100%;
+    border:3px solid #FFCCD9; box-shadow:0 15px 35px rgba(255, 105, 180, 0.3);
+    text-align:left; animation:scaleUp .25s ease;
+  }
+  @keyframes scaleUp{ from{transform:scale(0.92); opacity:0;} to{transform:scale(1); opacity:1;} }
+  .modal-header{
+    display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;
+  }
+  .modal-title{ font-family:'Baloo 2',sans-serif; font-size:22px; font-weight:800; color:var(--plum); margin:0; }
+  .modal-close{
+    background:#FFF0F5; border-radius:50%; width:38px; height:38px; font-size:20px;
+    display:flex; align-items:center; justify-content:center; color:var(--pink-dark); font-weight:900;
+  }
+  .setting-group{ margin-bottom:16px; }
+  .setting-label{ display:block; font-weight:900; font-size:13.5px; color:var(--plum); margin-bottom:6px; }
+  .setting-select{
+    width:100%; padding:12px 14px; border-radius:14px; border:2px solid #FFCCD9;
+    font-family:'Quicksand',sans-serif; font-size:14px; font-weight:800;
+    color:var(--plum); background:#FFF8FA; outline:none;
+  }
+  .setting-slider-row{ display:flex; align-items:center; gap:12px; }
+  .setting-slider{ flex:1; accent-color:var(--pink-bright); }
+  .setting-val{ font-weight:800; font-size:13px; color:var(--pink-dark); min-width:48px; text-align:right; }
+  .modal-actions{ display:flex; gap:10px; margin-top:20px; }
+  .btn-test{
+    flex:1; background:linear-gradient(135deg, #FFE66D, #FFB800); color:#5A3E00;
+    padding:13px; border-radius:16px; font-weight:900; font-size:14.5px;
+    box-shadow:0 4px 0 #D48800; text-align:center;
+  }
+  .btn-save{
+    flex:1; background:linear-gradient(135deg, #FF7597, #FF4D79); color:#fff;
+    padding:13px; border-radius:16px; font-weight:900; font-size:14.5px;
+    box-shadow:0 4px 0 #D81B60; text-align:center;
+  }
+
   /* ---------- CONFETTI ---------- */
   .confetti{ position:fixed; inset:0; pointer-events:none; z-index:50; overflow:hidden; }
   .confetti span{ position:absolute; top:-20px; font-size:26px; animation:fall linear forwards; }
@@ -398,7 +451,10 @@ html_code = """<!DOCTYPE html>
 <section class="screen" id="screen-home">
   <div class="topbar">
     <div class="name-badge">👑 Freya Shyam</div>
-    <div class="stars">⭐ <span id="totalStars">0</span> / <span id="maxStars">0</span> Bintang</div>
+    <div style="display:flex; gap:8px;">
+      <button class="voice-btn" onclick="openVoiceModal()" title="Pilih Suara (Voice Settings)">🎙️ Suara</button>
+      <div class="stars">⭐ <span id="totalStars">0</span> / <span id="maxStars">0</span></div>
+    </div>
   </div>
 
   <div class="hero">
@@ -416,7 +472,7 @@ html_code = """<!DOCTYPE html>
   <!-- iPad sound tip -->
   <div class="sound-tip">
     <span>🔊</span>
-    <span><strong>Tips iPad:</strong> Jika suara tidak bunyi, pastikan iPad tidak dalam <em>Mode Hening (Silent Mode)</em> dan naikkan volume ya! ✨</span>
+    <span><strong>Tips Suara:</strong> Pastikan iPad tidak dalam <em>Mode Hening (Silent Mode)</em> dan naikkan volume ya! Sentuh tombol <strong>🎙️ Suara</strong> di atas untuk ganti suara. ✨</span>
   </div>
 
   <div class="chapter-list" id="chaptersList"></div>
@@ -429,7 +485,10 @@ html_code = """<!DOCTYPE html>
   <div class="topbar">
     <button class="backbtn" onclick="goHome()">←</button>
     <div class="name-badge">🦄 Freya's Island</div>
-    <div class="stars">⭐ <span id="stationStars">0</span> / 3</div>
+    <div style="display:flex; gap:8px;">
+      <button class="voice-btn" onclick="openVoiceModal()">🎙️ Suara</button>
+      <div class="stars">⭐ <span id="stationStars">0</span> / 3</div>
+    </div>
   </div>
 
   <div class="station-header">
@@ -461,7 +520,10 @@ html_code = """<!DOCTYPE html>
   <div class="topbar">
     <button class="backbtn" onclick="showStation()">←</button>
     <div class="progress-info" id="learnProgressText">Kartu 1 dari 10 🌸</div>
-    <button class="backbtn" onclick="speakCurrentDialogue()" title="Dengarkan Suara">🔊</button>
+    <div style="display:flex; gap:6px;">
+      <button class="voice-btn" onclick="openVoiceModal()">🎙️</button>
+      <button class="backbtn" onclick="speakCurrentDialogue()" title="Dengarkan Suara">🔊</button>
+    </div>
   </div>
 
   <div class="card-wrap">
@@ -476,7 +538,7 @@ html_code = """<!DOCTYPE html>
       <div class="bubble speaker-a" onclick="speakSpeakerA()">
         <div class="bubble-speaker">
           <span>🦄 Teman Unicorn (Speaker A)</span>
-          <span class="speaker-sound-icon">🔊 Ketuk</span>
+          <span class="speaker-sound-icon">🔊 Ketuk Suara</span>
         </div>
         <div class="en-text" id="cardTextAEn">Hello!</div>
         <div class="id-text" id="cardTextAId">🇮🇩 Halo!</div>
@@ -486,7 +548,7 @@ html_code = """<!DOCTYPE html>
       <div class="bubble speaker-b" onclick="speakSpeakerB()">
         <div class="bubble-speaker">
           <span>🐱 Putri Freya (Speaker B)</span>
-          <span class="speaker-sound-icon">🔊 Ketuk</span>
+          <span class="speaker-sound-icon">🔊 Ketuk Suara</span>
         </div>
         <div class="en-text" id="cardTextBEn">Hi there!</div>
         <div class="id-text" id="cardTextBId">🇮🇩 Halo juga!</div>
@@ -545,16 +607,61 @@ html_code = """<!DOCTYPE html>
   </div>
 </section>
 
+<!-- ===================== VOICE SETTINGS MODAL ===================== -->
+<div class="modal-overlay hidden" id="voiceModal" onclick="closeVoiceModalOnOutside(event)">
+  <div class="modal-card">
+    <div class="modal-header">
+      <h3 class="modal-title">🎙️ Pilihan Suara (Voice) ✨</h3>
+      <button class="modal-close" onclick="closeVoiceModal()">✕</button>
+    </div>
+
+    <!-- Voice Picker -->
+    <div class="setting-group">
+      <label class="setting-label" for="voiceSelect">Pilih Suara Bahasa Inggris:</label>
+      <select class="setting-select" id="voiceSelect" onchange="onVoiceSelected()"></select>
+    </div>
+
+    <!-- Speed / Rate Slider -->
+    <div class="setting-group">
+      <label class="setting-label">Kecepatan Bicara (Speed):</label>
+      <div class="setting-slider-row">
+        <span>🐢 Pelan</span>
+        <input type="range" class="setting-slider" id="speedSlider" min="0.6" max="1.2" step="0.05" value="0.88" oninput="onSpeedChange()">
+        <span>🐰 Cepat</span>
+        <span class="setting-val" id="speedVal">0.88x</span>
+      </div>
+    </div>
+
+    <!-- Pitch Slider -->
+    <div class="setting-group">
+      <label class="setting-label">Tinggi Nada (Pitch):</label>
+      <div class="setting-slider-row">
+        <span>Deep</span>
+        <input type="range" class="setting-slider" id="pitchSlider" min="0.8" max="1.4" step="0.05" value="1.1" oninput="onPitchChange()">
+        <span>Cute 🌸</span>
+        <span class="setting-val" id="pitchVal">1.1x</span>
+      </div>
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn-test" onclick="testCurrentVoice()">🔊 Coba Suara</button>
+      <button class="btn-save" onclick="saveAndCloseVoiceModal()">Simpan 💖</button>
+    </div>
+  </div>
+</div>
+
 <script>
 /* =========================================================
    IOS / IPADOS AUDIO & SPEECH FIXES
-   - Global memory retention (prevents iOS garbage collection bug)
-   - AudioContext unlocking on touch
-   - Speech synthesis queue unfreezing
    ========================================================= */
 window._activeUtterances = [];
 let audioCtx = null;
 let audioUnlocked = false;
+
+// Saved user preferences
+let currentVoiceURI = localStorage.getItem('freya_voice_uri') || '';
+let voiceSpeed = parseFloat(localStorage.getItem('freya_voice_speed')) || 0.88;
+let voicePitch = parseFloat(localStorage.getItem('freya_voice_pitch')) || 1.1;
 
 function getAudioContext(){
   if(!audioCtx){
@@ -648,21 +755,132 @@ function playMagicalSound(type){
 }
 
 /* =========================================================
-   ROBUST TEXT TO SPEECH (Tested for iOS & Safari)
+   VOICE LIST POPULATION & SELECTION
    ========================================================= */
-function findEnglishVoice(){
-  if(!('speechSynthesis' in window)) return null;
-  const voices = window.speechSynthesis.getVoices() || [];
-  return voices.find(v => v.lang === 'en-US' || v.lang === 'en_US') ||
-         voices.find(v => v.lang && v.lang.startsWith('en')) || null;
+let cachedVoices = [];
+
+function getAvailableEnglishVoices(){
+  if(!('speechSynthesis' in window)) return [];
+  const all = window.speechSynthesis.getVoices() || [];
+  return all.filter(v => v.lang && v.lang.toLowerCase().startsWith('en'));
 }
 
-// Warm up voices when available
+function populateVoiceSelect(){
+  if(!('speechSynthesis' in window)) return;
+  cachedVoices = getAvailableEnglishVoices();
+  const select = document.getElementById('voiceSelect');
+  if(!select) return;
+
+  select.innerHTML = '';
+  if(cachedVoices.length === 0){
+    select.innerHTML = '<option value="">🌸 Suara Bawaan Sistem (Default)</option>';
+    return;
+  }
+
+  // Group or display voices nicely
+  cachedVoices.forEach(v => {
+    const opt = document.createElement('option');
+    opt.value = v.voiceURI;
+    
+    // Friendly voice names (e.g. Samantha - US, Daniel - UK)
+    let displayName = v.name;
+    if(v.lang){
+      displayName += ` (${v.lang})`;
+    }
+    opt.textContent = displayName;
+
+    if(currentVoiceURI && v.voiceURI === currentVoiceURI){
+      opt.selected = true;
+    }
+    select.appendChild(opt);
+  });
+
+  // If no voice currently selected, pick first or natural voice
+  if(!currentVoiceURI && cachedVoices.length > 0){
+    const natural = cachedVoices.find(v => v.name.includes('Samantha') || v.name.includes('Natural') || v.name.includes('Siri')) || cachedVoices[0];
+    currentVoiceURI = natural.voiceURI;
+    select.value = natural.voiceURI;
+  }
+}
+
 if('speechSynthesis' in window){
-  window.speechSynthesis.onvoiceschanged = () => { findEnglishVoice(); };
+  window.speechSynthesis.onvoiceschanged = () => {
+    populateVoiceSelect();
+  };
 }
 
-function speakSingle(text, pitch = 1.1, rate = 0.88, onEnd = null){
+function getActiveVoice(){
+  if(!cachedVoices.length) cachedVoices = getAvailableEnglishVoices();
+  if(currentVoiceURI){
+    const found = cachedVoices.find(v => v.voiceURI === currentVoiceURI);
+    if(found) return found;
+  }
+  return cachedVoices.find(v => v.lang === 'en-US' || v.lang === 'en_US') || cachedVoices[0] || null;
+}
+
+/* Voice Settings Modal Controls */
+function openVoiceModal(){
+  playMagicalSound('pop');
+  populateVoiceSelect();
+  document.getElementById('speedSlider').value = voiceSpeed;
+  document.getElementById('speedVal').textContent = voiceSpeed.toFixed(2) + 'x';
+  document.getElementById('pitchSlider').value = voicePitch;
+  document.getElementById('pitchVal').textContent = voicePitch.toFixed(2) + 'x';
+
+  document.getElementById('voiceModal').classList.remove('hidden');
+}
+
+function closeVoiceModal(){
+  playMagicalSound('pop');
+  document.getElementById('voiceModal').classList.add('hidden');
+}
+
+function closeVoiceModalOnOutside(e){
+  if(e.target.id === 'voiceModal'){
+    closeVoiceModal();
+  }
+}
+
+function onVoiceSelected(){
+  const select = document.getElementById('voiceSelect');
+  currentVoiceURI = select.value;
+  localStorage.setItem('freya_voice_uri', currentVoiceURI);
+}
+
+function onSpeedChange(){
+  const slider = document.getElementById('speedSlider');
+  voiceSpeed = parseFloat(slider.value);
+  document.getElementById('speedVal').textContent = voiceSpeed.toFixed(2) + 'x';
+  localStorage.setItem('freya_voice_speed', voiceSpeed);
+}
+
+function onPitchChange(){
+  const slider = document.getElementById('pitchSlider');
+  voicePitch = parseFloat(slider.value);
+  document.getElementById('pitchVal').textContent = voicePitch.toFixed(2) + 'x';
+  localStorage.setItem('freya_voice_pitch', voicePitch);
+}
+
+function testCurrentVoice(){
+  playMagicalSound('pop');
+  onVoiceSelected();
+  onSpeedChange();
+  onPitchChange();
+  speakSingle("Hello Freya! How are you doing today?", voicePitch, voiceSpeed);
+}
+
+function saveAndCloseVoiceModal(){
+  onVoiceSelected();
+  onSpeedChange();
+  onPitchChange();
+  playMagicalSound('sparkle');
+  closeVoiceModal();
+}
+
+/* =========================================================
+   TEXT TO SPEECH FUNCTIONS
+   ========================================================= */
+function speakSingle(text, pitch = null, rate = null, onEnd = null){
   try{
     if(!('speechSynthesis' in window)) return;
     unlockAudioOnIOS();
@@ -670,16 +888,19 @@ function speakSingle(text, pitch = 1.1, rate = 0.88, onEnd = null){
     window.speechSynthesis.resume();
     window.speechSynthesis.cancel();
 
+    const effPitch = (pitch !== null) ? pitch : voicePitch;
+    const effRate = (rate !== null) ? rate : voiceSpeed;
+
     setTimeout(() => {
       const u = new SpeechSynthesisUtterance(text);
       u.lang = 'en-US';
-      u.rate = rate;
-      u.pitch = pitch;
+      u.rate = effRate;
+      u.pitch = effPitch;
 
-      const voice = findEnglishVoice();
+      const voice = getActiveVoice();
       if(voice) u.voice = voice;
 
-      // Keep reference to prevent iOS garbage collection
+      // Keep reference in global array to prevent iOS garbage collection
       window._activeUtterances = [u];
 
       u.onend = () => {
@@ -706,21 +927,21 @@ function speakDialoguePair(textA, textB){
     setTimeout(() => {
       const uA = new SpeechSynthesisUtterance(textA);
       uA.lang = 'en-US';
-      uA.rate = 0.86;
-      uA.pitch = 1.25; // Unicorn pitch
+      uA.rate = voiceSpeed;
+      uA.pitch = Math.min(2.0, voicePitch * 1.15); // Slightly higher for Unicorn
 
       const uB = new SpeechSynthesisUtterance(textB);
       uB.lang = 'en-US';
-      uB.rate = 0.86;
-      uB.pitch = 1.05; // Freya reply pitch
+      uB.rate = voiceSpeed;
+      uB.pitch = Math.max(0.6, voicePitch * 0.95); // Natural reply for Freya
 
-      const voice = findEnglishVoice();
+      const voice = getActiveVoice();
       if(voice){
         uA.voice = voice;
         uB.voice = voice;
       }
 
-      // Retain both utterances in memory
+      // Retain both in memory
       window._activeUtterances = [uA, uB];
 
       uB.onend = () => { window._activeUtterances = []; };
@@ -744,14 +965,14 @@ function speakSpeakerA(){
   const card = activeCards[learnIndex];
   if(!card) return;
   playMagicalSound('pop');
-  speakSingle(card.q, 1.25, 0.86);
+  speakSingle(card.q, voicePitch * 1.15, voiceSpeed);
 }
 
 function speakSpeakerB(){
   const card = activeCards[learnIndex];
   if(!card) return;
   playMagicalSound('pop');
-  speakSingle(card.a, 1.05, 0.86);
+  speakSingle(card.a, voicePitch * 0.95, voiceSpeed);
 }
 
 function speakQuizQuestion(){
@@ -759,7 +980,7 @@ function speakQuizQuestion(){
   const q = quizState.questions[quizState.index];
   if(q && q.speakText){
     playMagicalSound('pop');
-    speakSingle(q.speakText, 1.15, 0.88);
+    speakSingle(q.speakText, voicePitch, voiceSpeed);
   }
 }
 
@@ -1065,7 +1286,7 @@ function renderQuizQuestion(){
     optContainer.appendChild(btn);
   });
 
-  if(q.speakText) speakSingle(q.speakText, 1.15, 0.88);
+  if(q.speakText) speakSingle(q.speakText, voicePitch, voiceSpeed);
 }
 
 function answerQuiz(btn, selectedText, q){
@@ -1079,7 +1300,7 @@ function answerQuiz(btn, selectedText, q){
     fb.textContent = 'Hebat Sekali Freya! Betul 100%! 🎉✨';
     fb.className = 'feedback good';
     quizState.correctCount++;
-    speakSingle(q.speakText || q.correct, 1.15, 0.88);
+    speakSingle(q.speakText || q.correct, voicePitch, voiceSpeed);
   } else {
     playMagicalSound('wrong');
     btn.classList.add('wrong');
@@ -1089,7 +1310,7 @@ function answerQuiz(btn, selectedText, q){
     fb.textContent = 'Hampir tepat! Jawaban yang benar ditandai ya, Freya! 💪🌸';
     fb.className = 'feedback bad';
     quizState.lives--;
-    speakSingle(q.speakText || q.correct, 1.05, 0.88);
+    speakSingle(q.speakText || q.correct, voicePitch * 0.95, voiceSpeed);
   }
 
   setTimeout(() => {
@@ -1170,6 +1391,7 @@ function launchConfetti(){
    INIT
    ========================================================= */
 renderHome();
+populateVoiceSelect();
 show('screen-home');
 </script>
 </body>
@@ -1182,4 +1404,4 @@ with open("Freya_Shyam_English.html", "w", encoding="utf-8") as f:
 with open("index.html", "w", encoding="utf-8") as f:
     f.write(html_code)
 
-print("Updated with complete iOS/iPad sound & speech synthesis fixes!")
+print("Added Voice Settings modal, speed & pitch sliders, and voice test successfully!")
