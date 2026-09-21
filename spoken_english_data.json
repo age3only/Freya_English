@@ -1,0 +1,1670 @@
+[
+  {
+    "id": "ch1",
+    "number": 1,
+    "title": "Good Manners",
+    "sub": "Greetings, Politeness & Social Etiquette",
+    "badge": "🤝",
+    "color": "#3FBF7F",
+    "topics": [
+      {
+        "title": "How to greet people",
+        "items": [
+          {
+            "q": "Good morning! How are you?",
+            "a": "I’m fine, thanks. How are you?",
+            "note": "formal",
+            "emoji": "☀️"
+          },
+          {
+            "q": "Hello! How are you doing?",
+            "a": "Fine, just fine. How are you?",
+            "note": "informal",
+            "emoji": "👋"
+          },
+          {
+            "q": "Hi, how is it going?",
+            "a": "Pretty good. How about you?",
+            "note": "informal",
+            "emoji": "😊"
+          },
+          {
+            "q": "Hi, what’s up?",
+            "a": "Not much. What about you?",
+            "note": "informal",
+            "emoji": "✌️"
+          },
+          {
+            "q": "What have you been up to?",
+            "a": "The same as usual.",
+            "note": "informal",
+            "emoji": "🤷"
+          }
+        ]
+      },
+      {
+        "title": "How to thank people",
+        "items": [
+          {
+            "q": "Thank you for looking after my son.",
+            "a": "You’re very welcome.",
+            "emoji": "💐"
+          },
+          {
+            "q": "Thanks for your help.",
+            "a": "No problem.",
+            "emoji": "🙌"
+          },
+          {
+            "q": "Thank you for carrying my bag.",
+            "a": "Don’t mention it.",
+            "emoji": "🎒"
+          },
+          {
+            "q": "That’s very kind of you but you really shouldn’t have gone to all this trouble.",
+            "a": "I was happy to help.",
+            "note": "you shouldn't have gone to all this trouble = standard phrase to someone who worked hard for you",
+            "emoji": "💖"
+          }
+        ]
+      },
+      {
+        "title": "How to say sorry",
+        "items": [
+          {
+            "q": "Sorry to have kept you waiting.",
+            "a": "That’s ok.",
+            "emoji": "⏳"
+          },
+          {
+            "q": "Sorry I’m late.",
+            "a": "No problem. I’ve only just got here myself.",
+            "emoji": "⏰"
+          },
+          {
+            "q": "I’m sorry about reading your messages.",
+            "a": "Don’t let it happen again.",
+            "note": "don’t let it happen again = I hope you won't do this again",
+            "emoji": "📵"
+          }
+        ]
+      },
+      {
+        "title": "How to ask people to do something for you",
+        "items": [
+          {
+            "q": "Could you open the window, please?",
+            "a": "Sure.",
+            "emoji": "🪟"
+          },
+          {
+            "q": "Could you make me a cup of tea, please?",
+            "a": "Yes, of course.",
+            "emoji": "☕"
+          },
+          {
+            "q": "Could you give me his phone number, please?",
+            "a": "I’m sorry but I don’t know his number.",
+            "emoji": "📱"
+          },
+          {
+            "q": "Could you look after my son tonight?",
+            "a": "I’m afraid I can’t. I’m working an evening shift today.",
+            "note": "shift work = the time period during which you are at work",
+            "emoji": "🌙"
+          },
+          {
+            "q": "Do you mind moving your seat so that I and my friend could sit together?",
+            "a": "No, of course not. (positive answer)",
+            "emoji": "💺"
+          },
+          {
+            "q": "Do you mind lending me some money?",
+            "a": "I’m sorry, I’m broke.",
+            "note": "to be broke = to have no money",
+            "emoji": "💸"
+          }
+        ]
+      },
+      {
+        "title": "How to offer people help",
+        "items": [
+          {
+            "q": "My flight arrives at 7 am.",
+            "a": "Would you like me to meet you at the airport?",
+            "emoji": "✈️"
+          },
+          {
+            "q": "My car is broken, so I came to work by underground today.",
+            "a": "Do you want me to give you a lift home?",
+            "note": "to give a lift = to take someone somewhere in your car",
+            "emoji": "🚗"
+          },
+          {
+            "q": "The suitcase is so heavy.",
+            "a": "Let me carry it for you!",
+            "emoji": "🧳"
+          },
+          {
+            "q": "What do these statistics mean?",
+            "a": "Let me explain.",
+            "emoji": "📊"
+          }
+        ]
+      },
+      {
+        "title": "How to ask for permission to do something",
+        "items": [
+          {
+            "q": "Can I switch the TV on?",
+            "a": "Sure, go ahead.",
+            "emoji": "📺"
+          },
+          {
+            "q": "Can I read this e-mail?",
+            "a": "No, I’m afraid not.",
+            "emoji": "📧"
+          },
+          {
+            "q": "Do you mind if I sit here?",
+            "a": "No, of course not.",
+            "emoji": "🪑"
+          },
+          {
+            "q": "Do you mind if I borrow your car tomorrow?",
+            "a": "Yes, I’m afraid I do.",
+            "note": "to borrow = use another's item and return it later",
+            "emoji": "🚙"
+          }
+        ]
+      },
+      {
+        "title": "How to suggest somebody an idea",
+        "items": [
+          {
+            "q": "It’s hot in here.",
+            "a": "Let’s open the window. — Okay.",
+            "emoji": "☀️"
+          },
+          {
+            "q": "Let’s ask your mum to look after Johnny while we are away.",
+            "a": "I’d rather not.",
+            "emoji": "🙅"
+          },
+          {
+            "q": "How about going there by train?",
+            "a": "Sounds good!",
+            "emoji": "🚆"
+          },
+          {
+            "q": "How about painting the walls blue?",
+            "a": "It doesn’t sound very good.",
+            "emoji": "🎨"
+          },
+          {
+            "q": "Why don’t we go to the beach?",
+            "a": "Good idea!",
+            "emoji": "🏖️"
+          },
+          {
+            "q": "Why don’t you get a new hairstyle?",
+            "a": "I don’t feel like it.",
+            "emoji": "💇"
+          }
+        ]
+      },
+      {
+        "title": "How to agree and disagree with your companion",
+        "items": [
+          {
+            "q": "Kevin is musically gifted.",
+            "a": "That’s true!",
+            "note": "gifted = talented",
+            "emoji": "🎵"
+          },
+          {
+            "q": "I think Martin Freeman is a brilliant actor!",
+            "a": "Absolutely!",
+            "emoji": "🎭"
+          },
+          {
+            "q": "The facts he gave us are convincing.",
+            "a": "I can’t see that!",
+            "note": "convincing = making you believe it is true",
+            "emoji": "🧐"
+          },
+          {
+            "q": "He is an honest man.",
+            "a": "I don’t think so!",
+            "emoji": "🤔"
+          }
+        ]
+      },
+      {
+        "title": "How to give and accept a compliment",
+        "items": [
+          {
+            "q": "Your cake is really delicious!",
+            "a": "I’m glad you like it!",
+            "emoji": "🍰"
+          },
+          {
+            "q": "You look gorgeous in this outfit. You have a great fashion sense!",
+            "a": "That’s very kind of you to say so.",
+            "note": "gorgeous = beautiful; outfit = clothes set; fashion sense = style",
+            "emoji": "👗"
+          },
+          {
+            "q": "Your presentation was great!",
+            "a": "Thank you. I really needed that.",
+            "emoji": "👏"
+          }
+        ]
+      },
+      {
+        "title": "How to sympathize",
+        "items": [
+          {
+            "q": "Jill has had a heart attack! She’s just been taken to hospital!",
+            "a": "How awful/terrible!",
+            "emoji": "🏥"
+          },
+          {
+            "q": "My back kills me!",
+            "a": "I’m sorry to hear this!",
+            "emoji": "😣"
+          },
+          {
+            "q": "I’ve lost one of my gloves.",
+            "a": "What a shame!",
+            "emoji": "🧤"
+          },
+          {
+            "q": "I spent half an hour looking for my car key! When I got to my car, I saw I had a flat tyre.",
+            "a": "I can imagine! Oh, no!",
+            "note": "flat tyre = little air in tyre; frustrating = annoying",
+            "emoji": "🛞"
+          }
+        ]
+      },
+      {
+        "title": "How to ask to repeat and check understanding",
+        "items": [
+          {
+            "q": "Are you following me?",
+            "a": "No, you’ve lost me. Could you explain that again, please?",
+            "emoji": "❓"
+          },
+          {
+            "q": "Are you with me?",
+            "a": "Sorry, what was that again?",
+            "emoji": "👂"
+          },
+          {
+            "q": "Am I making sense?",
+            "a": "Could you explain that another way/just one more time, please?",
+            "note": "to make sense = to be easy to understand",
+            "emoji": "💡"
+          }
+        ]
+      },
+      {
+        "title": "How to finish a conversation and say good-bye",
+        "items": [
+          {
+            "q": "It was nice to talk to you but I’ve got to go now.",
+            "a": "You too. See you around.",
+            "emoji": "👋"
+          },
+          {
+            "q": "It was great to see you, but I must dash now.",
+            "a": "It was good to see you too. Take care.",
+            "note": "to dash = go quickly in a hurry",
+            "emoji": "🏃"
+          },
+          {
+            "q": "I should get going.",
+            "a": "Ok. See you later.",
+            "emoji": "🚶"
+          },
+          {
+            "q": "I’m running terribly late!",
+            "a": "Ok. See you around.",
+            "emoji": "⏱️"
+          },
+          {
+            "q": "I hope we meet again soon.",
+            "a": "Yes, let’s keep in touch.",
+            "note": "to keep in touch = call/write from time to time",
+            "emoji": "💌"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "ch2",
+    "number": 2,
+    "title": "Going to Public Places",
+    "sub": "Cinema, Gym, Taxi, Bus & Metro",
+    "badge": "🏙️",
+    "color": "#2EC4E8",
+    "topics": [
+      {
+        "title": "How to go to the cinema",
+        "items": [
+          {
+            "q": "Let’s go to the cinema. What’s on?",
+            "a": "The Martian. Matt Damon is in the film.",
+            "note": "be on = to be shown at the cinema",
+            "emoji": "🍿"
+          },
+          {
+            "q": "Can we have two tickets for The Martian, please?",
+            "a": "That’s 30 euros. Here you are. — Thank you.",
+            "emoji": "🎟️"
+          },
+          {
+            "q": "Excuse me, you’re in my seat.",
+            "a": "Sorry? That’s my seat 8 row 15. — Oh, yes, you’re right. Sorry.",
+            "emoji": "💺"
+          }
+        ]
+      },
+      {
+        "title": "How to join a fitness club",
+        "items": [
+          {
+            "q": "What are your hours?",
+            "a": "We’re open from 9 am to 10 pm seven days a week.",
+            "emoji": "🏋️"
+          },
+          {
+            "q": "I’d like to sign up for a membership. How much is the charge?",
+            "a": "It’s 80 euros.",
+            "note": "to sign up for = to join",
+            "emoji": "💳"
+          },
+          {
+            "q": "I’d like to sign up for pilates classes. What days and what time are they?",
+            "a": "They are on Tuesday and Friday at 7 pm. — Great.",
+            "emoji": "🧘"
+          }
+        ]
+      },
+      {
+        "title": "How to queue",
+        "items": [
+          {
+            "q": "Is this the end of the line?",
+            "a": "No, the end of the line is over there.",
+            "emoji": "🧍"
+          },
+          {
+            "q": "Are you in the line?",
+            "a": "Yeap.",
+            "emoji": "👍"
+          },
+          {
+            "q": "Could you hold my place in the queue? I should be back right now.",
+            "a": "Sure.",
+            "note": "hold my place = keep spot while away briefly",
+            "emoji": "⏳"
+          },
+          {
+            "q": "Can I sneak ahead of you? I only have one item.",
+            "a": "Yes, go ahead.",
+            "note": "to sneak ahead = be served before someone",
+            "emoji": "🛍️"
+          },
+          {
+            "q": "Excuse me, I was here before you. I should be ahead of you in the queue.",
+            "a": "Sorry.",
+            "emoji": "✋"
+          }
+        ]
+      },
+      {
+        "title": "How to exchange money",
+        "items": [
+          {
+            "q": "I’d like to exchange dollars into euros. What’s the exchange rate, please?",
+            "a": "One euro is 1.2 dollar.",
+            "note": "exchange rate = value of one currency to another",
+            "emoji": "💱"
+          },
+          {
+            "q": "Do you charge a commission?",
+            "a": "Yes, Sir. It’s 2%. — That’s fine. I’d like to exchange 500 euros into dollars.",
+            "emoji": "💶"
+          },
+          {
+            "q": "How would you like your money?",
+            "a": "In hundred dollar banknotes, please. — That’s 588 dollars.",
+            "note": "banknote = paper money",
+            "emoji": "💵"
+          }
+        ]
+      },
+      {
+        "title": "How to book an excursion",
+        "items": [
+          {
+            "q": "I’d like to book a tour of Niagara Falls.",
+            "a": "Yes, of course. We have daily tours available. We’d like to book two adults and a child.",
+            "note": "tour = excursion; adult = grown up",
+            "emoji": "🌊"
+          },
+          {
+            "q": "When does the tour start and when does it finish?",
+            "a": "It starts at 8 am. At 4 pm.",
+            "emoji": "⏰"
+          },
+          {
+            "q": "Where does the tour leave from?",
+            "a": "The bus will pick you up right outside the hotel.",
+            "note": "to pick up = to collect",
+            "emoji": "🚌"
+          }
+        ]
+      },
+      {
+        "title": "How to call a taxi",
+        "items": [
+          {
+            "q": "I need a taxi to the Louvre. Where from?",
+            "a": "Rue Michel-Ange.",
+            "emoji": "🚕"
+          },
+          {
+            "q": "What time is it for?",
+            "a": "As soon as possible, please.",
+            "emoji": "⏱️"
+          },
+          {
+            "q": "How long will it be till it comes?",
+            "a": "15 minutes.",
+            "emoji": "🚖"
+          }
+        ]
+      },
+      {
+        "title": "How to ask for and give directions",
+        "items": [
+          {
+            "q": "How do I get to the Museum of Modern Art?",
+            "a": "Go straight ahead and take the second right. You’ll see the sign for it.",
+            "note": "go straight ahead = same direction",
+            "emoji": "🏛️"
+          },
+          {
+            "q": "How do I get to the nearest metro station, please?",
+            "a": "Go down this street till you get to the supermarket. Go past the supermarket and turn left. It’s on your right.",
+            "emoji": "🚇"
+          },
+          {
+            "q": "Is there a bank near here, please?",
+            "a": "Take the right turning at the next traffic light. — So, I take the next left? — No, take the next right.",
+            "emoji": "🏦"
+          },
+          {
+            "q": "Is there a chemist’s near here?",
+            "a": "Follow me. I’ll take you there. — Thank you, that’s very kind.",
+            "emoji": "💊"
+          }
+        ]
+      },
+      {
+        "title": "How to get around by bus and metro",
+        "items": [
+          {
+            "q": "Does this bus go to the city centre?",
+            "a": "No, it doesn’t. You need the 23.",
+            "emoji": "🚌"
+          },
+          {
+            "q": "Does it stop outside the Opera House?",
+            "a": "Yes, it does.",
+            "emoji": "🎭"
+          },
+          {
+            "q": "Can I buy a ticket on the bus?",
+            "a": "No, but you can buy it from a ticket machine over there.",
+            "emoji": "🎫"
+          },
+          {
+            "q": "Is anybody sitting here? / Is this seat taken?",
+            "a": "No, go ahead. / I’m sorry, my wife is sitting here.",
+            "emoji": "💺"
+          },
+          {
+            "q": "How many stops is it to Central Park?",
+            "a": "It’s 4 stops.",
+            "emoji": "🌳"
+          },
+          {
+            "q": "Where do I get off for the hospital?",
+            "a": "At the next stop.",
+            "note": "to get off = to leave the bus",
+            "emoji": "🏥"
+          },
+          {
+            "q": "How do I get to Bilbao?",
+            "a": "Take the purple line at Ventilla and change at Plaza de Castilla to the light blue line.",
+            "emoji": "🗺️"
+          }
+        ]
+      },
+      {
+        "title": "How to take a train",
+        "items": [
+          {
+            "q": "I'd like a ticket to Rome, please.",
+            "a": "A single or return? — A single, please.",
+            "note": "single = one-way ticket; return = round-trip ticket",
+            "emoji": "🚆"
+          },
+          {
+            "q": "Are there any trains leaving tomorrow?",
+            "a": "There are two trains to Rome: 10.20 am and 5 pm. — I'd like the 10.20 train. — Okay, booked for you!",
+            "emoji": "🎫"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "ch3",
+    "number": 3,
+    "title": "Social Interaction",
+    "sub": "Introductions, Hosting, Parties & Dating",
+    "badge": "🎉",
+    "color": "#FF6F5E",
+    "topics": [
+      {
+        "title": "How to introduce yourself & others",
+        "items": [
+          {
+            "q": "Great party, isn’t it? I’m Ruth.",
+            "a": "Yeah. It’s cool. I’m Julia. Nice to meet you. — You too.",
+            "emoji": "🤝"
+          },
+          {
+            "q": "Hi, I’m Kevin. So, how do you know the host?",
+            "a": "Hi, Kevin! I’m David. I and Daniel work together. What about you? — I live next door.",
+            "note": "host = person inviting guests; next door = house next to yours",
+            "emoji": "🏡"
+          },
+          {
+            "q": "Laura, meet Seon! Seon, this is Laura!",
+            "a": "Nice to meet you, Seon. — You too, Laura!",
+            "emoji": "👋"
+          },
+          {
+            "q": "James, this is Chris. Chris, this is James.",
+            "a": "Nice to meet you, James! — You too, Chris. I’ve heard a lot about you! — All good, I hope.",
+            "emoji": "😄"
+          }
+        ]
+      },
+      {
+        "title": "How to welcome a new employee",
+        "items": [
+          {
+            "q": "Hi, I’m Claire. Are you new here?",
+            "a": "Nice to meet you. I’m Robert. Yes, it’s my first day here.",
+            "emoji": "💼"
+          },
+          {
+            "q": "You must be Susan. I’m Jill. Let me show you around.",
+            "a": "Yes, right. Nice to meet you too, Jill. Thank you.",
+            "note": "show you around = show a place/office",
+            "emoji": "🏢"
+          },
+          {
+            "q": "Hello, Jake. Welcome to the Nesco Company. Let me introduce you to some people.",
+            "a": "Thank you, that would be nice.",
+            "emoji": "🤝"
+          },
+          {
+            "q": "Hi, I’m Jeff. Where will you be working?",
+            "a": "I’m Alex, a new paralegal. On the seventh floor. — We’ll be seeing a lot of each other then.",
+            "note": "paralegal = legal assistant",
+            "emoji": "📋"
+          }
+        ]
+      },
+      {
+        "title": "How to make an invitation",
+        "items": [
+          {
+            "q": "Would you like to come to my birthday party at 5 pm?",
+            "a": "I’d love to! I’ll be there. Thanks!",
+            "emoji": "🎂"
+          },
+          {
+            "q": "Would you like to come over for dinner tonight?",
+            "a": "That would be lovely but I’ve got a previous arrangement. I'd love to come another time!",
+            "note": "previous arrangement = earlier plan",
+            "emoji": "🍽️"
+          },
+          {
+            "q": "I’d love it if you could come to stay but do you mind dogs?",
+            "a": "No, of course not. Thank you for inviting me.",
+            "emoji": "🐶"
+          }
+        ]
+      },
+      {
+        "title": "How to welcome guests & compliment home",
+        "items": [
+          {
+            "q": "Hi, come in! I’m glad you could make it.",
+            "a": "Nice to see you! Thank you for asking me. — It’s a pleasure to have you here.",
+            "note": "make it = manage to get somewhere",
+            "emoji": "🚪"
+          },
+          {
+            "q": "Nice to have you here. How was your journey?",
+            "a": "I hit a traffic jam but quite smooth after all.",
+            "note": "hit a traffic jam = busy traffic; smooth = without problems",
+            "emoji": "🚗"
+          },
+          {
+            "q": "You’ve got a lovely house.",
+            "a": "Thank you. Let me show you around.",
+            "emoji": "🏡"
+          },
+          {
+            "q": "Come into the living room and have a seat. Make yourself comfortable.",
+            "a": "Your living room is very beautiful! Thank you!",
+            "emoji": "🛋️"
+          }
+        ]
+      },
+      {
+        "title": "How to offer drinks & food to guests",
+        "items": [
+          {
+            "q": "Would you like a drink? / Can I get you something to drink?",
+            "a": "Yes, please. I’d like a cup of tea. / What have you got?",
+            "emoji": "🍵"
+          },
+          {
+            "q": "How do you take your coffee?",
+            "a": "Two sugars, no milk, please.",
+            "emoji": "☕"
+          },
+          {
+            "q": "Help yourself to the cookies.",
+            "a": "Thank you! They are delicious.",
+            "note": "help yourself = serve yourself food/drink",
+            "emoji": "🍪"
+          },
+          {
+            "q": "Please, go ahead with the salad, I’ll bring the lamb in red wine in a minute.",
+            "a": "Sounds delicious!",
+            "emoji": "🥗"
+          },
+          {
+            "q": "Can I get anyone anything? / Are you done?",
+            "a": "No, thanks. We are full. The meal was delicious. / Yes, thank you.",
+            "emoji": "🍽️"
+          },
+          {
+            "q": "Thank you for having us. / Thank you for inviting us.",
+            "a": "We are glad you could come. Have a safe journey. Come back again!",
+            "emoji": "🤗"
+          }
+        ]
+      },
+      {
+        "title": "How to ask out, date & small talk",
+        "items": [
+          {
+            "q": "What are you up to today? Would you like to go to the cinema tonight?",
+            "a": "Nothing really. Yeah, what’s on?",
+            "emoji": "🎬"
+          },
+          {
+            "q": "I was thinking... Do you want to meet up for a drink some time?",
+            "a": "Sounds good! What about tomorrow evening?",
+            "emoji": "🍹"
+          },
+          {
+            "q": "I was wondering if you would have dinner with me?",
+            "a": "Dinner? Why not? When? — How about tonight? — Sorry, I can’t make it tonight. Tomorrow is fine.",
+            "emoji": "🍷"
+          },
+          {
+            "q": "Would you like to go out some time?",
+            "a": "That’s nice of you, but I’m already seeing someone.",
+            "note": "seeing someone = in a relationship",
+            "emoji": "💔"
+          },
+          {
+            "q": "I just thought we could grab a coffee sometime.",
+            "a": "No, sorry. You're a nice guy, but I'm just not into you in that way.",
+            "note": "into someone = interested in them",
+            "emoji": "☕"
+          },
+          {
+            "q": "Nice day, isn’t it?",
+            "a": "Yeah, it’s lovely outside.",
+            "emoji": "⛅"
+          },
+          {
+            "q": "Can you believe all this rain we’ve been having?",
+            "a": "Yes, we sure have!",
+            "emoji": "🌧️"
+          },
+          {
+            "q": "How much do you earn?",
+            "a": "I’d rather not say.",
+            "note": "avoid answering a question politely",
+            "emoji": "🤐"
+          },
+          {
+            "q": "Can we meet on the 16th of July?",
+            "a": "Yes, it suits me perfectly.",
+            "emoji": "📅"
+          },
+          {
+            "q": "We were going to meet on Friday but something has come up. Can we fix another time?",
+            "a": "Sure. Would Monday be ok?",
+            "note": "come up = a problem arises",
+            "emoji": "🔄"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "ch4",
+    "number": 4,
+    "title": "Shopping",
+    "sub": "Supermarket, Clothes, Sales, VAT & Bargaining",
+    "badge": "🛒",
+    "color": "#FFC94A",
+    "topics": [
+      {
+        "title": "How to ask for items & buy things",
+        "items": [
+          {
+            "q": "Hello! Have you got souvenir mugs?",
+            "a": "Yes, we have them here.",
+            "emoji": "☕"
+          },
+          {
+            "q": "Have you got umbrellas?",
+            "a": "Yes. Are you looking for men’s or ladies’ umbrellas? — A ladies’ one.",
+            "emoji": "☂️"
+          },
+          {
+            "q": "Can I have this calendar, please? How much is it?",
+            "a": "Here you are / There you go. It’s 10 pounds.",
+            "emoji": "📅"
+          },
+          {
+            "q": "Can I have a carton of milk and a loaf of bread, please?",
+            "a": "Here you are. That’s 4 euros.",
+            "emoji": "🍞"
+          },
+          {
+            "q": "Can I have a box of tissues, please?",
+            "a": "I’m sorry, we are out of tissues.",
+            "note": "out of = no more in stock",
+            "emoji": "📦"
+          },
+          {
+            "q": "I’m looking for a dishwasher.",
+            "a": "Freestanding or built-in?",
+            "emoji": "🍽️"
+          },
+          {
+            "q": "Can I help you?",
+            "a": "No, I am just looking around. — Just let me know if you need anything.",
+            "emoji": "👀"
+          }
+        ]
+      },
+      {
+        "title": "Supermarket & Clothes shopping",
+        "items": [
+          {
+            "q": "Excuse me, where can I find flour?",
+            "a": "It’s in aisle 4 next to sugar.",
+            "note": "aisle = passage between shelves",
+            "emoji": "🌾"
+          },
+          {
+            "q": "Where can I weigh my fruit?",
+            "a": "The scales are at the end of the aisle.",
+            "note": "scales = weighing equipment",
+            "emoji": "🍎"
+          },
+          {
+            "q": "Are the bags free of charge?",
+            "a": "Yes, we don’t charge for them.",
+            "note": "free of charge = costing no money",
+            "emoji": "🛍️"
+          },
+          {
+            "q": "I’m looking for a pair of trousers. I’m a 40 for trousers.",
+            "a": "What colour are you looking for?",
+            "emoji": "👖"
+          },
+          {
+            "q": "I’m looking for a pair of shoes. I’m a 9 for shoes.",
+            "a": "What kind of shoes are you looking for? Dress shoes, loafers, oxfords?",
+            "note": "loafers = casual shoes; oxfords = formal shoes",
+            "emoji": "👞"
+          },
+          {
+            "q": "What’s this dress made of? Can it be machine washed?",
+            "a": "Pure wool. No, the care instructions say it has to be washed by hand.",
+            "note": "pure wool = sheep hair; care instructions = washing rules",
+            "emoji": "👗"
+          }
+        ]
+      },
+      {
+        "title": "Fitting rooms & Sales",
+        "items": [
+          {
+            "q": "Where are the changing/fitting rooms? Can I try these jeans on?",
+            "a": "Over there. Sure, the changing rooms are over there.",
+            "note": "try on = put on clothes to see fit",
+            "emoji": "🚪"
+          },
+          {
+            "q": "Does the dress fit?",
+            "a": "No, it’s too tight. Do you have it in a bigger size? — Here you are. — This one is ok, I’ll take it.",
+            "emoji": "✨"
+          },
+          {
+            "q": "Are the trousers ok?",
+            "a": "They are too big. Do you have them in a smaller size? — No, I’m afraid not. — I’ll leave them then.",
+            "note": "leave them = not buy",
+            "emoji": "👖"
+          },
+          {
+            "q": "Is this shirt in the sale? How long does the sale last?",
+            "a": "Yes, it’s 30% off. It ends next Sunday.",
+            "note": "30% off = price reduced",
+            "emoji": "🏷️"
+          }
+        ]
+      },
+      {
+        "title": "Paying, VAT return, Returns & Bargaining",
+        "items": [
+          {
+            "q": "Are you in the tax-free shopping scheme? How much to qualify for a VAT refund?",
+            "a": "Yes, Sir. Can I see your passport? The minimum amount is 175 euros.",
+            "note": "VAT return = tax refund for tourists",
+            "emoji": "🛂"
+          },
+          {
+            "q": "Can I pay by credit card? / Do you take credit cards?",
+            "a": "Yes, please enter your PIN. / No, I’m afraid we don’t. Cash only.",
+            "emoji": "💳"
+          },
+          {
+            "q": "Do you have a refund policy?",
+            "a": "Yes, you have to keep the receipt and bring an item back within 2 weeks.",
+            "note": "receipt = proof of payment; refund policy = return rules",
+            "emoji": "🧾"
+          },
+          {
+            "q": "I’d like to return this skirt. The stitching is coming undone.",
+            "a": "Sure. Can I have your receipt, please?",
+            "note": "stitching coming undone = threads untied",
+            "emoji": "🧵"
+          },
+          {
+            "q": "I’d like to return these trousers. They shrank a lot after I washed them.",
+            "a": "What seems to be the problem? Did you follow the care instructions?",
+            "note": "shrink = become smaller",
+            "emoji": "👖"
+          },
+          {
+            "q": "How much is it? 30 euros. That’s pretty steep. Can you knock a few dollars off?",
+            "a": "Ok. You can have it for 28.",
+            "note": "steep = expensive; knock off = reduce price",
+            "emoji": "🏷️"
+          },
+          {
+            "q": "How much is this vase? 100 euros. How about 70 euros?",
+            "a": "You can have it for 85. — I’m afraid that’s still too much.",
+            "emoji": "🏺"
+          },
+          {
+            "q": "How much are these gloves? 30 dollars. Will you take 20 for them?",
+            "a": "25 is the best price.",
+            "emoji": "🧤"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "ch5",
+    "number": 5,
+    "title": "Air Travel",
+    "sub": "Booking Flights, Check-in, Security, Customs & Luggage",
+    "badge": "✈️",
+    "color": "#1B9DC0",
+    "topics": [
+      {
+        "title": "How to book & change a flight",
+        "items": [
+          {
+            "q": "What flights are there to Oslo?",
+            "a": "There are two flights tomorrow: 7.30 am and 4 pm.",
+            "emoji": "🛫"
+          },
+          {
+            "q": "Are there any direct flights to Dallas?",
+            "a": "No, you'll have to transfer either in Chicago or Kansas City.",
+            "note": "transfer = change planes",
+            "emoji": "🛬"
+          },
+          {
+            "q": "I’d like to book a flight to Beijing, please. The 19th of March.",
+            "a": "There is a flight at 5.20 am. Would you like to be booked on it? — Yes, please.",
+            "emoji": "🌏"
+          },
+          {
+            "q": "I’d like to change my flight reservation. I'm booked on flight XPL on April 12.",
+            "a": "What date would you like to depart? Will you have to pay a change fee? Yes, booked over 24h ago.",
+            "note": "fee = service charge; depart = leave",
+            "emoji": "🔄"
+          }
+        ]
+      },
+      {
+        "title": "Check-in & Luggage",
+        "items": [
+          {
+            "q": "Can I see your passport and tickets, please?",
+            "a": "Here you are. Your flight has been delayed. It's scheduled to depart at 4.30 pm.",
+            "note": "delayed = later than planned; scheduled = planned",
+            "emoji": "🛂"
+          },
+          {
+            "q": "Would you like an aisle or a window seat?",
+            "a": "A window seat, please.",
+            "note": "aisle seat = seat near passage",
+            "emoji": "💺"
+          },
+          {
+            "q": "Are you checking in any bags?",
+            "a": "I have a suitcase to check and one carry-on. — This exceeds size restrictions. Put it on the carry-on sizer.",
+            "note": "carry-on = bag taken onto plane",
+            "emoji": "🧳"
+          },
+          {
+            "q": "Did you pack your bags yourself? Are there any sharp or prohibited items?",
+            "a": "Yes, I did. No.",
+            "note": "prohibited = banned; sharp = able to cut",
+            "emoji": "🔍"
+          },
+          {
+            "q": "I have a stopover in Miami. Will I have to collect my luggage there?",
+            "a": "No, your luggage will go straight through to Montevideo. Here is your boarding pass.",
+            "note": "stopover = flight break; collect = pick up",
+            "emoji": "🎫"
+          }
+        ]
+      },
+      {
+        "title": "Security & Immigration",
+        "items": [
+          {
+            "q": "Do I need to take my mobile out of the bag?",
+            "a": "Yes, you do. Put it into the bin, please.",
+            "note": "bin = plastic tray/container",
+            "emoji": "📱"
+          },
+          {
+            "q": "Do you have any coins or keys in your pockets?",
+            "a": "No, I’ve taken everything out. — Then walk through the body scan.",
+            "emoji": "🚶"
+          },
+          {
+            "q": "Can I take this bottle of water on board?",
+            "a": "No, I’m afraid not, Sir.",
+            "note": "on board = on the aircraft",
+            "emoji": "💧"
+          },
+          {
+            "q": "Is this the gate for flight 234 to Madrid?",
+            "a": "Yes, it is.",
+            "emoji": "🚪"
+          },
+          {
+            "q": "Welcome to the USA. Where are you travelling from and what is the purpose of your trip?",
+            "a": "From France. I’m here on holiday for 10 days.",
+            "note": "purpose = reason for travel",
+            "emoji": "🇺🇸"
+          },
+          {
+            "q": "Who are you travelling with and where will you be staying?",
+            "a": "With my husband. At the Hilton Hotel.",
+            "emoji": "🏨"
+          }
+        ]
+      },
+      {
+        "title": "Lost luggage & Airport meeting",
+        "items": [
+          {
+            "q": "My luggage hasn’t arrived. I think it’s lost. What does your bag look like?",
+            "a": "It’s a brown suitcase with my name on it. — It is being held by customs in that corridor.",
+            "emoji": "🧳"
+          },
+          {
+            "q": "I picked up my suitcase and found that it’s been damaged.",
+            "a": "What’s the problem? — The wheel is broken and the side is dented.",
+            "note": "dented = hollow on surface",
+            "emoji": "⚠️"
+          },
+          {
+            "q": "Hello! Are you Ms. Jones? Welcome to Brazil.",
+            "a": "Yes, I am. I’m Sanches from Netco. I’m here to take you to our office.",
+            "emoji": "🤝"
+          },
+          {
+            "q": "Did you have a good flight? You must be very tired.",
+            "a": "It was good but very long. Yes, I really am. My car is this way.",
+            "emoji": "🚗"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "ch6",
+    "number": 6,
+    "title": "Car & Flat Rental",
+    "sub": "Renting Cars, Leases, Deposits & Landlords",
+    "badge": "🔑",
+    "color": "#9B51E0",
+    "topics": [
+      {
+        "title": "How to rent a car",
+        "items": [
+          {
+            "q": "I’d like to rent a car for 3 days. What type of car would you like?",
+            "a": "I’d like a midsize car. How much would it cost? — 30 dollars per day.",
+            "emoji": "🚗"
+          },
+          {
+            "q": "Would you like insurance on your car? How many people are going to drive?",
+            "a": "Yes, please. Just myself.",
+            "note": "insurance = protects costs if accident happens",
+            "emoji": "🛡️"
+          },
+          {
+            "q": "Can I see your driver’s licence?",
+            "a": "Will my international licence do?",
+            "emoji": "🪪"
+          },
+          {
+            "q": "Do I have to return the car to this location?",
+            "a": "No, you can leave it at any of our locations. Return it by 2 am on Wednesday.",
+            "emoji": "📍"
+          },
+          {
+            "q": "How much would you charge me if I’m an hour late?",
+            "a": "There is a late return fee.",
+            "note": "charge = request payment",
+            "emoji": "⏱️"
+          }
+        ]
+      },
+      {
+        "title": "How to rent a flat",
+        "items": [
+          {
+            "q": "I’m calling about the flat for rent. Is it still available? Can I see it today?",
+            "a": "Yes, it is.",
+            "emoji": "🏢"
+          },
+          {
+            "q": "How much is the rent? Are utilities included?",
+            "a": "It’s 1200 dollars per month. No, you’ll have to pay utilities yourself.",
+            "note": "utilities = gas, water, electricity",
+            "emoji": "💡"
+          },
+          {
+            "q": "When is the rent due?",
+            "a": "On the first of each month. It’s paid in advance.",
+            "note": "due = must be paid; in advance = before time",
+            "emoji": "📅"
+          },
+          {
+            "q": "Will the rent go up?",
+            "a": "Not until the end of the lease. When your lease expires the rent may go up.",
+            "note": "lease = rental contract; expire = end",
+            "emoji": "📈"
+          },
+          {
+            "q": "How much is the security deposit?",
+            "a": "It’s a month’s rent.",
+            "note": "security deposit = returned when you move out",
+            "emoji": "💰"
+          },
+          {
+            "q": "Can I sublet? How much notice do I need to give if I want to leave early?",
+            "a": "Yes, with written permission. You need to give a month’s notice.",
+            "note": "sublet = rent to another; notice = advance notification",
+            "emoji": "📝"
+          },
+          {
+            "q": "Who do I contact if there is a problem? When will the flat be available?",
+            "a": "Me, here is my phone number. Available next month.",
+            "emoji": "📞"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "ch7",
+    "number": 7,
+    "title": "Staying in a Hotel",
+    "sub": "Rooms, Check-in, Services, Complaints & Check-out",
+    "badge": "🏨",
+    "color": "#F2994A",
+    "topics": [
+      {
+        "title": "Prices, facilities & booking",
+        "items": [
+          {
+            "q": "How much is a room? Are your basic rooms en suite?",
+            "a": "From $50 to $250 for a suite. Basic single has shared facilities; others are en-suite.",
+            "note": "en-suite = room with private bathroom; suite = set of rooms",
+            "emoji": "🛏️"
+          },
+          {
+            "q": "I need a room for 3 people (one double bed and one single bed).",
+            "a": "Yes, we have suites for three people.",
+            "emoji": "👨‍👩‍👧"
+          },
+          {
+            "q": "Is breakfast included? Do you have free wi-fi?",
+            "a": "Local cafe offers guest discounts. Wi-fi is free of charge throughout hotel.",
+            "emoji": "📶"
+          },
+          {
+            "q": "What are your check-in and check-out times? What is your cancellation policy?",
+            "a": "Check-in 2 pm, check-out 12 pm. Cancel at least 24h before to avoid fee.",
+            "emoji": "⏰"
+          },
+          {
+            "q": "I’d like to book a double room for three nights starting Monday the 9th.",
+            "a": "Who is the booking for? — Victoria Garcia. Are you going to put a hold on my card?",
+            "note": "put a hold = reserve funds on card",
+            "emoji": "💳"
+          }
+        ]
+      },
+      {
+        "title": "Check-in & Hotel facilities",
+        "items": [
+          {
+            "q": "Hello, I’m checking in. My name is Julia Lawrence.",
+            "a": "Yes, Ms. Lawrence... Single room for 5 nights. Is that right? — Yes, that’s right.",
+            "emoji": "🔑"
+          },
+          {
+            "q": "Are you still open for breakfast?",
+            "a": "Yes, but the restaurant closes soon, so you’d better hurry.",
+            "emoji": "🥐"
+          },
+          {
+            "q": "What time is dinner served? When does breakfast start?",
+            "a": "Dinner is from 6 pm to 9 pm. Breakfast starts at 7.30 am.",
+            "emoji": "🍽️"
+          },
+          {
+            "q": "What time does the pool open? Do I have to bring my own towel?",
+            "a": "Opens at 6.30 am. You can get a towel at the pool.",
+            "emoji": "🏊"
+          },
+          {
+            "q": "Can you send laundry service up to room 236, please?",
+            "a": "Yes, I’ll send someone up right away.",
+            "emoji": "👔"
+          },
+          {
+            "q": "Can I have my suit pressed?",
+            "a": "We have an ironing room equipped with iron and board on the 2nd floor.",
+            "note": "press = iron smooth",
+            "emoji": "🧼"
+          }
+        ]
+      },
+      {
+        "title": "Making complaints & Check-out",
+        "items": [
+          {
+            "q": "My room is noisy. Could I move to a quieter one?",
+            "a": "Let me just check if there are any rooms available now.",
+            "emoji": "🔊"
+          },
+          {
+            "q": "I just checked into my room and there’s hair in the bathtub.",
+            "a": "I’m sorry. I’ll send up someone from housekeeping right now.",
+            "note": "housekeeping = cleaning department",
+            "emoji": "🛁"
+          },
+          {
+            "q": "The air conditioner isn’t working / The bulb isn't working.",
+            "a": "I’ll call maintenance / get someone to replace it right away.",
+            "note": "maintenance = repairs team",
+            "emoji": "❄️"
+          },
+          {
+            "q": "The toilet is not flushing properly.",
+            "a": "I’ll send the plumber in right away.",
+            "note": "flush = pass water through toilet; plumber = toilet/pipe repairer",
+            "emoji": "🚽"
+          },
+          {
+            "q": "The mini bar is empty. Could you get someone to restock it?",
+            "a": "Sure.",
+            "emoji": "🍾"
+          },
+          {
+            "q": "I am checking out of room 451. Could I have my bill, please?",
+            "a": "Yes, here it is. How would you like to pay? Settle on card on file?",
+            "note": "card on file = registered banking card",
+            "emoji": "🧾"
+          },
+          {
+            "q": "Can I leave my suitcase with the hotel for 2 days?",
+            "a": "Yes, of course. We will hold your suitcase free of charge.",
+            "emoji": "🧳"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "ch8",
+    "number": 8,
+    "title": "Seeing a Doctor",
+    "sub": "Appointments, Symptoms, Illness & Treatments",
+    "badge": "🩺",
+    "color": "#27AE60",
+    "topics": [
+      {
+        "title": "Making a doctor's appointment",
+        "items": [
+          {
+            "q": "I’d like to make an appointment with a GP, please.",
+            "a": "When would you like to come?",
+            "note": "GP = General Practitioner (family doctor)",
+            "emoji": "👨‍⚕️"
+          },
+          {
+            "q": "I’d like to make an appointment with Dr. Taylor, please?",
+            "a": "Dr. Taylor is booked up today but tomorrow at 3 pm is possible. — That’s fine.",
+            "note": "booked up = busy with no time available",
+            "emoji": "📅"
+          },
+          {
+            "q": "Can I make an appointment with the dentist, please?",
+            "a": "Tomorrow at 10 am or 3.30 pm. Which time works best for you? — 10 am is ok.",
+            "emoji": "🦷"
+          },
+          {
+            "q": "Would 5.30 pm be ok with you? Do you have anything earlier?",
+            "a": "No, I’m afraid not. If an earlier booking cancels, could you let me know?",
+            "emoji": "⏰"
+          }
+        ]
+      },
+      {
+        "title": "Describing symptoms & Recommendations",
+        "items": [
+          {
+            "q": "What seems to be the trouble?",
+            "a": "I have blotches all over my body. — Have you eaten anything you are allergic to?",
+            "note": "blotches = red skin marks; allergic = bad reaction to food",
+            "emoji": "🔴"
+          },
+          {
+            "q": "What seems to be the trouble?",
+            "a": "I have a pain in my knee. — What were you doing when the pain started?",
+            "emoji": "🦵"
+          },
+          {
+            "q": "What seems to be the trouble?",
+            "a": "I have a fever and a splitting headache. — Have you been taking any medicine for it?",
+            "note": "splitting headache = severe head pain; fever = high temperature",
+            "emoji": "🤕"
+          },
+          {
+            "q": "What seems to be the trouble?",
+            "a": "Could you describe the pain? Sharp? Mild? Persistent or intermittent?",
+            "note": "persistent = continuous; intermittent = stopping and starting",
+            "emoji": "👁️"
+          },
+          {
+            "q": "I’ll prescribe you a cream. You should apply it twice a day.",
+            "a": "How long will the swelling take to go down? — About a week.",
+            "note": "prescribe = order medicine; swelling = swollen area",
+            "emoji": "🧴"
+          },
+          {
+            "q": "You should go to the hospital for some blood tests / X-ray.",
+            "a": "Do you think I've torn my joint, doctor? — If you are not better in two days, come see me.",
+            "note": "joint = bone junction; X-ray = scan",
+            "emoji": "🩻"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "ch9",
+    "number": 9,
+    "title": "Eating Out",
+    "sub": "Reserving, Ordering, Special Requests & The Bill",
+    "badge": "🍽️",
+    "color": "#E67E22",
+    "topics": [
+      {
+        "title": "Booking a table & seating",
+        "items": [
+          {
+            "q": "I’d like to book a table for tonight, please. For 4 people at 7 pm.",
+            "a": "Good. I have you reserved for a table for 4 at 7 pm.",
+            "emoji": "📞"
+          },
+          {
+            "q": "Good evening. Do you have a reservation?",
+            "a": "Yes, a table for two in the name of Johnson. / I'm joining Tom Jenkin's party.",
+            "emoji": "🍷"
+          },
+          {
+            "q": "Do you have a booking? / Have you got any free tables?",
+            "a": "No, we don’t. Is there a table free? — You’ll have to wait about 10 minutes.",
+            "emoji": "⏳"
+          },
+          {
+            "q": "Can we have a table by the window / on the terrace?",
+            "a": "Yes, of course. / I’ll see if there is one free.",
+            "emoji": "🪟"
+          },
+          {
+            "q": "Do you have a high chair for little children?",
+            "a": "Sure. I’ll get it for you.",
+            "emoji": "👶"
+          }
+        ]
+      },
+      {
+        "title": "Choosing meals & Ordering",
+        "items": [
+          {
+            "q": "What should I order? What’s best here?",
+            "a": "They serve delicious fish here. Their speciality is seafood.",
+            "note": "speciality = signature dish",
+            "emoji": "🐟"
+          },
+          {
+            "q": "Are you ready to order? Can I take your order?",
+            "a": "Yes, I’ll have tuna salad and a bottle of still water, please.",
+            "note": "still water = without bubbles",
+            "emoji": "🥗"
+          },
+          {
+            "q": "Could you serve the salad on the side, please? What dressings do you have?",
+            "a": "Sure. We have Italian, French, and blue cheese.",
+            "note": "on the side = on a separate dish",
+            "emoji": "🫒"
+          },
+          {
+            "q": "How would you like your steak done? Rare, medium, well-done?",
+            "a": "Medium, please. We are in a hurry. How long will it take? — About 10 minutes.",
+            "note": "rare = lightly cooked",
+            "emoji": "🥩"
+          },
+          {
+            "q": "Would you like a dessert? Is there anything you would recommend?",
+            "a": "Tiramisu. It’s delicious.",
+            "emoji": "🍰"
+          }
+        ]
+      },
+      {
+        "title": "Requests, Meal issues & Paying the bill",
+        "items": [
+          {
+            "q": "Excuse me, I dropped my fork. Can I get another, please?",
+            "a": "Sure. I’ll get you one right away.",
+            "emoji": "🍴"
+          },
+          {
+            "q": "Excuse me, this cup is dirty. / There’s a hair in the soup.",
+            "a": "I apologize. I’ll bring you another one / We won’t charge you for the soup.",
+            "emoji": "🥣"
+          },
+          {
+            "q": "My baked potato is raw inside. / This meat is undercooked.",
+            "a": "Sorry, Mam. I’ll replace it with a well-baked one right away.",
+            "note": "raw = not cooked; undercooked = cooked insufficiently",
+            "emoji": "🥔"
+          },
+          {
+            "q": "Let’s split it.",
+            "a": "No, I’ll get it. It’s my treat. / No, it’s on me. — Thank you.",
+            "note": "split = divide evenly; my treat / on me = I will pay",
+            "emoji": "🎁"
+          },
+          {
+            "q": "Can I have the bill, please? We’d like separate bills.",
+            "a": "Coming right up. Sure.",
+            "emoji": "🧾"
+          },
+          {
+            "q": "I’m afraid there is a mistake in the bill. You charged me twice for dessert.",
+            "a": "I’m sorry, Mam. I’ll bring you the correct bill right away.",
+            "emoji": "💳"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "ch10",
+    "number": 10,
+    "title": "Solving Problems & Emergencies",
+    "sub": "Appliances, Car Trouble, Health & Police Reports",
+    "badge": "🚨",
+    "color": "#E74C3C",
+    "topics": [
+      {
+        "title": "Broken equipment & household appliances",
+        "items": [
+          {
+            "q": "The washing machine isn’t working. Do you know what’s wrong with it?",
+            "a": "The remote control isn’t working. The batteries might have run out.",
+            "emoji": "🧺"
+          },
+          {
+            "q": "My lock is broken. The key doesn’t turn.",
+            "a": "You should call the locksmith.",
+            "note": "locksmith = person who repairs locks",
+            "emoji": "🔑"
+          },
+          {
+            "q": "The tap in the kitchen is dripping.",
+            "a": "I’ll send the plumber in right now.",
+            "note": "drip = water falling in small drops",
+            "emoji": "🚰"
+          },
+          {
+            "q": "One of my burners won’t light. / The bulb is blown.",
+            "a": "It can be clogged. Just clean it. / I’ll replace it right now.",
+            "note": "clogged = blocked; blown = filament burned out",
+            "emoji": "💡"
+          }
+        ]
+      },
+      {
+        "title": "Car breakdowns & emergencies",
+        "items": [
+          {
+            "q": "I’ve locked myself out of my car.",
+            "a": "Have you got the second key?",
+            "note": "keys locked inside car",
+            "emoji": "🚗"
+          },
+          {
+            "q": "My car won’t start. The battery must be dead.",
+            "a": "Do you need a boost? / You’d better call the garage quick.",
+            "note": "boost = jump-start battery with cables",
+            "emoji": "🔋"
+          },
+          {
+            "q": "Your right brake light is out. / My car tyre is flat.",
+            "a": "Thanks for telling me. / Does it have a puncture?",
+            "note": "puncture = small hole in tyre",
+            "emoji": "🛞"
+          }
+        ]
+      },
+      {
+        "title": "Medical emergencies & Police reports",
+        "items": [
+          {
+            "q": "The man has fallen over and badly hurt himself.",
+            "a": "He should be taken to the fracture clinic.",
+            "note": "fracture clinic = clinic for broken bones",
+            "emoji": "🏥"
+          },
+          {
+            "q": "The woman has fainted in the heat. She is unconscious.",
+            "a": "Call an ambulance. She needs CPR.",
+            "note": "faint = lose consciousness; CPR = chest compression resuscitation",
+            "emoji": "🚑"
+          },
+          {
+            "q": "I’ve burned myself. It’s my hand.",
+            "a": "Put your hand under cold water.",
+            "emoji": "🖐️"
+          },
+          {
+            "q": "There is a robbery in progress / fight outside the bar.",
+            "a": "What’s the address? Hold on, I’ll get the police dispatched.",
+            "note": "dispatched = sent",
+            "emoji": "🚓"
+          },
+          {
+            "q": "There’s a car accident. Is anyone trapped inside?",
+            "a": "One man is. The ambulance is on the way. What should we do until they arrive?",
+            "emoji": "💥"
+          },
+          {
+            "q": "My house is on fire! / My house is flooding!",
+            "a": "The fire crew is on its way. / Have you got a burst pipe?",
+            "note": "burst pipe = broken water pipe",
+            "emoji": "🔥"
+          },
+          {
+            "q": "I’d like to report a crime / break-in. My bag has been stolen.",
+            "a": "Can you tell me what happened? When and where did it happen?",
+            "note": "break-in = illegal entry into house/car",
+            "emoji": "🚨"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "ch11",
+    "number": 11,
+    "title": "Telephoning",
+    "sub": "Calling, Leaving Messages, Timing & Connection Issues",
+    "badge": "📞",
+    "color": "#3498DB",
+    "topics": [
+      {
+        "title": "Asking to speak & giving reasons",
+        "items": [
+          {
+            "q": "Can I speak to Mary Taylor, please?",
+            "a": "Speaking. — Hi, Mary. It’s Rita Cooper.",
+            "emoji": "🗣️"
+          },
+          {
+            "q": "Could I speak to Peter Wright, please? Who is calling?",
+            "a": "It’s Brian Evans. — Hold on while I get him.",
+            "emoji": "⏳"
+          },
+          {
+            "q": "Hi, Brian. How are you doing? What can I do for you?",
+            "a": "I’m calling to remind you of our dinner plans.",
+            "note": "remind = make someone remember",
+            "emoji": "🍽️"
+          },
+          {
+            "q": "Can I speak to someone from the HR department? Can I ask what it is in connection with?",
+            "a": "I’m calling about applying for the job of a sales representative. — I’ll connect you.",
+            "emoji": "👔"
+          }
+        ]
+      },
+      {
+        "title": "Taking/leaving messages & Timing",
+        "items": [
+          {
+            "q": "She is at lunch. Would you like to leave a message or call her back later?",
+            "a": "I’ll call her back, thanks. / Can I take a message? — Yes, please. I'll get a pen.",
+            "emoji": "📝"
+          },
+          {
+            "q": "He isn’t at his desk now. Is it urgent?",
+            "a": "No, not really. Can I just leave a message for him, please?",
+            "note": "urgent = needs immediate action",
+            "emoji": "📋"
+          },
+          {
+            "q": "Is this a good time to call?",
+            "a": "Sure. Now is fine. What’s up? / Look, I'm in the middle of something. Could you call back in a couple of hours?",
+            "emoji": "⏰"
+          },
+          {
+            "q": "He is in a meeting. Do you know when it’ll be over?",
+            "a": "Do you know how long he’ll be?",
+            "note": "to be over = to finish",
+            "emoji": "⌛"
+          }
+        ]
+      },
+      {
+        "title": "Connection problems",
+        "items": [
+          {
+            "q": "The line is bad. Can you speak up?",
+            "a": "I’ll try calling you when I’m in the office.",
+            "note": "speak up = speak louder",
+            "emoji": "🔊"
+          },
+          {
+            "q": "My phone is dying. I’m afraid we’ll get cut off now.",
+            "a": "Let me call you on the other phone.",
+            "note": "phone is dying = battery running out; cut off = disconnected",
+            "emoji": "🪫"
+          }
+        ]
+      }
+    ]
+  }
+]
