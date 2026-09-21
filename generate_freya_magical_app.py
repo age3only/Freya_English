@@ -138,8 +138,15 @@ html_code = """<!DOCTYPE html>
   }
   .hero p{ margin:0; font-weight:800; color:#85586F; font-size:14px; }
 
+  /* ---------- SOUND TIP BANNER FOR IPAD ---------- */
+  .sound-tip{
+    background:#FFF5EB; border:1.5px dashed #FFA94D; border-radius:16px;
+    padding:8px 14px; margin:10px auto 14px; font-size:12px; font-weight:800;
+    color:#D9480F; display:flex; align-items:center; gap:8px; text-align:left;
+  }
+
   /* ---------- CHAPTER CARDS ---------- */
-  .chapter-list{ display:flex; flex-direction:column; gap:13px; margin-top:18px; }
+  .chapter-list{ display:flex; flex-direction:column; gap:13px; margin-top:16px; }
   .chapter-card{
     background:#FFFFFF; border-radius:26px; padding:16px 18px;
     display:flex; align-items:center; gap:16px;
@@ -245,12 +252,14 @@ html_code = """<!DOCTYPE html>
   }
   .bubble{
     border-radius:22px; padding:15px 18px; font-size:16px; line-height:1.4;
-    position:relative;
+    position:relative; cursor:pointer; transition:transform .12s ease;
   }
+  .bubble:active{ transform:scale(0.98); }
   .bubble-speaker{
     font-size:12px; font-weight:900; text-transform:uppercase; letter-spacing:0.5px;
-    margin-bottom:5px; display:flex; align-items:center; gap:6px;
+    margin-bottom:5px; display:flex; align-items:center; justify-content:space-between;
   }
+  .speaker-sound-icon{ font-size:14px; background:rgba(255,255,255,0.7); padding:2px 8px; border-radius:999px; }
   .bubble.speaker-a{
     background:#F5EEFD; color:#5B2C6F; border-bottom-left-radius:6px;
     border:2px solid #E4D0FC;
@@ -404,6 +413,12 @@ html_code = """<!DOCTYPE html>
     <p>Ayo belajar percakapan seru bersama Unicorn &amp; Kitty! 🎀</p>
   </div>
 
+  <!-- iPad sound tip -->
+  <div class="sound-tip">
+    <span>🔊</span>
+    <span><strong>Tips iPad:</strong> Jika suara tidak bunyi, pastikan iPad tidak dalam <em>Mode Hening (Silent Mode)</em> dan naikkan volume ya! ✨</span>
+  </div>
+
   <div class="chapter-list" id="chaptersList"></div>
 
   <div class="footer-note">Sentuh 🔊 untuk mendengarkan suara putri cantik! ✨</div>
@@ -457,16 +472,22 @@ html_code = """<!DOCTYPE html>
     <div class="flashcard">
       <div class="card-topic-tag" id="cardTopicTag">🎀 Topik Percakapan</div>
 
-      <!-- Speaker A (Unicorn Friend) -->
-      <div class="bubble speaker-a">
-        <div class="bubble-speaker">🦄 Teman Unicorn (Speaker A)</div>
+      <!-- Speaker A (Unicorn Friend) - Tap to listen -->
+      <div class="bubble speaker-a" onclick="speakSpeakerA()">
+        <div class="bubble-speaker">
+          <span>🦄 Teman Unicorn (Speaker A)</span>
+          <span class="speaker-sound-icon">🔊 Ketuk</span>
+        </div>
         <div class="en-text" id="cardTextAEn">Hello!</div>
         <div class="id-text" id="cardTextAId">🇮🇩 Halo!</div>
       </div>
 
-      <!-- Speaker B (Kitty / Freya) -->
-      <div class="bubble speaker-b">
-        <div class="bubble-speaker">🐱 Putri Freya (Speaker B)</div>
+      <!-- Speaker B (Kitty / Freya) - Tap to listen -->
+      <div class="bubble speaker-b" onclick="speakSpeakerB()">
+        <div class="bubble-speaker">
+          <span>🐱 Putri Freya (Speaker B)</span>
+          <span class="speaker-sound-icon">🔊 Ketuk</span>
+        </div>
         <div class="en-text" id="cardTextBEn">Hi there!</div>
         <div class="id-text" id="cardTextBId">🇮🇩 Halo juga!</div>
       </div>
@@ -475,7 +496,7 @@ html_code = """<!DOCTYPE html>
       <div class="card-note hidden" id="cardNote"></div>
 
       <div class="card-audio-row">
-        <button class="listen-btn" onclick="speakCurrentDialogue()">🔊 Dengarkan Percakapan ✨</button>
+        <button class="listen-btn" onclick="speakCurrentDialogue()">🔊 Dengarkan Semuanya ✨</button>
       </div>
     </div>
 
@@ -526,21 +547,55 @@ html_code = """<!DOCTYPE html>
 
 <script>
 /* =========================================================
-   WEB AUDIO SOUND EFFECTS (100% Offline & Instant)
-   Cute magical chimes, bell sparkle & friendly pops!
+   IOS / IPADOS AUDIO & SPEECH FIXES
+   - Global memory retention (prevents iOS garbage collection bug)
+   - AudioContext unlocking on touch
+   - Speech synthesis queue unfreezing
    ========================================================= */
+window._activeUtterances = [];
 let audioCtx = null;
+let audioUnlocked = false;
+
 function getAudioContext(){
   if(!audioCtx){
     const AudioContext = window.AudioContext || window.webkitAudioContext;
     if(AudioContext) audioCtx = new AudioContext();
   }
   if(audioCtx && audioCtx.state === 'suspended'){
-    audioCtx.resume();
+    audioCtx.resume().catch(()=>{});
   }
   return audioCtx;
 }
 
+function unlockAudioOnIOS(){
+  if(audioUnlocked) return;
+  audioUnlocked = true;
+
+  // 1. Unlock Web Audio
+  try{
+    const ctx = getAudioContext();
+    if(ctx && ctx.state === 'suspended') ctx.resume();
+  }catch(e){}
+
+  // 2. Unlock Speech Synthesis on iOS Safari
+  try{
+    if('speechSynthesis' in window){
+      window.speechSynthesis.resume();
+      const dummy = new SpeechSynthesisUtterance('');
+      dummy.volume = 0;
+      window.speechSynthesis.speak(dummy);
+    }
+  }catch(e){}
+}
+
+// Attach to all user touch/click events so iOS unlocks immediately
+['touchstart', 'touchend', 'click'].forEach(evt => {
+  window.addEventListener(evt, unlockAudioOnIOS, { passive: true });
+});
+
+/* =========================================================
+   WEB AUDIO SOUND EFFECTS (100% Offline & Instant)
+   ========================================================= */
 function playMagicalSound(type){
   try{
     const ctx = getAudioContext();
@@ -593,6 +648,122 @@ function playMagicalSound(type){
 }
 
 /* =========================================================
+   ROBUST TEXT TO SPEECH (Tested for iOS & Safari)
+   ========================================================= */
+function findEnglishVoice(){
+  if(!('speechSynthesis' in window)) return null;
+  const voices = window.speechSynthesis.getVoices() || [];
+  return voices.find(v => v.lang === 'en-US' || v.lang === 'en_US') ||
+         voices.find(v => v.lang && v.lang.startsWith('en')) || null;
+}
+
+// Warm up voices when available
+if('speechSynthesis' in window){
+  window.speechSynthesis.onvoiceschanged = () => { findEnglishVoice(); };
+}
+
+function speakSingle(text, pitch = 1.1, rate = 0.88, onEnd = null){
+  try{
+    if(!('speechSynthesis' in window)) return;
+    unlockAudioOnIOS();
+
+    window.speechSynthesis.resume();
+    window.speechSynthesis.cancel();
+
+    setTimeout(() => {
+      const u = new SpeechSynthesisUtterance(text);
+      u.lang = 'en-US';
+      u.rate = rate;
+      u.pitch = pitch;
+
+      const voice = findEnglishVoice();
+      if(voice) u.voice = voice;
+
+      // Keep reference to prevent iOS garbage collection
+      window._activeUtterances = [u];
+
+      u.onend = () => {
+        window._activeUtterances = [];
+        if(onEnd) onEnd();
+      };
+      u.onerror = () => {
+        window._activeUtterances = [];
+      };
+
+      window.speechSynthesis.speak(u);
+    }, 40);
+  }catch(e){}
+}
+
+function speakDialoguePair(textA, textB){
+  try{
+    if(!('speechSynthesis' in window)) return;
+    unlockAudioOnIOS();
+
+    window.speechSynthesis.resume();
+    window.speechSynthesis.cancel();
+
+    setTimeout(() => {
+      const uA = new SpeechSynthesisUtterance(textA);
+      uA.lang = 'en-US';
+      uA.rate = 0.86;
+      uA.pitch = 1.25; // Unicorn pitch
+
+      const uB = new SpeechSynthesisUtterance(textB);
+      uB.lang = 'en-US';
+      uB.rate = 0.86;
+      uB.pitch = 1.05; // Freya reply pitch
+
+      const voice = findEnglishVoice();
+      if(voice){
+        uA.voice = voice;
+        uB.voice = voice;
+      }
+
+      // Retain both utterances in memory
+      window._activeUtterances = [uA, uB];
+
+      uB.onend = () => { window._activeUtterances = []; };
+      uB.onerror = () => { window._activeUtterances = []; };
+
+      // Queue both synchronously inside user tap
+      window.speechSynthesis.speak(uA);
+      window.speechSynthesis.speak(uB);
+    }, 40);
+  }catch(e){}
+}
+
+function speakCurrentDialogue(){
+  const card = activeCards[learnIndex];
+  if(!card) return;
+  playMagicalSound('pop');
+  speakDialoguePair(card.q, card.a);
+}
+
+function speakSpeakerA(){
+  const card = activeCards[learnIndex];
+  if(!card) return;
+  playMagicalSound('pop');
+  speakSingle(card.q, 1.25, 0.86);
+}
+
+function speakSpeakerB(){
+  const card = activeCards[learnIndex];
+  if(!card) return;
+  playMagicalSound('pop');
+  speakSingle(card.a, 1.05, 0.86);
+}
+
+function speakQuizQuestion(){
+  if(!quizState) return;
+  const q = quizState.questions[quizState.index];
+  if(q && q.speakText){
+    playMagicalSound('pop');
+    speakSingle(q.speakText, 1.15, 0.88);
+  }
+}
+
+/* =========================================================
    DATA - All 11 Chapters with Indonesian Translations
    ========================================================= */
 const CHAPTERS = """ + json.dumps(chapters_data, ensure_ascii=False) + """;
@@ -619,45 +790,6 @@ let currentTopicFilter = "all";
 let activeCards = [];
 let learnIndex = 0;
 let quizState = null;
-
-/* =========================================================
-   TEXT TO SPEECH (Web Speech API)
-   Clear, gentle, friendly voice for an 8-year-old girl
-   ========================================================= */
-function speak(text, pitch = 1.15, rate = 0.88, onEnd = null){
-  try{
-    if(!('speechSynthesis' in window)) return;
-    window.speechSynthesis.cancel();
-    const u = new SpeechSynthesisUtterance(text);
-    u.lang = 'en-US';
-    u.rate = rate;
-    u.pitch = pitch;
-    if(onEnd) u.onend = onEnd;
-    window.speechSynthesis.speak(u);
-  }catch(e){}
-}
-
-function speakCurrentDialogue(){
-  const card = activeCards[learnIndex];
-  if(!card) return;
-  playMagicalSound('pop');
-  // Speaker A in bright, friendly voice
-  speak(card.q, 1.25, 0.86, () => {
-    setTimeout(() => {
-      // Speaker B in natural reply voice
-      speak(card.a, 1.05, 0.86);
-    }, 450);
-  });
-}
-
-function speakQuizQuestion(){
-  if(!quizState) return;
-  const q = quizState.questions[quizState.index];
-  if(q && q.speakText){
-    playMagicalSound('pop');
-    speak(q.speakText, 1.15, 0.88);
-  }
-}
 
 /* =========================================================
    NAVIGATION
@@ -777,11 +909,11 @@ function startLearn(){
   updateActiveCards();
   if(!activeCards.length) return;
   learnIndex = 0;
-  renderLearnCard();
+  renderLearnCard(true);
   show('screen-learn');
 }
 
-function renderLearnCard(){
+function renderLearnCard(autoPlay = true){
   const card = activeCards[learnIndex];
   const total = activeCards.length;
 
@@ -801,7 +933,7 @@ function renderLearnCard(){
     noteEl.classList.add('hidden');
   }
 
-  document.getElementById('learnProgressText').textContent = `Kartu ${learnIndex + 1} dari ${total} 🦄`;
+  document.getElementById('learnProgressText').textContent = `Kartu ${learnIndex + 1} dari ${total} 🌸`;
   const pct = Math.round(((learnIndex + 1) / total) * 100);
   document.getElementById('learnProgressBar').style.width = pct + '%';
 
@@ -809,14 +941,16 @@ function renderLearnCard(){
   const mainBtn = document.getElementById('cardMainBtn');
   mainBtn.textContent = (learnIndex === total - 1) ? 'Selesai! Main Kuis Seru 🎯' : 'Lanjut 🌸 →';
 
-  speakCurrentDialogue();
+  if(autoPlay){
+    speakCurrentDialogue();
+  }
 }
 
 function nextCard(){
   playMagicalSound('pop');
   if(learnIndex < activeCards.length - 1){
     learnIndex++;
-    renderLearnCard();
+    renderLearnCard(true);
   } else {
     startQuiz();
   }
@@ -826,7 +960,7 @@ function prevCard(){
   playMagicalSound('pop');
   if(learnIndex > 0){
     learnIndex--;
-    renderLearnCard();
+    renderLearnCard(true);
   }
 }
 
@@ -931,7 +1065,7 @@ function renderQuizQuestion(){
     optContainer.appendChild(btn);
   });
 
-  if(q.speakText) speak(q.speakText, 1.15, 0.88);
+  if(q.speakText) speakSingle(q.speakText, 1.15, 0.88);
 }
 
 function answerQuiz(btn, selectedText, q){
@@ -945,7 +1079,7 @@ function answerQuiz(btn, selectedText, q){
     fb.textContent = 'Hebat Sekali Freya! Betul 100%! 🎉✨';
     fb.className = 'feedback good';
     quizState.correctCount++;
-    speak(q.speakText || q.correct, 1.15, 0.88);
+    speakSingle(q.speakText || q.correct, 1.15, 0.88);
   } else {
     playMagicalSound('wrong');
     btn.classList.add('wrong');
@@ -955,7 +1089,7 @@ function answerQuiz(btn, selectedText, q){
     fb.textContent = 'Hampir tepat! Jawaban yang benar ditandai ya, Freya! 💪🌸';
     fb.className = 'feedback bad';
     quizState.lives--;
-    speak(q.speakText || q.correct, 1.05, 0.88);
+    speakSingle(q.speakText || q.correct, 1.05, 0.88);
   }
 
   setTimeout(() => {
@@ -1048,4 +1182,4 @@ with open("Freya_Shyam_English.html", "w", encoding="utf-8") as f:
 with open("index.html", "w", encoding="utf-8") as f:
     f.write(html_code)
 
-print("Generated Freya Shyam Hello Kitty & Unicorn edition successfully!")
+print("Updated with complete iOS/iPad sound & speech synthesis fixes!")
