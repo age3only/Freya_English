@@ -188,7 +188,7 @@ html_code = """<!DOCTYPE html>
     color:#D9480F; display:flex; align-items:center; gap:8px; text-align:left;
   }
 
-  /* ---------- CHAPTER CARDS WITH PROGRESS ---------- */
+  /* ---------- CHAPTER CARDS WITH 10 STARS ---------- */
   .chapter-list{ display:flex; flex-direction:column; gap:14px; margin-top:8px; }
   .chapter-card{
     background:#FFFFFF; border-radius:26px; padding:16px 18px;
@@ -224,19 +224,23 @@ html_code = """<!DOCTYPE html>
     font-size:18px; color:var(--pink-bright); font-weight:900; flex:0 0 auto;
   }
 
-  /* Progress bar inside each chapter card */
+  /* 10-Star Progress Bar inside each chapter card */
   .ch-prog-wrap{
-    background:#FFF5F8; border-radius:16px; padding:10px 12px;
+    background:#FFF5F8; border-radius:18px; padding:10px 14px;
     border:1.5px solid #FFE0EB;
   }
   .ch-prog-header{
     display:flex; justify-content:space-between; align-items:center;
     margin-bottom:6px; font-size:12px; font-weight:800;
   }
-  .ch-stars-row{ color:var(--gold); font-size:14px; letter-spacing:2px; }
+  .ch-stars-row{
+    font-size:15px; letter-spacing:1.5px; display:inline-flex; align-items:center;
+  }
+  .star-gold{ color:#FFB800; filter:drop-shadow(0 1px 2px rgba(255, 184, 0, 0.35)); }
+  .star-dim{ color:#E2E8F0; }
   .ch-pct-badge{
-    background:#FFE0EB; color:var(--pink-dark); padding:2px 8px;
-    border-radius:999px; font-weight:900; font-size:11.5px;
+    background:#FFE0EB; color:var(--pink-dark); padding:3px 10px;
+    border-radius:999px; font-weight:900; font-size:12px;
   }
   .ch-pct-badge.done{
     background:#D4F8E8; color:var(--mint-dark);
@@ -265,6 +269,11 @@ html_code = """<!DOCTYPE html>
   .station-header .id-title{ font-size:19px; font-weight:900; color:var(--pink-dark); }
   .station-header h2{ margin:2px 0; font-size:24px; color:var(--plum); }
   .station-header .sub{ font-weight:800; color:#85586F; font-size:13.5px; }
+  .station-stars-level{
+    margin-top:6px; font-size:15px; font-weight:900; color:var(--gold);
+    background:#FFFDF0; display:inline-block; padding:4px 16px; border-radius:999px;
+    border:1.5px solid #FFE680;
+  }
 
   .topic-box{
     background:#FFFFFF; border-radius:24px; padding:16px 18px;
@@ -430,21 +439,24 @@ html_code = """<!DOCTYPE html>
   .feedback.good{ color:var(--mint-dark); text-shadow:0 1px 2px rgba(32, 191, 107, 0.2); }
   .feedback.bad{ color:var(--coral-dark); }
 
-  /* ---------- RESULT SCREEN ---------- */
-  .result-wrap{ margin:36px auto 0; text-align:center; }
-  .result-wrap .big-emoji{ font-size:78px; animation:pop .5s ease; filter:drop-shadow(0 6px 16px rgba(255, 105, 180, 0.3)); }
+  /* ---------- RESULT SCREEN (10 STARS) ---------- */
+  .result-wrap{ margin:32px auto 0; text-align:center; }
+  .result-wrap .big-emoji{ font-size:76px; animation:pop .5s ease; filter:drop-shadow(0 6px 16px rgba(255, 105, 180, 0.3)); }
   @keyframes pop{ 0%{transform:scale(0);} 70%{transform:scale(1.2);} 100%{transform:scale(1);} }
-  .result-wrap h2{ font-size:28px; margin:10px 0 4px; color:var(--plum); }
-  .result-wrap p{ font-weight:800; color:var(--pink-dark); font-size:16.5px; }
-  .result-stars{ font-size:46px; margin:14px 0; letter-spacing:8px; filter:drop-shadow(0 4px 8px rgba(255, 184, 0, 0.4)); }
+  .result-wrap h2{ font-size:26px; margin:10px 0 4px; color:var(--plum); }
+  .result-wrap p{ font-weight:800; color:var(--pink-dark); font-size:16px; }
+  .result-stars-10{
+    font-size:28px; margin:14px 0; letter-spacing:4px;
+    display:flex; justify-content:center; flex-wrap:wrap; gap:4px;
+  }
   .result-score-tag{
     font-size:18px; font-weight:900; color:#fff; background:linear-gradient(135deg, #FF69B4, #C2185B);
     display:inline-block; padding:8px 24px; border-radius:999px; margin-bottom:18px;
     box-shadow:0 4px 12px rgba(194, 24, 91, 0.25);
   }
-  .result-buttons{ display:flex; flex-direction:column; gap:13px; margin-top:22px; }
+  .result-buttons{ display:flex; flex-direction:column; gap:13px; margin-top:18px; }
 
-  /* ---------- VOICE SETTINGS MODAL ---------- */
+  /* ---------- VOICE & SETTINGS MODAL ---------- */
   .modal-overlay{
     position:fixed; inset:0; background:rgba(43, 34, 80, 0.55);
     backdrop-filter:blur(5px); -webkit-backdrop-filter:blur(5px);
@@ -523,7 +535,7 @@ html_code = """<!DOCTYPE html>
     <div class="name-badge">👑 Freya Shyam</div>
     <div style="display:flex; gap:8px;">
       <button class="voice-btn" onclick="openVoiceModal()" title="Pilih Suara (Voice Settings)">🎙️ Suara</button>
-      <div class="stars">⭐ <span id="totalStars">0</span> / <span id="maxStars">0</span></div>
+      <div class="stars">⭐ <span id="totalStars">0</span> / <span id="maxStars">110</span></div>
     </div>
   </div>
 
@@ -539,7 +551,7 @@ html_code = """<!DOCTYPE html>
     <p>Ayo belajar percakapan seru bersama Unicorn &amp; Kitty! 🎀</p>
   </div>
 
-  <!-- Overall Progress Card for Freya -->
+  <!-- Overall Progress Card for Freya (110 Total Stars) -->
   <div class="overall-progress-card">
     <div class="op-title-row">
       <div class="op-title">👑 Total Progres Belajar Freya</div>
@@ -549,7 +561,7 @@ html_code = """<!DOCTYPE html>
       <div class="op-bar-fill" id="overallBarFill"></div>
     </div>
     <div class="op-stats">
-      <span>⭐ Bintang: <strong id="overallStarsLabel">0 / 33</strong></span>
+      <span>⭐ Bintang: <strong id="overallStarsLabel">0 / 110</strong></span>
       <span>🏝️ Pulau Selesai: <strong id="overallIslandsLabel">0 / 11</strong></span>
       <span>📖 Kartu: <strong id="overallCardsLabel">0 / 239</strong></span>
     </div>
@@ -563,7 +575,7 @@ html_code = """<!DOCTYPE html>
 
   <div class="chapter-list" id="chaptersList"></div>
 
-  <div class="footer-note">Progres belajarmu tersimpan otomatis setiap kali membuka web ini! 🌸✨</div>
+  <div class="footer-note">Setiap bab memiliki 10 ⭐ untuk menguji level kemampuan Freya! 🌸✨</div>
 </section>
 
 <!-- ===================== STATION MENU SCREEN ===================== -->
@@ -573,7 +585,7 @@ html_code = """<!DOCTYPE html>
     <div class="name-badge">🦄 Freya's Island</div>
     <div style="display:flex; gap:8px;">
       <button class="voice-btn" onclick="openVoiceModal()">🎙️ Suara</button>
-      <div class="stars">⭐ <span id="stationStars">0</span> / 3</div>
+      <div class="stars">⭐ <span id="stationStars">0</span> / 10</div>
     </div>
   </div>
 
@@ -582,6 +594,7 @@ html_code = """<!DOCTYPE html>
     <div class="id-title" id="stHeaderTitleId">Sopan Santun</div>
     <h2 id="stHeaderTitleEn">Good Manners</h2>
     <div class="sub" id="stHeaderSub">Greetings, Politeness &amp; Social Etiquette</div>
+    <div class="station-stars-level" id="stHeaderStarsRow">⭐⭐⭐⭐⭐☆☆☆☆☆ (0/10)</div>
   </div>
 
   <div class="topic-box">
@@ -596,7 +609,7 @@ html_code = """<!DOCTYPE html>
     </button>
     <button class="mode-btn play" onclick="startQuiz()">
       <span class="icon">🎯</span>
-      <span>Main Kuis Bintang ⭐<small>Kumpulkan 3 bintang emas untuk Freya!</small></span>
+      <span>Main Kuis 10 Bintang ⭐<small>Dapatkan hingga 10 bintang emas untuk Freya!</small></span>
     </button>
   </div>
 </section>
@@ -665,7 +678,7 @@ html_code = """<!DOCTYPE html>
 
   <div class="quiz-wrap">
     <div class="quiz-top">
-      <div class="quiz-progress" id="quizProgressText">Soal 1 / 5 🦄</div>
+      <div class="quiz-progress" id="quizProgressText">Soal 1 / 10 🦄</div>
     </div>
     <div class="quiz-question">
       <div class="kicker" id="quizKicker">Apa arti kalimat ini?</div>
@@ -678,14 +691,14 @@ html_code = """<!DOCTYPE html>
   </div>
 </section>
 
-<!-- ===================== RESULT SCREEN ===================== -->
+<!-- ===================== RESULT SCREEN (10 STARS) ===================== -->
 <section class="screen hidden" id="screen-result">
   <div class="result-wrap">
     <div class="big-emoji" id="resultEmoji">🦄</div>
     <h2 id="resultTitle">Luar Biasa, Princess Freya! 👑</h2>
     <p id="resultSub">Kamu berhasil menyelesaikan bab ini!</p>
-    <div class="result-stars" id="resultStars">⭐⭐⭐</div>
-    <div class="result-score-tag" id="resultScore">Nilai: 5 / 5 ⭐</div>
+    <div class="result-stars-10" id="resultStars10"></div>
+    <div class="result-score-tag" id="resultScore">Nilai: 10 / 10 ⭐</div>
     <div class="result-buttons">
       <button class="finish-btn" onclick="retryQuiz()" id="retryBtn">🔁 Main Kuis Lagi 🎀</button>
       <button class="mode-btn learn" onclick="goHome()">🏝️ Kembali ke Pulau Impian 🦄</button>
@@ -768,13 +781,11 @@ function unlockAudioOnIOS(){
   if(audioUnlocked) return;
   audioUnlocked = true;
 
-  // 1. Unlock Web Audio
   try{
     const ctx = getAudioContext();
     if(ctx && ctx.state === 'suspended') ctx.resume();
   }catch(e){}
 
-  // 2. Unlock Speech Synthesis on iOS Safari
   try{
     if('speechSynthesis' in window){
       window.speechSynthesis.resume();
@@ -814,7 +825,6 @@ function playMagicalSound(type){
         osc.stop(now + i * 0.08 + 0.45);
       });
     } else if(type === 'wrong'){
-      // Gentle soft tone
       const osc = ctx.createOscillator();
       const gain = ctx.createGain();
       osc.type = 'triangle';
@@ -827,7 +837,6 @@ function playMagicalSound(type){
       osc.start(now);
       osc.stop(now + 0.26);
     } else if(type === 'pop'){
-      // Cute bubble pop
       const osc = ctx.createOscillator();
       const gain = ctx.createGain();
       osc.type = 'sine';
@@ -1068,10 +1077,8 @@ function speakQuizQuestion(){
 const CHAPTERS = """ + json.dumps(chapters_data, ensure_ascii=False) + """;
 
 /* =========================================================
-   STATE & PERSISTENT PROGRESS
-   Saved in localStorage:
-   - progress[ch.id]: stars earned (0 - 3)
-   - cardsSeen[ch.id]: array of seen dialogue indices
+   STATE & PERSISTENT PROGRESS (10 STARS PER CHAPTER)
+   - Max 10 stars per chapter (110 stars total)
    ========================================================= */
 let progress = {};
 let cardsSeen = {};
@@ -1083,20 +1090,31 @@ CHAPTERS.forEach(c => {
 
 function saveProgress(){
   try{
-    localStorage.setItem('freya_english_stars', JSON.stringify(progress));
-    localStorage.setItem('freya_english_cards_seen', JSON.stringify(cardsSeen));
+    localStorage.setItem('freya_english_stars_10', JSON.stringify(progress));
+    localStorage.setItem('freya_english_cards_seen_10', JSON.stringify(cardsSeen));
   }catch(e){}
 }
 
 function loadProgress(){
   try{
-    // Try v2 stars
-    const rawStars = localStorage.getItem('freya_english_stars') || localStorage.getItem('freya_english_progress');
-    if(rawStars){
-      const parsed = JSON.parse(rawStars);
+    const rawStars10 = localStorage.getItem('freya_english_stars_10');
+    if(rawStars10){
+      const parsed = JSON.parse(rawStars10);
       Object.assign(progress, parsed);
+    } else {
+      // Migrate from old 3-star format if existing (e.g. 3 stars -> 10 stars, 2 stars -> 7 stars, 1 star -> 4 stars)
+      const oldStars = localStorage.getItem('freya_english_stars') || localStorage.getItem('freya_english_progress');
+      if(oldStars){
+        const parsed = JSON.parse(oldStars);
+        for(const k in parsed){
+          const oldVal = parsed[k] || 0;
+          progress[k] = Math.min(10, Math.round((oldVal / 3) * 10));
+        }
+        saveProgress();
+      }
     }
-    const rawSeen = localStorage.getItem('freya_english_cards_seen');
+
+    const rawSeen = localStorage.getItem('freya_english_cards_seen_10') || localStorage.getItem('freya_english_cards_seen');
     if(rawSeen){
       const parsed = JSON.parse(rawSeen);
       Object.assign(cardsSeen, parsed);
@@ -1123,6 +1141,19 @@ let activeCards = [];
 let learnIndex = 0;
 let quizState = null;
 
+/* Helper to render 10 stars cleanly */
+function render10StarsHtml(count){
+  let html = '';
+  for(let i = 0; i < 10; i++){
+    if(i < count){
+      html += '<span class="star-gold">⭐</span>';
+    } else {
+      html += '<span class="star-dim">☆</span>';
+    }
+  }
+  return html;
+}
+
 /* =========================================================
    NAVIGATION
    ========================================================= */
@@ -1148,11 +1179,15 @@ function openChapter(idx){
 
 function showStation(){
   const ch = CHAPTERS[currentChapterIdx];
+  const stars = progress[ch.id] || 0;
   document.getElementById('stHeaderBadge').textContent = ch.badge;
   document.getElementById('stHeaderTitleId').textContent = ch.title_id || ch.title;
   document.getElementById('stHeaderTitleEn').textContent = `Bab ${ch.number}: ${ch.title}`;
   document.getElementById('stHeaderSub').textContent = ch.sub_id || ch.sub;
-  document.getElementById('stationStars').textContent = progress[ch.id];
+  document.getElementById('stationStars').textContent = stars;
+
+  // Header 10 stars display
+  document.getElementById('stHeaderStarsRow').innerHTML = `${render10StarsHtml(stars)} (${stars}/10 ⭐)`;
 
   // Populate dropdown
   const select = document.getElementById('topicDropdown');
@@ -1200,7 +1235,7 @@ function updateActiveCards(){
 }
 
 /* =========================================================
-   HOME SCREEN & OVERALL / PER-CHAPTER PROGRESS CALCULATION
+   HOME SCREEN & 10-STAR PROGRESS CALCULATION
    ========================================================= */
 function calculateChapterProgress(ch){
   const stars = progress[ch.id] || 0;
@@ -1208,13 +1243,12 @@ function calculateChapterProgress(ch){
   const seenSet = new Set(cardsSeen[ch.id] || []);
   const seenCount = Math.min(totalCards, seenSet.size);
 
-  // Weight: 60% from Quiz stars (0, 33%, 66%, 100%), 40% from Flashcards studied
-  const starPct = (stars / 3) * 60;
-  const cardsPct = totalCards > 0 ? (seenCount / totalCards) * 40 : 0;
-  let overallPct = Math.round(starPct + cardsPct);
-
-  // If 3 stars earned, guarantee 100%
-  if(stars === 3) overallPct = 100;
+  // 10 stars directly reflect 0% - 100% of subject mastery
+  let overallPct = stars * 10;
+  if(stars === 0 && seenCount > 0){
+    // Small boost for viewing cards even before quiz
+    overallPct = Math.min(9, Math.round((seenCount / totalCards) * 10));
+  }
   if(overallPct > 100) overallPct = 100;
 
   return {
@@ -1222,7 +1256,7 @@ function calculateChapterProgress(ch){
     totalCards,
     seenCount,
     percent: overallPct,
-    isComplete: overallPct >= 100 || stars === 3
+    isComplete: stars >= 10 || overallPct >= 100
   };
 }
 
@@ -1231,7 +1265,6 @@ function renderHome(){
   let completedIslands = 0;
   let totalCardsSeenCount = 0;
   let totalCardsAll = 0;
-  let totalPercentSum = 0;
 
   CHAPTERS.forEach(ch => {
     const p = calculateChapterProgress(ch);
@@ -1239,11 +1272,10 @@ function renderHome(){
     if(p.isComplete) completedIslands++;
     totalCardsSeenCount += p.seenCount;
     totalCardsAll += p.totalCards;
-    totalPercentSum += p.percent;
   });
 
-  const maxStarsTotal = CHAPTERS.length * 3;
-  const overallPercentage = Math.round(totalPercentSum / CHAPTERS.length);
+  const maxStarsTotal = CHAPTERS.length * 10; // 110 Stars total
+  const overallPercentage = Math.round((totalStarsEarned / maxStarsTotal) * 100);
 
   // Topbar stars
   document.getElementById('totalStars').textContent = totalStarsEarned;
@@ -1256,7 +1288,7 @@ function renderHome(){
   document.getElementById('overallIslandsLabel').textContent = `${completedIslands} / ${CHAPTERS.length}`;
   document.getElementById('overallCardsLabel').textContent = `${totalCardsSeenCount} / ${totalCardsAll}`;
 
-  // Render Every Single Chapter Card with its individual progress bar
+  // Render Every Chapter Card with its 10 STARS
   const list = document.getElementById('chaptersList');
   list.innerHTML = '';
 
@@ -1266,10 +1298,10 @@ function renderHome(){
     card.className = 'chapter-card' + (p.isComplete ? ' completed' : '');
     card.onclick = () => openChapter(i);
 
-    const starsDisplay = '⭐'.repeat(p.stars) + '☆'.repeat(3 - p.stars);
+    const starsRowHtml = render10StarsHtml(p.stars);
     const badgeDoneClass = p.isComplete ? 'done' : '';
     const barDoneClass = p.isComplete ? 'done' : '';
-    const badgeText = p.isComplete ? '🎉 100% Selesai' : `${p.percent}% Selesai`;
+    const badgeText = p.isComplete ? '👑 10/10 ⭐ (100%)' : `${p.stars}/10 ⭐ (${p.percent}%)`;
 
     card.innerHTML = `
       <div class="ch-top-row">
@@ -1283,10 +1315,10 @@ function renderHome(){
         <div class="ch-arrow">›</div>
       </div>
 
-      <!-- Dedicated Progress Bar for this Index -->
+      <!-- 10 Stars Progress for this Subject -->
       <div class="ch-prog-wrap">
         <div class="ch-prog-header">
-          <span class="ch-stars-row">${starsDisplay}</span>
+          <span class="ch-stars-row">${starsRowHtml}</span>
           <span class="ch-pct-badge ${badgeDoneClass}">${badgeText}</span>
         </div>
         <div class="ch-bar-bg">
@@ -1347,7 +1379,7 @@ function renderLearnCard(autoPlay = true){
 
   document.getElementById('prevBtn').disabled = (learnIndex === 0);
   const mainBtn = document.getElementById('cardMainBtn');
-  mainBtn.textContent = (learnIndex === total - 1) ? 'Selesai! Main Kuis Seru 🎯' : 'Lanjut 🌸 →';
+  mainBtn.textContent = (learnIndex === total - 1) ? 'Selesai! Main Kuis 10 ⭐ 🎯' : 'Lanjut 🌸 →';
 
   if(autoPlay){
     speakCurrentDialogue();
@@ -1373,7 +1405,7 @@ function prevCard(){
 }
 
 /* =========================================================
-   QUIZ MODE FOR FREYA (8 YEARS OLD)
+   QUIZ MODE FOR FREYA (10 QUESTIONS = UP TO 10 STARS)
    ========================================================= */
 function shuffle(arr){
   const a = arr.slice();
@@ -1387,7 +1419,8 @@ function shuffle(arr){
 function buildQuizQuestions(){
   updateActiveCards();
   const pool = activeCards.length >= 4 ? activeCards : getAllChapterCards();
-  const sampleCount = Math.min(6, pool.length);
+  // 10 questions for 10 stars!
+  const sampleCount = Math.min(10, pool.length);
   const selected = shuffle(pool).slice(0, sampleCount);
 
   return selected.map((item, idx) => {
@@ -1518,35 +1551,34 @@ function finishQuiz(completed){
   const ch = CHAPTERS[currentChapterIdx];
   const total = quizState.questions.length;
   const ratio = quizState.correctCount / total;
-  let stars = 0;
 
-  if(completed){
-    if(ratio >= 0.85) stars = 3;
-    else if(ratio >= 0.6) stars = 2;
-    else stars = 1;
-  } else {
-    stars = 0;
-  }
+  // Up to 10 stars!
+  let earnedStars = Math.round(ratio * 10);
+  if(earnedStars === 0 && quizState.correctCount > 0) earnedStars = 1;
+  if(earnedStars > 10) earnedStars = 10;
 
-  const passed = stars >= 1;
-  if(passed && stars > progress[ch.id]){
-    progress[ch.id] = stars;
+  const passed = earnedStars >= 1;
+  if(passed && earnedStars > (progress[ch.id] || 0)){
+    progress[ch.id] = earnedStars;
     saveProgress();
   }
 
-  document.getElementById('resultEmoji').textContent = passed ? '🦄' : '💖';
-  document.getElementById('resultTitle').textContent = passed 
+  const currentBest = Math.max(progress[ch.id] || 0, earnedStars);
+
+  document.getElementById('resultEmoji').textContent = earnedStars >= 7 ? '🦄' : '💖';
+  document.getElementById('resultTitle').textContent = earnedStars >= 8
     ? 'Luar Biasa, Princess Freya! 👑✨' 
-    : 'Semangat Terus, Freya Cantik! 🌸';
-  document.getElementById('resultSub').textContent = passed 
-    ? `Freya berhasil menguasai pulau ${ch.title_id || ch.title}!`
-    : `Bagus sekali usahanya! Ayo lihat kartu lagi dan kumpulkan bintangnya!`;
-  document.getElementById('resultStars').textContent = passed ? ('⭐'.repeat(stars) + '☆'.repeat(3 - stars)) : '☆☆☆';
-  document.getElementById('resultScore').textContent = `Jawaban Benar: ${quizState.correctCount} / ${total} ⭐`;
-  document.getElementById('retryBtn').textContent = passed ? '🔁 Main Kuis Lagi 🎀' : '🔁 Coba Lagi 🌸';
+    : 'Bagus Sekali, Freya Cantik! 🌸';
+  document.getElementById('resultSub').textContent = `Freya mengumpulkan ${earnedStars} dari 10 Bintang di Bab ini!`;
+
+  // Render 10 stars on result screen
+  document.getElementById('resultStars10').innerHTML = render10StarsHtml(earnedStars);
+
+  document.getElementById('resultScore').textContent = `Nilai: ${quizState.correctCount} / ${total} Soal Benar (${earnedStars}/10 ⭐)`;
+  document.getElementById('retryBtn').textContent = earnedStars === 10 ? '🔁 Main Kuis Lagi 🎀' : '⭐ Main Lagi untuk 10 Bintang!';
 
   show('screen-result');
-  if(passed){
+  if(earnedStars >= 5){
     playMagicalSound('sparkle');
     launchConfetti();
   }
@@ -1591,4 +1623,4 @@ with open("Freya_Shyam_English.html", "w", encoding="utf-8") as f:
 with open("index.html", "w", encoding="utf-8") as f:
     f.write(html_code)
 
-print("Added overall progress card and persistent progress bars to each chapter successfully!")
+print("Upgraded to 10 stars per chapter (110 total stars) successfully!")
