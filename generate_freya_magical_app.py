@@ -121,7 +121,7 @@ html_code = """<!DOCTYPE html>
   .backbtn:active{ transform:translateY(2px); box-shadow:0 2px 4px rgba(231, 84, 128, 0.15); }
 
   /* ---------- HERO SECTION ---------- */
-  .hero{ text-align:center; margin-bottom:16px; }
+  .hero{ text-align:center; margin-bottom:14px; }
   .mascot-row{
     display:flex; align-items:center; justify-content:center; gap:8px;
     margin-bottom:6px;
@@ -147,32 +147,67 @@ html_code = """<!DOCTYPE html>
   }
   .hero p{ margin:0; font-weight:800; color:#85586F; font-size:14px; }
 
+  /* ---------- OVERALL PROGRESS CARD ---------- */
+  .overall-progress-card{
+    background:#FFFFFF; border-radius:24px; padding:16px 18px;
+    border:2.5px solid #FFCCD9;
+    box-shadow:0 8px 22px rgba(255, 105, 180, 0.16);
+    margin:14px 0 16px; text-align:left; position:relative; overflow:hidden;
+  }
+  .overall-progress-card::after{
+    content:'🦄'; position:absolute; right:10px; bottom:-10px;
+    font-size:60px; opacity:0.12; pointer-events:none;
+  }
+  .op-title-row{
+    display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;
+  }
+  .op-title{
+    font-weight:900; font-size:14.5px; color:var(--plum); display:flex; align-items:center; gap:6px;
+  }
+  .op-percent{
+    font-family:'Baloo 2', cursive, sans-serif; font-weight:900; font-size:22px; color:var(--pink-dark);
+  }
+  .op-bar-bg{
+    width:100%; height:14px; background:#FFE8F1; border-radius:999px;
+    overflow:hidden; border:2px solid #FFCCD9; margin-bottom:8px;
+  }
+  .op-bar-fill{
+    height:100%; width:0%;
+    background:linear-gradient(90deg, #FF85A2 0%, #FF4D79 45%, #B388EB 80%, #48DBBB 100%);
+    border-radius:999px; transition:width .45s ease;
+  }
+  .op-stats{
+    display:flex; justify-content:space-between; font-size:12px; font-weight:800; color:#85586F;
+  }
+  .op-stats strong{ color:var(--pink-dark); }
+
   /* ---------- SOUND TIP BANNER FOR IPAD ---------- */
   .sound-tip{
     background:#FFF5EB; border:1.5px dashed #FFA94D; border-radius:16px;
-    padding:8px 14px; margin:10px auto 14px; font-size:12px; font-weight:800;
+    padding:8px 14px; margin:0 auto 16px; font-size:12px; font-weight:800;
     color:#D9480F; display:flex; align-items:center; gap:8px; text-align:left;
   }
 
-  /* ---------- CHAPTER CARDS ---------- */
-  .chapter-list{ display:flex; flex-direction:column; gap:13px; margin-top:16px; }
+  /* ---------- CHAPTER CARDS WITH PROGRESS ---------- */
+  .chapter-list{ display:flex; flex-direction:column; gap:14px; margin-top:8px; }
   .chapter-card{
     background:#FFFFFF; border-radius:26px; padding:16px 18px;
-    display:flex; align-items:center; gap:16px;
+    display:flex; flex-direction:column; gap:12px;
     border:2.5px solid #FFDFE9;
     box-shadow:0 6px 18px rgba(255, 140, 180, 0.14), 0 3px 0 #FFCCD9;
     transition:transform .14s ease, box-shadow .14s ease;
     cursor:pointer; text-align:left; position:relative; overflow:hidden;
   }
-  .chapter-card::after{
-    content:''; position:absolute; top:-20px; right:-20px; width:60px; height:60px;
-    background:radial-gradient(circle, rgba(255,182,193,0.35) 0%, transparent 70%);
-    border-radius:50%;
+  .chapter-card.completed{
+    border-color:#7FCE9C; box-shadow:0 6px 18px rgba(32, 191, 107, 0.16), 0 3px 0 #5CB881;
   }
   .chapter-card:active{ transform:translateY(3px); box-shadow:0 2px 8px rgba(255, 140, 180, 0.15), 0 1px 0 #FFCCD9; }
   
+  .ch-top-row{
+    display:flex; align-items:center; gap:15px;
+  }
   .ch-badge{
-    width:66px; height:66px; border-radius:50%; flex:0 0 auto;
+    width:64px; height:64px; border-radius:50%; flex:0 0 auto;
     display:flex; align-items:center; justify-content:center;
     font-size:32px; border:3px solid #FFF;
     box-shadow:0 4px 12px rgba(255, 105, 180, 0.25);
@@ -183,11 +218,40 @@ html_code = """<!DOCTYPE html>
   .ch-title{ font-family:'Baloo 2',sans-serif; font-weight:800; font-size:20px; color:var(--plum); line-height:1.2; margin:2px 0 1px; }
   .ch-sub-id{ font-size:13px; font-weight:800; color:var(--pink-dark); }
   .ch-sub-en{ font-size:11.5px; font-weight:700; color:#8A7A90; }
-  .ch-stars{ font-size:15px; color:var(--gold); font-weight:800; margin-top:3px; }
   .ch-arrow{
     width:34px; height:34px; border-radius:50%; background:#FFF0F5;
     display:flex; align-items:center; justify-content:center;
     font-size:18px; color:var(--pink-bright); font-weight:900; flex:0 0 auto;
+  }
+
+  /* Progress bar inside each chapter card */
+  .ch-prog-wrap{
+    background:#FFF5F8; border-radius:16px; padding:10px 12px;
+    border:1.5px solid #FFE0EB;
+  }
+  .ch-prog-header{
+    display:flex; justify-content:space-between; align-items:center;
+    margin-bottom:6px; font-size:12px; font-weight:800;
+  }
+  .ch-stars-row{ color:var(--gold); font-size:14px; letter-spacing:2px; }
+  .ch-pct-badge{
+    background:#FFE0EB; color:var(--pink-dark); padding:2px 8px;
+    border-radius:999px; font-weight:900; font-size:11.5px;
+  }
+  .ch-pct-badge.done{
+    background:#D4F8E8; color:var(--mint-dark);
+  }
+  .ch-bar-bg{
+    width:100%; height:9px; background:#FFFFFF; border-radius:999px;
+    overflow:hidden; border:1.5px solid #FFCCD9;
+  }
+  .ch-bar-fill{
+    height:100%; width:0%;
+    background:linear-gradient(90deg, #FF85A2, #FF4D79);
+    border-radius:999px; transition:width .35s ease;
+  }
+  .ch-bar-fill.done{
+    background:linear-gradient(90deg, #48DBBB, #20BF6B);
   }
 
   /* ---------- STATION SCREEN ---------- */
@@ -423,6 +487,12 @@ html_code = """<!DOCTYPE html>
     padding:13px; border-radius:16px; font-weight:900; font-size:14.5px;
     box-shadow:0 4px 0 #D81B60; text-align:center;
   }
+  .reset-btn-row{
+    text-align:center; margin-top:16px; padding-top:14px; border-top:1px dashed #FFCCD9;
+  }
+  .reset-btn{
+    background:none; color:#A0AEC0; font-size:12px; font-weight:800; text-decoration:underline;
+  }
 
   /* ---------- CONFETTI ---------- */
   .confetti{ position:fixed; inset:0; pointer-events:none; z-index:50; overflow:hidden; }
@@ -469,6 +539,22 @@ html_code = """<!DOCTYPE html>
     <p>Ayo belajar percakapan seru bersama Unicorn &amp; Kitty! 🎀</p>
   </div>
 
+  <!-- Overall Progress Card for Freya -->
+  <div class="overall-progress-card">
+    <div class="op-title-row">
+      <div class="op-title">👑 Total Progres Belajar Freya</div>
+      <div class="op-percent" id="overallPercent">0%</div>
+    </div>
+    <div class="op-bar-bg">
+      <div class="op-bar-fill" id="overallBarFill"></div>
+    </div>
+    <div class="op-stats">
+      <span>⭐ Bintang: <strong id="overallStarsLabel">0 / 33</strong></span>
+      <span>🏝️ Pulau Selesai: <strong id="overallIslandsLabel">0 / 11</strong></span>
+      <span>📖 Kartu: <strong id="overallCardsLabel">0 / 239</strong></span>
+    </div>
+  </div>
+
   <!-- iPad sound tip -->
   <div class="sound-tip">
     <span>🔊</span>
@@ -477,7 +563,7 @@ html_code = """<!DOCTYPE html>
 
   <div class="chapter-list" id="chaptersList"></div>
 
-  <div class="footer-note">Sentuh 🔊 untuk mendengarkan suara putri cantik! ✨</div>
+  <div class="footer-note">Progres belajarmu tersimpan otomatis setiap kali membuka web ini! 🌸✨</div>
 </section>
 
 <!-- ===================== STATION MENU SCREEN ===================== -->
@@ -607,7 +693,7 @@ html_code = """<!DOCTYPE html>
   </div>
 </section>
 
-<!-- ===================== VOICE SETTINGS MODAL ===================== -->
+<!-- ===================== VOICE & SETTINGS MODAL ===================== -->
 <div class="modal-overlay hidden" id="voiceModal" onclick="closeVoiceModalOnOutside(event)">
   <div class="modal-card">
     <div class="modal-header">
@@ -646,6 +732,10 @@ html_code = """<!DOCTYPE html>
     <div class="modal-actions">
       <button class="btn-test" onclick="testCurrentVoice()">🔊 Coba Suara</button>
       <button class="btn-save" onclick="saveAndCloseVoiceModal()">Simpan 💖</button>
+    </div>
+
+    <div class="reset-btn-row">
+      <button class="reset-btn" onclick="resetAllProgress()">↺ Reset Progres Bintang &amp; Kartu (Mulai Ulang)</button>
     </div>
   </div>
 </div>
@@ -695,7 +785,6 @@ function unlockAudioOnIOS(){
   }catch(e){}
 }
 
-// Attach to all user touch/click events so iOS unlocks immediately
 ['touchstart', 'touchend', 'click'].forEach(evt => {
   window.addEventListener(evt, unlockAudioOnIOS, { passive: true });
 });
@@ -777,16 +866,11 @@ function populateVoiceSelect(){
     return;
   }
 
-  // Group or display voices nicely
   cachedVoices.forEach(v => {
     const opt = document.createElement('option');
     opt.value = v.voiceURI;
-    
-    // Friendly voice names (e.g. Samantha - US, Daniel - UK)
     let displayName = v.name;
-    if(v.lang){
-      displayName += ` (${v.lang})`;
-    }
+    if(v.lang) displayName += ` (${v.lang})`;
     opt.textContent = displayName;
 
     if(currentVoiceURI && v.voiceURI === currentVoiceURI){
@@ -795,7 +879,6 @@ function populateVoiceSelect(){
     select.appendChild(opt);
   });
 
-  // If no voice currently selected, pick first or natural voice
   if(!currentVoiceURI && cachedVoices.length > 0){
     const natural = cachedVoices.find(v => v.name.includes('Samantha') || v.name.includes('Natural') || v.name.includes('Siri')) || cachedVoices[0];
     currentVoiceURI = natural.voiceURI;
@@ -818,7 +901,6 @@ function getActiveVoice(){
   return cachedVoices.find(v => v.lang === 'en-US' || v.lang === 'en_US') || cachedVoices[0] || null;
 }
 
-/* Voice Settings Modal Controls */
 function openVoiceModal(){
   playMagicalSound('pop');
   populateVoiceSelect();
@@ -826,7 +908,6 @@ function openVoiceModal(){
   document.getElementById('speedVal').textContent = voiceSpeed.toFixed(2) + 'x';
   document.getElementById('pitchSlider').value = voicePitch;
   document.getElementById('pitchVal').textContent = voicePitch.toFixed(2) + 'x';
-
   document.getElementById('voiceModal').classList.remove('hidden');
 }
 
@@ -900,7 +981,6 @@ function speakSingle(text, pitch = null, rate = null, onEnd = null){
       const voice = getActiveVoice();
       if(voice) u.voice = voice;
 
-      // Keep reference in global array to prevent iOS garbage collection
       window._activeUtterances = [u];
 
       u.onend = () => {
@@ -928,12 +1008,12 @@ function speakDialoguePair(textA, textB){
       const uA = new SpeechSynthesisUtterance(textA);
       uA.lang = 'en-US';
       uA.rate = voiceSpeed;
-      uA.pitch = Math.min(2.0, voicePitch * 1.15); // Slightly higher for Unicorn
+      uA.pitch = Math.min(2.0, voicePitch * 1.15); // Unicorn
 
       const uB = new SpeechSynthesisUtterance(textB);
       uB.lang = 'en-US';
       uB.rate = voiceSpeed;
-      uB.pitch = Math.max(0.6, voicePitch * 0.95); // Natural reply for Freya
+      uB.pitch = Math.max(0.6, voicePitch * 0.95); // Freya
 
       const voice = getActiveVoice();
       if(voice){
@@ -941,13 +1021,11 @@ function speakDialoguePair(textA, textB){
         uB.voice = voice;
       }
 
-      // Retain both in memory
       window._activeUtterances = [uA, uB];
 
       uB.onend = () => { window._activeUtterances = []; };
       uB.onerror = () => { window._activeUtterances = []; };
 
-      // Queue both synchronously inside user tap
       window.speechSynthesis.speak(uA);
       window.speechSynthesis.speak(uB);
     }, 40);
@@ -990,21 +1068,54 @@ function speakQuizQuestion(){
 const CHAPTERS = """ + json.dumps(chapters_data, ensure_ascii=False) + """;
 
 /* =========================================================
-   STATE & PERSISTENCE
+   STATE & PERSISTENT PROGRESS
+   Saved in localStorage:
+   - progress[ch.id]: stars earned (0 - 3)
+   - cardsSeen[ch.id]: array of seen dialogue indices
    ========================================================= */
 let progress = {};
-CHAPTERS.forEach(c => progress[c.id] = 0);
+let cardsSeen = {};
+
+CHAPTERS.forEach(c => {
+  progress[c.id] = 0;
+  cardsSeen[c.id] = [];
+});
 
 function saveProgress(){
-  try{ localStorage.setItem('freya_english_progress', JSON.stringify(progress)); }catch(e){}
+  try{
+    localStorage.setItem('freya_english_stars', JSON.stringify(progress));
+    localStorage.setItem('freya_english_cards_seen', JSON.stringify(cardsSeen));
+  }catch(e){}
 }
+
 function loadProgress(){
   try{
-    const raw = localStorage.getItem('freya_english_progress');
-    if(raw){ const parsed = JSON.parse(raw); Object.assign(progress, parsed); }
+    // Try v2 stars
+    const rawStars = localStorage.getItem('freya_english_stars') || localStorage.getItem('freya_english_progress');
+    if(rawStars){
+      const parsed = JSON.parse(rawStars);
+      Object.assign(progress, parsed);
+    }
+    const rawSeen = localStorage.getItem('freya_english_cards_seen');
+    if(rawSeen){
+      const parsed = JSON.parse(rawSeen);
+      Object.assign(cardsSeen, parsed);
+    }
   }catch(e){}
 }
 loadProgress();
+
+function resetAllProgress(){
+  if(confirm("Apakah Freya ingin mengulang semua bintang dan kartu dari awal? 🌸")){
+    CHAPTERS.forEach(c => {
+      progress[c.id] = 0;
+      cardsSeen[c.id] = [];
+    });
+    saveProgress();
+    closeVoiceModal();
+    renderHome();
+  }
+}
 
 let currentChapterIdx = 0;
 let currentTopicFilter = "all";
@@ -1089,41 +1200,106 @@ function updateActiveCards(){
 }
 
 /* =========================================================
-   HOME SCREEN
+   HOME SCREEN & OVERALL / PER-CHAPTER PROGRESS CALCULATION
    ========================================================= */
-function renderHome(){
-  const totalEarned = Object.values(progress).reduce((a, b) => a + b, 0);
-  document.getElementById('totalStars').textContent = totalEarned;
-  document.getElementById('maxStars').textContent = CHAPTERS.length * 3;
+function calculateChapterProgress(ch){
+  const stars = progress[ch.id] || 0;
+  const totalCards = getChapterTotalCount(ch);
+  const seenSet = new Set(cardsSeen[ch.id] || []);
+  const seenCount = Math.min(totalCards, seenSet.size);
 
+  // Weight: 60% from Quiz stars (0, 33%, 66%, 100%), 40% from Flashcards studied
+  const starPct = (stars / 3) * 60;
+  const cardsPct = totalCards > 0 ? (seenCount / totalCards) * 40 : 0;
+  let overallPct = Math.round(starPct + cardsPct);
+
+  // If 3 stars earned, guarantee 100%
+  if(stars === 3) overallPct = 100;
+  if(overallPct > 100) overallPct = 100;
+
+  return {
+    stars,
+    totalCards,
+    seenCount,
+    percent: overallPct,
+    isComplete: overallPct >= 100 || stars === 3
+  };
+}
+
+function renderHome(){
+  let totalStarsEarned = 0;
+  let completedIslands = 0;
+  let totalCardsSeenCount = 0;
+  let totalCardsAll = 0;
+  let totalPercentSum = 0;
+
+  CHAPTERS.forEach(ch => {
+    const p = calculateChapterProgress(ch);
+    totalStarsEarned += p.stars;
+    if(p.isComplete) completedIslands++;
+    totalCardsSeenCount += p.seenCount;
+    totalCardsAll += p.totalCards;
+    totalPercentSum += p.percent;
+  });
+
+  const maxStarsTotal = CHAPTERS.length * 3;
+  const overallPercentage = Math.round(totalPercentSum / CHAPTERS.length);
+
+  // Topbar stars
+  document.getElementById('totalStars').textContent = totalStarsEarned;
+  document.getElementById('maxStars').textContent = maxStarsTotal;
+
+  // Overall Progress Card
+  document.getElementById('overallPercent').textContent = overallPercentage + '%';
+  document.getElementById('overallBarFill').style.width = overallPercentage + '%';
+  document.getElementById('overallStarsLabel').textContent = `${totalStarsEarned} / ${maxStarsTotal}`;
+  document.getElementById('overallIslandsLabel').textContent = `${completedIslands} / ${CHAPTERS.length}`;
+  document.getElementById('overallCardsLabel').textContent = `${totalCardsSeenCount} / ${totalCardsAll}`;
+
+  // Render Every Single Chapter Card with its individual progress bar
   const list = document.getElementById('chaptersList');
   list.innerHTML = '';
 
   CHAPTERS.forEach((ch, i) => {
-    const count = getChapterTotalCount(ch);
+    const p = calculateChapterProgress(ch);
     const card = document.createElement('div');
-    card.className = 'chapter-card';
+    card.className = 'chapter-card' + (p.isComplete ? ' completed' : '');
     card.onclick = () => openChapter(i);
 
-    const stars = '⭐'.repeat(progress[ch.id]) + '☆'.repeat(3 - progress[ch.id]);
+    const starsDisplay = '⭐'.repeat(p.stars) + '☆'.repeat(3 - p.stars);
+    const badgeDoneClass = p.isComplete ? 'done' : '';
+    const barDoneClass = p.isComplete ? 'done' : '';
+    const badgeText = p.isComplete ? '🎉 100% Selesai' : `${p.percent}% Selesai`;
 
     card.innerHTML = `
-      <div class="ch-badge">${ch.badge}</div>
-      <div class="ch-info">
-        <div class="ch-tag">Pulau Impian ${ch.number} 🦄</div>
-        <div class="ch-title">${ch.title}</div>
-        <div class="ch-sub-id">${ch.title_id || ''}</div>
-        <div class="ch-sub-en">${ch.topics.length} Topik • ${count} Percakapan</div>
-        <div class="ch-stars">${stars}</div>
+      <div class="ch-top-row">
+        <div class="ch-badge">${ch.badge}</div>
+        <div class="ch-info">
+          <div class="ch-tag">Pulau Impian ${ch.number} 🦄</div>
+          <div class="ch-title">${ch.title}</div>
+          <div class="ch-sub-id">${ch.title_id || ''}</div>
+          <div class="ch-sub-en">${ch.topics.length} Topik • ${p.totalCards} Percakapan</div>
+        </div>
+        <div class="ch-arrow">›</div>
       </div>
-      <div class="ch-arrow">›</div>
+
+      <!-- Dedicated Progress Bar for this Index -->
+      <div class="ch-prog-wrap">
+        <div class="ch-prog-header">
+          <span class="ch-stars-row">${starsDisplay}</span>
+          <span class="ch-pct-badge ${badgeDoneClass}">${badgeText}</span>
+        </div>
+        <div class="ch-bar-bg">
+          <div class="ch-bar-fill ${barDoneClass}" style="width:${p.percent}%"></div>
+        </div>
+      </div>
     `;
     list.appendChild(card);
   });
 }
 
 /* =========================================================
-   FLASHCARD MODE
+   FLASHCARD MODE (Kartu Belajar)
    ========================================================= */
 function startLearn(){
   playMagicalSound('pop');
@@ -1134,9 +1310,20 @@ function startLearn(){
   show('screen-learn');
 }
 
+function recordCardSeen(){
+  const ch = CHAPTERS[currentChapterIdx];
+  if(!cardsSeen[ch.id]) cardsSeen[ch.id] = [];
+  if(!cardsSeen[ch.id].includes(learnIndex)){
+    cardsSeen[ch.id].push(learnIndex);
+    saveProgress();
+  }
+}
+
 function renderLearnCard(autoPlay = true){
   const card = activeCards[learnIndex];
   const total = activeCards.length;
+
+  recordCardSeen();
 
   document.getElementById('cardTopicTag').textContent = '🌸 ' + (card.topicTitle || 'Percakapan Cantik');
   document.getElementById('cardTextAEn').textContent = card.q;
@@ -1404,4 +1591,4 @@ with open("Freya_Shyam_English.html", "w", encoding="utf-8") as f:
 with open("index.html", "w", encoding="utf-8") as f:
     f.write(html_code)
 
-print("Added Voice Settings modal, speed & pitch sliders, and voice test successfully!")
+print("Added overall progress card and persistent progress bars to each chapter successfully!")
