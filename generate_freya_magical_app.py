@@ -101,7 +101,10 @@ html_code = """<!DOCTYPE html>
     color:#fff; padding:6px 14px; border-radius:999px; font-weight:800;
     font-size:13px; letter-spacing:0.5px; box-shadow:0 3px 8px rgba(255, 105, 180, 0.35);
     display:flex; align-items:center; gap:5px;
+    cursor:pointer; user-select:none; -webkit-user-select:none;
+    transition:transform .12s ease;
   }
+  .name-badge:active{ transform:scale(0.94); }
   .voice-btn{
     background:#FFFFFF; border-radius:999px; padding:6px 14px;
     font-weight:800; font-size:13px; border:2.5px solid var(--pink-soft);
@@ -532,7 +535,7 @@ html_code = """<!DOCTYPE html>
 <!-- ===================== HOME SCREEN ===================== -->
 <section class="screen" id="screen-home">
   <div class="topbar">
-    <div class="name-badge">👑 Freya Shyam</div>
+    <div class="name-badge" id="freyaNameBadge" onclick="handleFreyaNameClick(event)" title="👑 Freya Shyam (Klik 5x untuk reset skor)">👑 Freya Shyam</div>
     <div style="display:flex; gap:8px;">
       <button class="voice-btn" onclick="openVoiceModal()" title="Pilih Suara (Voice Settings)">🎙️ Suara</button>
       <div class="stars">⭐ <span id="totalStars">0</span> / <span id="maxStars">110</span></div>
@@ -582,7 +585,7 @@ html_code = """<!DOCTYPE html>
 <section class="screen hidden" id="screen-station">
   <div class="topbar">
     <button class="backbtn" onclick="goHome()">←</button>
-    <div class="name-badge">🦄 Freya's Island</div>
+    <div class="name-badge" onclick="handleFreyaNameClick(event)" title="👑 Freya Shyam (Klik 5x untuk reset skor)">🦄 Freya's Island</div>
     <div style="display:flex; gap:8px;">
       <button class="voice-btn" onclick="openVoiceModal()">🎙️ Suara</button>
       <div class="stars">⭐ <span id="stationStars">0</span> / 10</div>
@@ -1328,6 +1331,57 @@ function renderHome(){
     `;
     list.appendChild(card);
   });
+}
+
+/* =========================================================
+   SECRET RESET: 5 Left Clicks on Freya Shyam Badge Resets Scores
+   ========================================================= */
+let freyaClickCount = 0;
+let freyaClickTimer = null;
+
+function handleFreyaNameClick(e){
+  // Accept only primary/left mouse button (button === 0) or touch/tap
+  if(e && e.button !== undefined && e.button !== 0) return;
+  
+  freyaClickCount++;
+  playMagicalSound('pop');
+
+  const badge = (e && e.currentTarget) || document.getElementById('freyaNameBadge');
+  if(badge){
+    badge.style.transform = 'scale(0.88)';
+    setTimeout(() => { if(badge) badge.style.transform = ''; }, 120);
+  }
+
+  clearTimeout(freyaClickTimer);
+
+  if(freyaClickCount >= 5){
+    freyaClickCount = 0;
+    
+    // Reset all scores & progress across all chapters
+    CHAPTERS.forEach(c => {
+      progress[c.id] = 0;
+      cardsSeen[c.id] = [];
+    });
+
+    try{
+      localStorage.removeItem('freya_english_stars_10');
+      localStorage.removeItem('freya_english_stars');
+      localStorage.removeItem('freya_english_progress');
+      localStorage.removeItem('freya_english_cards_seen_10');
+      localStorage.removeItem('freya_english_cards_seen');
+    }catch(err){}
+
+    saveProgress();
+    goHome();
+    renderHome();
+    playMagicalSound('sparkle');
+    alert("🔄 Semua skor & bintang Freya berhasil di-reset ke 0! / All scores have been reset to 0! ⭐");
+  } else {
+    // Reset counter if next click is not within 3 seconds
+    freyaClickTimer = setTimeout(() => {
+      freyaClickCount = 0;
+    }, 3000);
+  }
 }
 
 /* =========================================================
