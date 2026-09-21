@@ -1934,30 +1934,30 @@
             "note_id": "blotches = bercak bintik merah pada kulit; allergic = alergi"
           },
           {
-            "q": "What seems to be the trouble?",
-            "a": "I have a pain in my knee. — What were you doing when the pain started?",
+            "q": "I have a sharp pain in my knee.",
+            "a": "What were you doing when the pain started? — I was running.",
             "emoji": "🦵",
-            "q_id": "Apa keluhan sakit yang Anda rasakan?",
-            "a_id": "Ada bintik-bintik merah di seluruh tubuhku. — Apakah kamu memakan makanan yang membuat alergi?",
-            "note_id": "blotches = bercak bintik merah pada kulit; allergic = alergi"
+            "q_id": "Lutut saya terasa sangat sakit.",
+            "a_id": "Sedang apa Anda saat rasa sakit itu mulai muncul? — Saya sedang berlari.",
+            "note_id": "pain = rasa sakit; knee = lutut"
           },
           {
-            "q": "What seems to be the trouble?",
-            "a": "I have a fever and a splitting headache. — Have you been taking any medicine for it?",
+            "q": "I have a fever and a splitting headache.",
+            "a": "Have you been taking any medicine for it? — Just aspirin.",
             "note": "splitting headache = severe head pain; fever = high temperature",
             "emoji": "🤕",
-            "q_id": "Apa keluhan sakit yang Anda rasakan?",
-            "a_id": "Ada bintik-bintik merah di seluruh tubuhku. — Apakah kamu memakan makanan yang membuat alergi?",
-            "note_id": "blotches = bercak bintik merah pada kulit; allergic = alergi"
+            "q_id": "Saya demam dan sakit kepala yang menusuk.",
+            "a_id": "Apakah Anda sudah minum obat untuk itu? — Baru aspirin saja.",
+            "note_id": "splitting headache = sakit kepala hebat; fever = demam"
           },
           {
-            "q": "What seems to be the trouble?",
-            "a": "Could you describe the pain? Sharp? Mild? Persistent or intermittent?",
+            "q": "Could you describe the pain you are feeling?",
+            "a": "Is it sharp or mild? Persistent or intermittent? — It's a mild ache.",
             "note": "persistent = continuous; intermittent = stopping and starting",
             "emoji": "👁️",
-            "q_id": "Apa keluhan sakit yang Anda rasakan?",
-            "a_id": "Ada bintik-bintik merah di seluruh tubuhku. — Apakah kamu memakan makanan yang membuat alergi?",
-            "note_id": "blotches = bercak bintik merah pada kulit; allergic = alergi"
+            "q_id": "Bisakah Anda menjelaskan rasa sakit yang dialami?",
+            "a_id": "Apakah sakitnya tajam atau ringan? Terus-menerus atau hilang timbul? — Sakitnya ringan saja.",
+            "note_id": "sharp = tajam; mild = ringan; persistent = terus-menerus"
           },
           {
             "q": "I’ll prescribe you a cream. You should apply it twice a day.",

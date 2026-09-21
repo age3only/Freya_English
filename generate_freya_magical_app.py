@@ -941,11 +941,20 @@ function getActiveVoice(){
 function getActiveIndonesianVoice(){
   if(!('speechSynthesis' in window)) return null;
   const all = window.speechSynthesis.getVoices() || [];
-  const indonesian = all.filter(v => v.lang && (v.lang.toLowerCase().startsWith('id') || v.lang.toLowerCase().startsWith('in')));
-  if(indonesian.length > 0){
-    const found = indonesian.find(v => v.name.includes('Damayanti') || v.name.includes('Natural') || v.name.includes('Siri') || v.name.includes('Google')) || indonesian[0];
-    return found;
-  }
+  if(!all.length) return null;
+
+  // 1. Damayanti (Apple's native Indonesian voice on macOS & iOS Safari)
+  let found = all.find(v => (v.name && v.name.toLowerCase().includes('damayanti')) || (v.voiceURI && v.voiceURI.toLowerCase().includes('damayanti')));
+  if(found) return found;
+
+  // 2. Voice with Indonesian / Bahasa in name
+  found = all.find(v => v.name && (v.name.toLowerCase().includes('indonesia') || v.name.toLowerCase().includes('bahasa')));
+  if(found) return found;
+
+  // 3. Voice with lang starting with 'id' or 'in' (id-ID, id_ID, in-ID)
+  found = all.find(v => v.lang && (v.lang.toLowerCase().replace('_', '-').startsWith('id') || v.lang.toLowerCase().replace('_', '-').startsWith('in')));
+  if(found) return found;
+
   return null;
 }
 
@@ -1509,12 +1518,33 @@ function shuffle(arr){
   return a;
 }
 
+const PRAISES = [
+  "Great, Freya!",
+  "Good job!",
+  "Outstanding, Freya!",
+  "Well done!"
+];
+
+function getRandomPraise(){
+  return PRAISES[Math.floor(Math.random() * PRAISES.length)];
+}
+
 function buildQuizQuestions(){
   const pool = getAllChapterCards();
-  let selected = shuffle(pool).slice(0, 10);
-  while(selected.length < 10){
-    selected.push(pool[Math.floor(Math.random() * pool.length)]);
-  }
+  const seen = new Set();
+  const uniqueItems = [];
+
+  shuffle(pool).forEach(item => {
+    const key = (item.q || '').trim().toLowerCase();
+    if(!seen.has(key)){
+      seen.add(key);
+      uniqueItems.push(item);
+    }
+  });
+
+  // Pick up to 10 unique questions (never repeat any question more than once)
+  const sampleCount = Math.min(10, uniqueItems.length);
+  const selected = uniqueItems.slice(0, sampleCount);
 
   return selected.map((item, idx) => {
     const distractors = shuffle(pool.filter(c => c.q !== item.q)).slice(0, 2);
@@ -1627,10 +1657,13 @@ function answerQuiz(btn, selectedText, q){
     btn.classList.add('correct');
     quizState.correctCount++;
     renderQuizLiveStars();
-    fb.textContent = `Hebat Sekali Freya! Betul! ⭐ (${quizState.correctCount}/10 Bintang) 🎉✨`;
+
+    const praise = getRandomPraise();
+    fb.textContent = `✨ ${praise} Betul 100%! ⭐ (${quizState.correctCount}/10 Bintang)`;
     fb.className = 'feedback good';
-    // When question is in Bahasa, speak the English correct answer so Freya learns English pronunciation
-    speakSingle(q.correct, voicePitch, voiceSpeed, null, 'en-US');
+
+    // Say random praise! Do NOT repeat the question!
+    speakSingle(praise, voicePitch * 1.06, voiceSpeed, null, 'en-US');
   } else {
     playMagicalSound('wrong');
     btn.classList.add('wrong');
@@ -1649,7 +1682,7 @@ function answerQuiz(btn, selectedText, q){
     } else {
       renderQuizQuestion();
     }
-  }, 1450);
+  }, 1650);
 }
 
 function finishQuiz(){
