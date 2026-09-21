@@ -1020,7 +1020,10 @@ function saveAndCloseVoiceModal(){
    ========================================================= */
 function speakSingle(text, pitch = null, rate = null, onEnd = null, lang = 'en-US'){
   try{
-    if(!('speechSynthesis' in window)) return;
+    if(!('speechSynthesis' in window)){
+      if(onEnd) setTimeout(onEnd, 300);
+      return;
+    }
     unlockAudioOnIOS();
 
     window.speechSynthesis.resume();
@@ -1052,11 +1055,14 @@ function speakSingle(text, pitch = null, rate = null, onEnd = null, lang = 'en-U
       };
       u.onerror = () => {
         window._activeUtterances = [];
+        if(onEnd) onEnd();
       };
 
       window.speechSynthesis.speak(u);
     }, 40);
-  }catch(e){}
+  }catch(e){
+    if(onEnd) setTimeout(onEnd, 300);
+  }
 }
 
 function speakDialoguePair(textA, textB){
@@ -1598,7 +1604,8 @@ function getAllChapterCards(){
 }
 
 function renderQuizLiveStars(){
-  const count = quizState ? quizState.correctCount : 0;
+  const ch = CHAPTERS[currentChapterIdx];
+  const count = (progress && ch) ? (progress[ch.id] || 0) : (quizState ? quizState.correctCount : 0);
   const el = document.getElementById('quizLiveStars');
   if(el){
     el.innerHTML = render10StarsHtml(count, 10);
@@ -1609,6 +1616,26 @@ function renderQuizLiveStars(){
   }
 }
 
+let quizAdvancing = false;
+let advanceSafetyTimer = null;
+
+function advanceToNextQuizQuestion(){
+  if(quizAdvancing) return;
+  quizAdvancing = true;
+  clearTimeout(advanceSafetyTimer);
+
+  // "no hurry": comfortable 850ms calm breathing pause after speaking completes before switching question
+  setTimeout(() => {
+    quizAdvancing = false;
+    quizState.index++;
+    if(quizState.index >= quizState.questions.length){
+      finishQuiz();
+    } else {
+      renderQuizQuestion();
+    }
+  }, 850);
+}
+
 function startQuiz(){
   playMagicalSound('sparkle');
   const questions = buildQuizQuestions();
@@ -1617,6 +1644,8 @@ function startQuiz(){
     index: 0,
     correctCount: 0
   };
+  quizAdvancing = false;
+  clearTimeout(advanceSafetyTimer);
   renderQuizLiveStars();
   renderQuizQuestion();
   show('screen-quiz');
@@ -1651,19 +1680,40 @@ function answerQuiz(btn, selectedText, q){
   const isCorrect = (selectedText === q.correct);
   document.querySelectorAll('.option').forEach(o => o.classList.add('disabled'));
 
+  quizAdvancing = false;
+  clearTimeout(advanceSafetyTimer);
+
   const fb = document.getElementById('quizFeedback');
+  const ch = CHAPTERS[currentChapterIdx];
+
   if(isCorrect){
     playMagicalSound('correct');
     btn.classList.add('correct');
     quizState.correctCount++;
+
+    // EVERY right answer is IMMEDIATELY logged into permanent localStorage!
+    // Even closing and opening again, it remains logged and only resets with 5 clicks!
+    if((progress[ch.id] || 0) < 10){
+      progress[ch.id] = (progress[ch.id] || 0) + 1;
+      saveProgress();
+    }
+
     renderQuizLiveStars();
 
     const praise = getRandomPraise();
-    fb.textContent = `✨ ${praise} Betul 100%! ⭐ (${quizState.correctCount}/10 Bintang)`;
+    fb.textContent = `✨ ${praise} Betul! ⭐ (${progress[ch.id]}/10 Bintang Tersimpan)`;
     fb.className = 'feedback good';
 
-    // Say random praise! Do NOT repeat the question!
-    speakSingle(praise, voicePitch * 1.06, voiceSpeed, null, 'en-US');
+    // Safety fallback timer (5.5s) in case speech is muted or blocked
+    advanceSafetyTimer = setTimeout(() => {
+      advanceToNextQuizQuestion();
+    }, 5500);
+
+    // ONLY move to next question AFTER completing voice speaking (no hurry!)
+    speakSingle(praise, voicePitch * 1.06, voiceSpeed, () => {
+      advanceToNextQuizQuestion();
+    }, 'en-US');
+
   } else {
     playMagicalSound('wrong');
     btn.classList.add('wrong');
@@ -1672,46 +1722,38 @@ function answerQuiz(btn, selectedText, q){
     });
     fb.textContent = 'Hampir tepat! Jawaban yang benar ditandai ya, Freya! 💪🌸';
     fb.className = 'feedback bad';
-    speakSingle(q.correct, voicePitch * 0.95, voiceSpeed, null, 'en-US');
-  }
 
-  setTimeout(() => {
-    quizState.index++;
-    if(quizState.index >= quizState.questions.length){
-      finishQuiz();
-    } else {
-      renderQuizQuestion();
-    }
-  }, 1650);
+    // Safety fallback timer (6.5s)
+    advanceSafetyTimer = setTimeout(() => {
+      advanceToNextQuizQuestion();
+    }, 6500);
+
+    // Speak correct answer and ONLY move to next question AFTER completing voice speaking!
+    speakSingle(q.correct, voicePitch * 0.95, voiceSpeed, () => {
+      advanceToNextQuizQuestion();
+    }, 'en-US');
+  }
 }
 
 function finishQuiz(){
   const ch = CHAPTERS[currentChapterIdx];
-  const total = quizState.questions.length;
-  const earnedStars = quizState.correctCount; // each right answer awards 1 star (0 to 10)
+  const currentStars = progress[ch.id] || 0;
+  saveProgress();
 
-  // Log the stars into permanent progress!
-  if(earnedStars > (progress[ch.id] || 0)){
-    progress[ch.id] = earnedStars;
-    saveProgress();
-  }
-
-  const currentBest = Math.max(progress[ch.id] || 0, earnedStars);
-
-  document.getElementById('resultEmoji').textContent = earnedStars >= 8 ? '👑' : (earnedStars >= 5 ? '🦄' : '🌸');
-  document.getElementById('resultTitle').textContent = earnedStars === 10
+  document.getElementById('resultEmoji').textContent = currentStars >= 8 ? '👑' : (currentStars >= 5 ? '🦄' : '🌸');
+  document.getElementById('resultTitle').textContent = currentStars === 10
     ? 'Sempurna! 10 Bintang Emas! 👑✨' 
-    : (earnedStars >= 7 ? 'Luar Biasa, Princess Freya! 🦄✨' : 'Bagus Sekali, Freya Cantik! 🌸');
-  document.getElementById('resultSub').textContent = `Freya berhasil mengumpulkan ${earnedStars} dari 10 Bintang di Bab ini!`;
+    : (currentStars >= 7 ? 'Luar Biasa, Princess Freya! 🦄✨' : 'Bagus Sekali, Freya Cantik! 🌸');
+  document.getElementById('resultSub').textContent = `Freya berhasil mengumpulkan ${currentStars} dari 10 Bintang di Bab ini!`;
 
   // Render 10 stars on result screen
-  document.getElementById('resultStars10').innerHTML = render10StarsHtml(earnedStars);
+  document.getElementById('resultStars10').innerHTML = render10StarsHtml(currentStars);
 
-  document.getElementById('resultScore').textContent = `Nilai Kuis: ${earnedStars} / ${total} Soal Benar (${earnedStars * 10}%) ⭐ | Bintang Tersimpan: ${currentBest}/10 ⭐`;
-  document.getElementById('retryBtn').textContent = earnedStars === 10 ? '🔁 Main Kuis Lagi 🎀' : '⭐ Main Lagi untuk 10 Bintang!';
+  document.getElementById('resultScore').textContent = `Bintang Tersimpan: ${currentStars} / 10 ⭐ (${currentStars * 10}%)`;
+  document.getElementById('retryBtn').textContent = currentStars === 10 ? '🔁 Main Kuis Lagi 🎀' : '⭐ Main Lagi untuk 10 Bintang!';
 
   show('screen-result');
-  if(earnedStars >= 4){
+  if(currentStars >= 4){
     playMagicalSound('sparkle');
     launchConfetti();
   }
