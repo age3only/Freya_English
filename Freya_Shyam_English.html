@@ -914,6 +914,17 @@ function getActiveVoice(){
   return cachedVoices.find(v => v.lang === 'en-US' || v.lang === 'en_US') || cachedVoices[0] || null;
 }
 
+function getActiveIndonesianVoice(){
+  if(!('speechSynthesis' in window)) return null;
+  const all = window.speechSynthesis.getVoices() || [];
+  const indonesian = all.filter(v => v.lang && (v.lang.toLowerCase().startsWith('id') || v.lang.toLowerCase().startsWith('in')));
+  if(indonesian.length > 0){
+    const found = indonesian.find(v => v.name.includes('Damayanti') || v.name.includes('Natural') || v.name.includes('Siri') || v.name.includes('Google')) || indonesian[0];
+    return found;
+  }
+  return null;
+}
+
 function openVoiceModal(){
   playMagicalSound('pop');
   populateVoiceSelect();
@@ -974,7 +985,7 @@ function saveAndCloseVoiceModal(){
 /* =========================================================
    TEXT TO SPEECH FUNCTIONS
    ========================================================= */
-function speakSingle(text, pitch = null, rate = null, onEnd = null){
+function speakSingle(text, pitch = null, rate = null, onEnd = null, lang = 'en-US'){
   try{
     if(!('speechSynthesis' in window)) return;
     unlockAudioOnIOS();
@@ -987,12 +998,18 @@ function speakSingle(text, pitch = null, rate = null, onEnd = null){
 
     setTimeout(() => {
       const u = new SpeechSynthesisUtterance(text);
-      u.lang = 'en-US';
+      const isIndonesian = (lang && (lang.toLowerCase().startsWith('id') || lang.toLowerCase().startsWith('in')));
+      u.lang = isIndonesian ? 'id-ID' : 'en-US';
       u.rate = effRate;
       u.pitch = effPitch;
 
-      const voice = getActiveVoice();
-      if(voice) u.voice = voice;
+      if(isIndonesian){
+        const idVoice = getActiveIndonesianVoice();
+        if(idVoice) u.voice = idVoice;
+      } else {
+        const voice = getActiveVoice();
+        if(voice) u.voice = voice;
+      }
 
       window._activeUtterances = [u];
 
@@ -1071,7 +1088,7 @@ function speakQuizQuestion(){
   const q = quizState.questions[quizState.index];
   if(q && q.speakText){
     playMagicalSound('pop');
-    speakSingle(q.speakText, voicePitch, voiceSpeed);
+    speakSingle(q.speakText, voicePitch, voiceSpeed, null, q.lang || 'en-US');
   }
 }
 
@@ -1480,35 +1497,38 @@ function buildQuizQuestions(){
     const qType = idx % 3;
 
     if(qType === 0){
-      // EN -> ID meaning
+      // EN -> ID meaning (Question is English)
       const options = shuffle([item.q_id, distractors[0].q_id, distractors[1].q_id]);
       return {
         kicker: "🌸 Apa arti kalimat bahasa Inggris ini?",
         qText: item.q,
         subhint: "Pilihlah arti yang tepat untuk Freya:",
         speakText: item.q,
+        lang: 'en-US',
         correct: item.q_id,
         options: options
       };
     } else if(qType === 1){
-      // How to reply in English
+      // How to reply in English (Question is English)
       const options = shuffle([item.a, distractors[0].a, distractors[1].a]);
       return {
         kicker: "🦄 Teman Unicorn bertanya:",
         qText: item.q,
         subhint: "Bagaimana cara Freya membalasnya dalam bahasa Inggris?",
         speakText: item.q,
+        lang: 'en-US',
         correct: item.a,
         options: options
       };
     } else {
-      // ID -> EN
+      // ID -> EN (Question is in Bahasa Indonesia!)
       const options = shuffle([item.q, distractors[0].q, distractors[1].q]);
       return {
         kicker: "🎀 Bagaimana bilang ini dalam bahasa Inggris?",
         qText: item.q_id,
-        subhint: "Pilihlah jawaban yang benar:",
-        speakText: item.q,
+        subhint: "Pilihlah kalimat bahasa Inggris yang benar:",
+        speakText: item.q_id,
+        lang: 'id-ID',
         correct: item.q,
         options: options
       };
@@ -1570,7 +1590,7 @@ function renderQuizQuestion(){
     optContainer.appendChild(btn);
   });
 
-  if(q.speakText) speakSingle(q.speakText, voicePitch, voiceSpeed);
+  if(q.speakText) speakSingle(q.speakText, voicePitch, voiceSpeed, null, q.lang || 'en-US');
 }
 
 function answerQuiz(btn, selectedText, q){
@@ -1585,7 +1605,8 @@ function answerQuiz(btn, selectedText, q){
     renderQuizLiveStars();
     fb.textContent = `Hebat Sekali Freya! Betul! ⭐ (${quizState.correctCount}/10 Bintang) 🎉✨`;
     fb.className = 'feedback good';
-    speakSingle(q.speakText || q.correct, voicePitch, voiceSpeed);
+    // When question is in Bahasa, speak the English correct answer so Freya learns English pronunciation
+    speakSingle(q.correct, voicePitch, voiceSpeed, null, 'en-US');
   } else {
     playMagicalSound('wrong');
     btn.classList.add('wrong');
@@ -1594,7 +1615,7 @@ function answerQuiz(btn, selectedText, q){
     });
     fb.textContent = 'Hampir tepat! Jawaban yang benar ditandai ya, Freya! 💪🌸';
     fb.className = 'feedback bad';
-    speakSingle(q.speakText || q.correct, voicePitch * 0.95, voiceSpeed);
+    speakSingle(q.correct, voicePitch * 0.95, voiceSpeed, null, 'en-US');
   }
 
   setTimeout(() => {
