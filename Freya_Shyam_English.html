@@ -212,11 +212,32 @@
     display:flex; justify-content:space-between; align-items:center;
     margin-bottom:6px; font-size:12px; font-weight:800;
   }
-  .ch-stars-row{
-    font-size:15px; letter-spacing:1.5px; display:inline-flex; align-items:center;
+  .ch-stars-row, .station-stars-level, .quiz-stars-live, .result-stars-10{
+    display:inline-flex; align-items:center; gap:2px; font-size:16px;
+    user-select:none; -webkit-user-select:none;
   }
-  .star-gold{ color:#FFB800; filter:drop-shadow(0 1px 2px rgba(255, 184, 0, 0.35)); }
-  .star-dim{ color:#E2E8F0; }
+  .star-item{
+    display:inline-block; font-size:16px; line-height:1;
+    transition:transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275), filter 0.25s ease;
+    user-select:none; -webkit-user-select:none;
+  }
+  .star-item.gold{
+    filter:drop-shadow(0 2px 4px rgba(255, 184, 0, 0.75));
+    transform:scale(1.08);
+  }
+  .star-item.empty{
+    filter:grayscale(100%) opacity(0.24);
+    transform:scale(0.92);
+  }
+  .quiz-stars-wrap{
+    background:#FFF0F5; border:1.5px solid #FFCCD9; border-radius:999px;
+    padding:4px 10px; display:inline-flex; align-items:center; gap:6px;
+  }
+  .quiz-score-badge{
+    background:linear-gradient(135deg, #FFB6C1, #FF69B4);
+    color:#fff; padding:4px 12px; border-radius:999px;
+    font-weight:900; font-size:13px; box-shadow:0 2px 6px rgba(255, 105, 180, 0.3);
+  }
   .ch-pct-badge{
     background:#FFE0EB; color:var(--pink-dark); padding:3px 10px;
     border-radius:999px; font-weight:900; font-size:12px;
@@ -561,7 +582,7 @@
 <section class="screen hidden" id="screen-station">
   <div class="topbar">
     <button class="backbtn" onclick="goHome()">←</button>
-    <div class="name-badge" onclick="handleFreyaNameClick(event)" title="👑 Freya Shyam (Klik 5x untuk reset skor)">🦄 Freya's Island</div>
+    <div class="name-badge" onclick="handleFreyaNameClick(event)" title="👑 Freya Shyam (Klik 5x untuk reset skor)">👑 Freya Shyam</div>
     <div style="display:flex; gap:8px;">
       <button class="voice-btn" onclick="openVoiceModal()">🎙️ Suara</button>
       <div class="stars">⭐ <span id="stationStars">0</span> / 10</div>
@@ -652,12 +673,16 @@
 <section class="screen hidden" id="screen-quiz">
   <div class="topbar">
     <button class="backbtn" onclick="showStation()">←</button>
-    <div class="quiz-hearts" id="quizHearts">💖💖💖</div>
+    <div class="name-badge" onclick="handleFreyaNameClick(event)" title="👑 Freya Shyam (Klik 5x untuk reset skor)">👑 Freya Shyam</div>
+    <div class="quiz-score-badge" id="quizLiveScore">0 / 10 ⭐</div>
   </div>
 
   <div class="quiz-wrap">
     <div class="quiz-top">
-      <div class="quiz-progress" id="quizProgressText">Soal 1 / 10 🦄</div>
+      <div class="quiz-progress" id="quizProgressText">Soal 1 dari 10 🦄</div>
+      <div class="quiz-stars-wrap">
+        <div class="quiz-stars-live" id="quizLiveStars"></div>
+      </div>
     </div>
     <div class="quiz-question">
       <div class="kicker" id="quizKicker">Apa arti kalimat ini?</div>
@@ -1121,13 +1146,14 @@ let learnIndex = 0;
 let quizState = null;
 
 /* Helper to render 10 stars cleanly */
-function render10StarsHtml(count){
+function render10StarsHtml(count, max = 10){
+  const validCount = Math.max(0, Math.min(max, count || 0));
   let html = '';
-  for(let i = 0; i < 10; i++){
-    if(i < count){
-      html += '<span class="star-gold">⭐</span>';
+  for(let i = 0; i < max; i++){
+    if(i < validCount){
+      html += '<span class="star-item gold" title="Bintang ' + (i+1) + ' Emas">⭐</span>';
     } else {
-      html += '<span class="star-dim">☆</span>';
+      html += '<span class="star-item empty" title="Bintang ' + (i+1) + ' Kosong">⭐</span>';
     }
   }
   return html;
@@ -1217,25 +1243,21 @@ function updateActiveCards(){
    HOME SCREEN & 10-STAR PROGRESS CALCULATION
    ========================================================= */
 function calculateChapterProgress(ch){
-  const stars = progress[ch.id] || 0;
+  const stars = Math.max(0, Math.min(10, progress[ch.id] || 0));
   const totalCards = getChapterTotalCount(ch);
   const seenSet = new Set(cardsSeen[ch.id] || []);
   const seenCount = Math.min(totalCards, seenSet.size);
 
   // 10 stars directly reflect 0% - 100% of subject mastery
-  let overallPct = stars * 10;
-  if(stars === 0 && seenCount > 0){
-    // Small boost for viewing cards even before quiz
-    overallPct = Math.min(9, Math.round((seenCount / totalCards) * 10));
-  }
-  if(overallPct > 100) overallPct = 100;
+  const percent = stars * 10;
+  const isComplete = (stars >= 10);
 
   return {
     stars,
     totalCards,
     seenCount,
-    percent: overallPct,
-    isComplete: stars >= 10 || overallPct >= 100
+    percent,
+    isComplete
   };
 }
 
@@ -1447,11 +1469,11 @@ function shuffle(arr){
 }
 
 function buildQuizQuestions(){
-  updateActiveCards();
-  const pool = activeCards.length >= 4 ? activeCards : getAllChapterCards();
-  // 10 questions for 10 stars!
-  const sampleCount = Math.min(10, pool.length);
-  const selected = shuffle(pool).slice(0, sampleCount);
+  const pool = getAllChapterCards();
+  let selected = shuffle(pool).slice(0, 10);
+  while(selected.length < 10){
+    selected.push(pool[Math.floor(Math.random() * pool.length)]);
+  }
 
   return selected.map((item, idx) => {
     const distractors = shuffle(pool.filter(c => c.q !== item.q)).slice(0, 2);
@@ -1501,23 +1523,35 @@ function getAllChapterCards(){
   return list;
 }
 
+function renderQuizLiveStars(){
+  const count = quizState ? quizState.correctCount : 0;
+  const el = document.getElementById('quizLiveStars');
+  if(el){
+    el.innerHTML = render10StarsHtml(count, 10);
+  }
+  const scoreBadge = document.getElementById('quizLiveScore');
+  if(scoreBadge){
+    scoreBadge.textContent = `${count} / 10 ⭐`;
+  }
+}
+
 function startQuiz(){
   playMagicalSound('sparkle');
   const questions = buildQuizQuestions();
   quizState = {
     questions: questions,
     index: 0,
-    lives: 3,
     correctCount: 0
   };
+  renderQuizLiveStars();
   renderQuizQuestion();
   show('screen-quiz');
 }
 
 function renderQuizQuestion(){
   const q = quizState.questions[quizState.index];
-  document.getElementById('quizHearts').textContent = '💖'.repeat(quizState.lives) + '🤍'.repeat(3 - quizState.lives);
   document.getElementById('quizProgressText').textContent = `Soal ${quizState.index + 1} dari ${quizState.questions.length} 🦄`;
+  renderQuizLiveStars();
 
   document.getElementById('quizKicker').textContent = q.kicker;
   document.getElementById('quizQ').textContent = q.qText;
@@ -1547,9 +1581,10 @@ function answerQuiz(btn, selectedText, q){
   if(isCorrect){
     playMagicalSound('correct');
     btn.classList.add('correct');
-    fb.textContent = 'Hebat Sekali Freya! Betul 100%! 🎉✨';
-    fb.className = 'feedback good';
     quizState.correctCount++;
+    renderQuizLiveStars();
+    fb.textContent = `Hebat Sekali Freya! Betul! ⭐ (${quizState.correctCount}/10 Bintang) 🎉✨`;
+    fb.className = 'feedback good';
     speakSingle(q.speakText || q.correct, voicePitch, voiceSpeed);
   } else {
     playMagicalSound('wrong');
@@ -1559,56 +1594,46 @@ function answerQuiz(btn, selectedText, q){
     });
     fb.textContent = 'Hampir tepat! Jawaban yang benar ditandai ya, Freya! 💪🌸';
     fb.className = 'feedback bad';
-    quizState.lives--;
     speakSingle(q.speakText || q.correct, voicePitch * 0.95, voiceSpeed);
   }
 
   setTimeout(() => {
-    if(quizState.lives <= 0){
-      finishQuiz(false);
-      return;
-    }
     quizState.index++;
     if(quizState.index >= quizState.questions.length){
-      finishQuiz(true);
+      finishQuiz();
     } else {
       renderQuizQuestion();
     }
   }, 1450);
 }
 
-function finishQuiz(completed){
+function finishQuiz(){
   const ch = CHAPTERS[currentChapterIdx];
   const total = quizState.questions.length;
-  const ratio = quizState.correctCount / total;
+  const earnedStars = quizState.correctCount; // each right answer awards 1 star (0 to 10)
 
-  // Up to 10 stars!
-  let earnedStars = Math.round(ratio * 10);
-  if(earnedStars === 0 && quizState.correctCount > 0) earnedStars = 1;
-  if(earnedStars > 10) earnedStars = 10;
-
-  const passed = earnedStars >= 1;
-  if(passed && earnedStars > (progress[ch.id] || 0)){
+  // Log the stars into permanent progress!
+  if(earnedStars > (progress[ch.id] || 0)){
     progress[ch.id] = earnedStars;
     saveProgress();
   }
 
   const currentBest = Math.max(progress[ch.id] || 0, earnedStars);
 
-  document.getElementById('resultEmoji').textContent = earnedStars >= 7 ? '🦄' : '💖';
-  document.getElementById('resultTitle').textContent = earnedStars >= 8
-    ? 'Luar Biasa, Princess Freya! 👑✨' 
-    : 'Bagus Sekali, Freya Cantik! 🌸';
-  document.getElementById('resultSub').textContent = `Freya mengumpulkan ${earnedStars} dari 10 Bintang di Bab ini!`;
+  document.getElementById('resultEmoji').textContent = earnedStars >= 8 ? '👑' : (earnedStars >= 5 ? '🦄' : '🌸');
+  document.getElementById('resultTitle').textContent = earnedStars === 10
+    ? 'Sempurna! 10 Bintang Emas! 👑✨' 
+    : (earnedStars >= 7 ? 'Luar Biasa, Princess Freya! 🦄✨' : 'Bagus Sekali, Freya Cantik! 🌸');
+  document.getElementById('resultSub').textContent = `Freya berhasil mengumpulkan ${earnedStars} dari 10 Bintang di Bab ini!`;
 
   // Render 10 stars on result screen
   document.getElementById('resultStars10').innerHTML = render10StarsHtml(earnedStars);
 
-  document.getElementById('resultScore').textContent = `Nilai: ${quizState.correctCount} / ${total} Soal Benar (${earnedStars}/10 ⭐)`;
+  document.getElementById('resultScore').textContent = `Nilai Kuis: ${earnedStars} / ${total} Soal Benar (${earnedStars * 10}%) ⭐ | Bintang Tersimpan: ${currentBest}/10 ⭐`;
   document.getElementById('retryBtn').textContent = earnedStars === 10 ? '🔁 Main Kuis Lagi 🎀' : '⭐ Main Lagi untuk 10 Bintang!';
 
   show('screen-result');
-  if(earnedStars >= 5){
+  if(earnedStars >= 4){
     playMagicalSound('sparkle');
     launchConfetti();
   }
