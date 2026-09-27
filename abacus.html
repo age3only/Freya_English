@@ -1577,6 +1577,9 @@ const I18N = {
     l5Sub: "Subtracting 6-9",
     l6Title: "Lesson 6: Small Friends",
     l6Sub: "Formulas (+1, +2, +3, +4)",
+    lblVoice: "Voice",
+    lblSound: "Sound",
+    lblTrophy: "Trophy",
     speedTitle: "Speed Writing Lab",
     speedSub: "Left & Right Hand (Apple Pencil)",
     testTitle: "Final Test Paper",
@@ -1626,6 +1629,9 @@ const I18N = {
     l5Sub: "Pengurangan 6-9",
     l6Title: "Pelajaran 6: Kawan Kecil",
     l6Sub: "Rumus (+1, +2, +3, +4)",
+    lblVoice: "Suara",
+    lblSound: "Musik",
+    lblTrophy: "Piala",
     speedTitle: "Tulis Cepat Angka",
     speedSub: "Tangan Kiri & Kanan (Apple Pencil)",
     testTitle: "Ujian Akhir Level-1",
@@ -1665,6 +1671,16 @@ function setLanguage(lang) {
   document.getElementById('lang-btn-id').classList.toggle('active', lang === 'id');
 
   const dict = I18N[lang];
+
+  // Top Bar buttons
+  const vEl = document.getElementById('lbl-voice');
+  if (vEl) vEl.innerText = dict.lblVoice || (lang === 'id' ? 'Suara' : 'Voice');
+  const sEl = document.getElementById('lbl-sound');
+  if (sEl) sEl.innerText = dict.lblSound || (lang === 'id' ? 'Musik' : 'Sound');
+  const tEl = document.getElementById('lbl-trophy');
+  if (tEl) tEl.innerText = dict.lblTrophy || (lang === 'id' ? 'Piala' : 'Trophy');
+
+  // Hero & stats
   document.getElementById('t-app-title').innerText = dict.appTitle;
   document.getElementById('t-app-subtitle').innerText = dict.welcomeSub;
   document.getElementById('t-correct-answers').innerText = dict.correctAnswers;
@@ -1673,6 +1689,7 @@ function setLanguage(lang) {
   document.getElementById('t-crowns-earned').innerText = dict.crownsEarned;
   document.getElementById('t-choose-lesson').innerText = dict.chooseLesson;
 
+  // Lesson cards
   document.getElementById('t-l1-title').innerText = dict.l1Title;
   document.getElementById('t-l1-sub').innerText = dict.l1Sub;
   document.getElementById('t-l2-title').innerText = dict.l2Title;
@@ -1690,12 +1707,14 @@ function setLanguage(lang) {
   document.getElementById('t-test-title').innerText = dict.testTitle;
   document.getElementById('t-test-sub').innerText = dict.testSub;
 
+  // Right block: Soroban Abacus card text & buttons
   document.getElementById('t-abacus-title').innerText = dict.abacusTitle;
   document.getElementById('t-rods-lbl').innerText = dict.rodsLbl;
   document.getElementById('t-clear-btn').innerText = dict.clearBtn;
   document.getElementById('t-how-works').innerText = dict.howBeadsWork;
   document.getElementById('t-val-lbl').innerText = dict.valLbl;
 
+  // Certificate Modal
   document.getElementById('t-cert-title').innerText = dict.certTitle;
   document.getElementById('t-cert-sub').innerText = dict.certSub;
   document.getElementById('t-cert-desc').innerText = dict.certDesc;
@@ -1705,8 +1724,40 @@ function setLanguage(lang) {
   document.getElementById('t-cert-level').innerText = dict.certLevel;
   document.getElementById('t-cert-btn').innerText = dict.certBtn;
 
+  // Update Right block: Update rod names (Satuan / Puluhan / Ratusan vs 1s / 10s / 100s) and re-render Soroban
+  if (rods && rods.length > 0) {
+    rods.forEach(rod => {
+      const power = rod.power;
+      if (power === 0) rod.name = currentLang === 'id' ? 'Satuan' : '1s (Unit)';
+      else if (power === 1) rod.name = currentLang === 'id' ? 'Puluhan' : '10s';
+      else if (power === 2) rod.name = currentLang === 'id' ? 'Ratusan' : '100s';
+      else if (power === 3) rod.name = currentLang === 'id' ? 'Ribuan' : '1,000s';
+      else if (power === 4) rod.name = currentLang === 'id' ? '10 Ribu' : '10,000s';
+      else rod.name = `10^${power}`;
+    });
+    renderSoroban();
+  }
+
+  // Update Right block: Spelled number in selected language
   updateDisplayAndSpeech(false);
-  renderActiveChallenge();
+
+  // Left block: Re-render the active challenge arena INSTANTLY in the new language!
+  if (activeLessonKey === 'sec-bead-count-1' || activeLessonKey === 'sec-bead-count-2') {
+    renderBeadLessonArena(activeLessonKey);
+  } else if (activeLessonKey === 'sec-speed-writing') {
+    renderSpeedWritingArena();
+  } else if (activeLessonKey === 'sec-bead-draw') {
+    renderBeadLessonArena(activeLessonKey);
+  } else {
+    renderActiveChallenge();
+  }
+
+  // If All Questions grid is currently open, refresh it instantly too!
+  const gridView = document.getElementById('all-questions-grid-view');
+  if (gridView && gridView.style.display === 'block') {
+    gridView.style.display = 'none';
+    toggleAllQuestionsGrid();
+  }
 }
 
 function numberToWords(num) {
