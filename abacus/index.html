@@ -1060,6 +1060,24 @@
     pointer-events: none;
   }
 
+  
+  .dotted-digit-box.box-filled {
+    border-color: #22c55e !important;
+    background: #f0fdf4 !important;
+    box-shadow: 0 0 10px rgba(34, 197, 94, 0.35) !important;
+    transition: all 0.2s ease;
+  }
+  .dotted-digit-box.box-filled .box-digit-watermark {
+    background: #dcfce7 !important;
+    color: #15803d !important;
+    border-color: #86efac !important;
+  }
+  .dotted-digit-box.box-active {
+    border-color: #ff4081 !important;
+    background: #fff0f5 !important;
+    box-shadow: 0 0 12px rgba(255, 64, 129, 0.4) !important;
+  }
+
   .dotted-digit-box {
     border: 2.5px dashed #ff85ad;
     border-radius: 14px;
@@ -4303,6 +4321,132 @@ let speedMusicInterval = null;
 let isDrawing = false;
 let canvasCtx = null;
 
+
+/* =========================================================================
+   SPEED WRITING BLOCK DETECTION & PROGRESS ENGINE
+   ========================================================================= */
+
+let speedBoxStrokes = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0, 9: 0, 0: 0 };
+let speedActivityStarted = false;
+let speedActivityFinished = false;
+
+function resetSpeedWritingState() {
+  speedBoxStrokes = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0, 9: 0, 0: 0 };
+  speedActivityStarted = false;
+  speedActivityFinished = false;
+  document.querySelectorAll('.dotted-digit-box').forEach(b => {
+    b.classList.remove('box-filled', 'box-active');
+  });
+  if (speedTimerInterval) clearInterval(speedTimerInterval);
+  if (speedMusicInterval) clearInterval(speedMusicInterval);
+  speedTimerInterval = null;
+  speedMusicInterval = null;
+  speedTimer16 = 16;
+  const disp = document.getElementById('speed-16s-display');
+  if (disp) disp.innerText = speedTimer16;
+  const st = document.getElementById('speed-writing-status');
+  if (st) {
+    st.innerText = currentLang === 'id' 
+      ? '👉 Mulai dengan menulis angka 1 di dalam Kotak 1!' 
+      : '👉 Start by writing number 1 inside Box 1!';
+  }
+}
+
+function getDigitBoxUnderPoint(clientX, clientY) {
+  const boxes = document.querySelectorAll('.dotted-digit-box');
+  for (let i = 0; i < boxes.length; i++) {
+    const box = boxes[i];
+    const rect = box.getBoundingClientRect();
+    if (clientX >= rect.left && clientX <= rect.right &&
+        clientY >= rect.top && clientY <= rect.bottom) {
+      return parseInt(box.getAttribute('data-digit'), 10);
+    }
+  }
+  return null;
+}
+
+function registerSpeedStrokePoint(clientX, clientY) {
+  if (speedActivityFinished) return;
+  const digit = getDigitBoxUnderPoint(clientX, clientY);
+  const st = document.getElementById('speed-writing-status');
+  const isId = (currentLang === 'id');
+
+  // Requirement: Timer and music start with writing first inside block ONE
+  if (!speedActivityStarted) {
+    if (digit === 1) {
+      speedActivityStarted = true;
+      start16SecSpeedSession();
+      const b1 = document.getElementById('box-digit-1');
+      if (b1) b1.classList.add('box-active');
+      if (st) st.innerText = isId ? '⏱️ Timer 16 detik berjalan! Lanjutkan ke kotak 2, 3, 4...' : '⏱️ 16s Timer running! Continue to boxes 2, 3, 4...';
+    } else {
+      if (st) st.innerText = isId ? '👉 Mulai dari Kotak 1 untuk menyalakan timer!' : '👉 Start inside Box 1 to start the timer!';
+      return;
+    }
+  }
+
+  // Register stroke point into corresponding block
+  if (digit !== null) {
+    speedBoxStrokes[digit] = (speedBoxStrokes[digit] || 0) + 1;
+    const boxEl = document.getElementById(`box-digit-${digit}`);
+
+    // When a block has at least 3 stroke points, highlight it as filled
+    if (speedBoxStrokes[digit] >= 3 && boxEl && !boxEl.classList.contains('box-filled')) {
+      boxEl.classList.add('box-filled');
+      boxEl.classList.remove('box-active');
+      // Highlight next expected box
+      const nextDigit = digit === 9 ? 0 : (digit + 1);
+      const nextEl = document.getElementById(`box-digit-${nextDigit}`);
+      if (nextEl && !nextEl.classList.contains('box-filled')) nextEl.classList.add('box-active');
+    }
+
+    // Requirement: Timer and music stop when writing in block ZERO
+    if (digit === 0 && speedActivityStarted && !speedActivityFinished && speedBoxStrokes[0] >= 3) {
+      // Immediately stop timer and rhythmic music
+      if (speedTimerInterval) clearInterval(speedTimerInterval);
+      if (speedMusicInterval) clearInterval(speedMusicInterval);
+      speedTimerInterval = null;
+      speedMusicInterval = null;
+
+      // Requirement: "also make sure there is sumthing ritten in blocks 2,3,4,5,6,7,8,9 then only it is considering as activity done"
+      const requiredIntermediate = [2, 3, 4, 5, 6, 7, 8, 9];
+      const missing = requiredIntermediate.filter(d => (speedBoxStrokes[d] || 0) < 3);
+
+      if (missing.length === 0) {
+        // All blocks 1 to 9 and 0 are written!
+        speedActivityFinished = true;
+        if (st) {
+          st.innerHTML = `🎉 <strong>${isId ? 'Luar biasa! Semua kotak 1 sampai 0 terisi!' : 'Outstanding! All boxes 1 to 0 completed!'}</strong>`;
+        }
+        setTimeout(() => {
+          finishSpeedWritingSession();
+        }, 300);
+      } else {
+        // Missing intermediate blocks: activity not done yet
+        if (st) {
+          st.innerHTML = `⚠️ <strong style="color: #f59e0b;">${isId ? `Timer berhenti! Masih ada kotak kosong: [${missing.join(', ')}]. Tulis di kotak tersebut!` : `Timer stopped! Missing boxes: [${missing.join(', ')}]. Write in them to finish!`}</strong>`;
+        }
+      }
+    } else if (speedActivityStarted && !speedActivityFinished) {
+      // Check if previously missing blocks are now all filled after block 0 was drawn
+      if (speedBoxStrokes[0] >= 3) {
+        const requiredIntermediate = [2, 3, 4, 5, 6, 7, 8, 9];
+        const missing = requiredIntermediate.filter(d => (speedBoxStrokes[d] || 0) < 3);
+        if (missing.length === 0) {
+          speedActivityFinished = true;
+          if (st) {
+            st.innerHTML = `🎉 <strong>${isId ? 'Hebat! Semua kotak kini terisi lengkap!' : 'Great! All boxes are now completed!'}</strong>`;
+          }
+          setTimeout(() => {
+            finishSpeedWritingSession();
+          }, 300);
+        }
+      }
+    }
+  }
+}
+
+
 function renderSpeedWritingArena() {
   const cardContainer = document.getElementById('active-challenge-card');
   if (!cardContainer) return;
@@ -4324,7 +4468,7 @@ function renderSpeedWritingArena() {
             ${currentLang === 'id' ? 'Gunakan Apple Pencil / Stylus' : 'Use Apple Pencil or Finger'}
           </div>
           <div style="font-size: 0.85rem; color: #718096;">
-            ${currentLang === 'id' ? 'Mulai menulis 1 sampai 0 pada pad! Timer 16 detik otomatis menyala begitu kamu menyentuh pad.' : 'Write 1 2 3 4 5 6 7 8 9 0 on the pad! 16s timer starts automatically as soon as you touch the pad!'}
+            ${currentLang === 'id' ? 'Mulai tulis di kotak 1! Timer & musik mulai saat menulis di kotak 1, dan berhenti di kotak 0 (isi semua kotak 1 sd 0).' : 'Start writing in box 1! Timer & music start when writing in box 1, and stop when writing in box 0 (fill boxes 1 to 0).'}
           </div>
         </div>
       </div>
@@ -4336,10 +4480,10 @@ function renderSpeedWritingArena() {
 
       <!-- Stylus / Apple Pencil Canvas with Dotted Line Rectangles for 1 to 0 -->
       <div class="canvas-sheet-wrap" id="canvas-sheet-wrap">
-        <div class="dotted-boxes-grid">
+        <div class="dotted-boxes-grid" id="speed-writing-boxes-grid">
           ${[1, 2, 3, 4, 5, 6, 7, 8, 9, 0].map(d => `
-            <div class="dotted-digit-box">
-              <span class="box-digit-watermark">${d}</span>
+            <div class="dotted-digit-box" id="box-digit-${d}" data-digit="${d}">
+              <span class="box-digit-watermark" id="box-watermark-${d}">${d}</span>
               <div class="box-guide-line"></div>
             </div>
           `).join('')}
@@ -4366,11 +4510,26 @@ function renderSpeedWritingArena() {
   initStylusCanvas();
 }
 
-function finishSpeedWritingSession() {
+function finishSpeedWritingSession(bypassCheck = false) {
   if (speedTimerInterval) clearInterval(speedTimerInterval);
   if (speedMusicInterval) clearInterval(speedMusicInterval);
   speedTimerInterval = null;
   speedMusicInterval = null;
+
+  // Verify that all blocks 1 to 9 and 0 have been written
+  if (!bypassCheck) {
+    const required = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0];
+    const missing = required.filter(d => (speedBoxStrokes[d] || 0) < 3);
+    if (missing.length > 0) {
+      const isId = (currentLang === 'id');
+      const st = document.getElementById('speed-writing-status');
+      if (st) {
+        st.innerHTML = `⚠️ <strong style="color: #f59e0b;">${isId ? `Masih ada kotak yang belum ditulis: [${missing.join(', ')}]. Lengkapi kotak 1 sampai 0!` : `Boxes [${missing.join(', ')}] are not written yet. Please write in all boxes 1 to 0!`}</strong>`;
+      }
+      playSound('tryagain');
+      return;
+    }
+  }
 
   // Mark completion for current hand:
   if (speedHandMode === 'left') {
@@ -4416,6 +4575,7 @@ function finishSpeedWritingSession() {
 function toggleSpeedHand() {
   speedHandMode = speedHandMode === 'left' ? 'right' : 'left';
   renderSpeedWritingArena();
+  resetSpeedWritingState();
 }
 
 function initStylusCanvas() {
@@ -4449,16 +4609,12 @@ function initStylusCanvas() {
     const pos = getPos(e);
     lastX = pos.x;
     lastY = pos.y;
-    // Pressure sensitivity for Apple Pencil
     if (e.pressure && e.pressure > 0) {
       canvasCtx.lineWidth = Math.max(2, e.pressure * 8);
     }
-    // Requirement: Automatically start 16s Timer & Music on first stroke!
-    if (!speedTimerInterval) {
-      start16SecSpeedSession();
-      const st = document.getElementById('speed-writing-status');
-      if (st) st.innerText = currentLang === 'id' ? '⏱️ Timer 16 detik & musik sedang berjalan!' : '⏱️ 16s Timer & Music running! Write fast!';
-    }
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+    registerSpeedStrokePoint(clientX, clientY);
   }
 
   function drawMove(e) {
@@ -4474,6 +4630,9 @@ function initStylusCanvas() {
     canvasCtx.stroke();
     lastX = pos.x;
     lastY = pos.y;
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+    registerSpeedStrokePoint(clientX, clientY);
   }
 
   function stopDraw(e) {
@@ -4497,6 +4656,7 @@ function clearStylusCanvas() {
   if (canvas && canvasCtx) {
     canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
   }
+  resetSpeedWritingState();
 }
 
 // 16s Countdown timer with rhythmic background music
@@ -4905,6 +5065,9 @@ const SOUND_THEMES = {
   arcade:   { nameEn: "Arcade 8-Bit Joy 🎮", nameId: "Game Arkade 8-Bit 🎮", desc: "Fun retro gaming arpeggios" }
 };
 
+let voiceSliderDebounce = null;
+let soundVolDebounce = null;
+
 function setVoicePreset(presetKey) {
   const p = VOICE_PRESETS[presetKey];
   if (!p) return;
@@ -4923,6 +5086,12 @@ function setVoicePreset(presetKey) {
   document.querySelectorAll('.voice-preset-card').forEach(c => {
     c.classList.toggle('active', c.getAttribute('data-preset') === presetKey);
   });
+
+  // Requirement: Immediately audition voice upon selection
+  const greeting = currentLang === 'id' 
+    ? 'Halo Freya! Suara ini siap menemanimu belajar sempoa!'
+    : "Hello Freya! I'm ready to learn abacus with you!";
+  speakPraiseCustom(greeting);
 }
 
 function setSoundTheme(themeKey) {
@@ -4933,6 +5102,9 @@ function setSoundTheme(themeKey) {
   document.querySelectorAll('.sound-theme-card').forEach(c => {
     c.classList.toggle('active', c.getAttribute('data-theme') === themeKey);
   });
+
+  // Requirement: Immediately audition sound theme upon selection
+  playThemePreviewMusic();
 }
 
 function updateVoiceSettingsFromUI() {
@@ -5259,24 +5431,21 @@ document.addEventListener('DOMContentLoaded', () => {
     <!-- Voice Engine Dropdown -->
     <div class="settings-control-row">
       <span class="settings-label">Speech Engine:</span>
-      <select id="voice-select-dropdown" class="settings-select" onchange="updateVoiceSettingsFromUI()"></select>
+      <select id="voice-select-dropdown" class="settings-select" onchange="updateVoiceSettingsFromUI(); speakPraiseCustom(currentLang === 'id' ? 'Suara aktif!' : 'Voice active!');"></select>
     </div>
 
-    <!-- Sliders -->
+    <!-- Sliders with instant audition -->
     <div class="settings-control-row">
       <span class="settings-label">Voice Pitch (High/Low):</span>
-      <input type="range" id="voice-pitch-slider" class="settings-slider" min="0.6" max="1.8" step="0.05" value="1.35" onchange="updateVoiceSettingsFromUI()">
+      <input type="range" id="voice-pitch-slider" class="settings-slider" min="0.6" max="1.8" step="0.05" value="1.35" oninput="updateVoiceSettingsFromUI(); clearTimeout(voiceSliderDebounce); voiceSliderDebounce = setTimeout(() => speakPraiseCustom('Freya!'), 300);">
     </div>
     <div class="settings-control-row">
       <span class="settings-label">Speaking Speed:</span>
-      <input type="range" id="voice-rate-slider" class="settings-slider" min="0.7" max="1.3" step="0.05" value="1.0" onchange="updateVoiceSettingsFromUI()">
+      <input type="range" id="voice-rate-slider" class="settings-slider" min="0.7" max="1.3" step="0.05" value="1.0" oninput="updateVoiceSettingsFromUI(); clearTimeout(voiceSliderDebounce); voiceSliderDebounce = setTimeout(() => speakPraiseCustom('Freya!'), 300);">
     </div>
 
     <div style="display: flex; gap: 10px; margin-top: 14px; justify-content: flex-end;">
-      <button class="btn-nav-mini" onclick="testCurrentVoice()" style="background: #fff0f5; color: #d81b60; border: 2px solid #ffccd9; padding: 8px 16px;">
-        ▶️ Test Voice
-      </button>
-      <button class="btn-submit-arena" onclick="closeVoiceSettingsModal()" style="padding: 8px 20px; width: auto;">
+      <button class="btn-submit-arena" onclick="closeVoiceSettingsModal()" style="padding: 10px 28px; width: auto;">
         Save & Done ✨
       </button>
     </div>
@@ -5331,17 +5500,14 @@ document.addEventListener('DOMContentLoaded', () => {
       </div>
     </div>
 
-    <!-- Volume Slider -->
+    <!-- Volume Slider with instant audition -->
     <div class="settings-control-row">
       <span class="settings-label">Master Volume:</span>
-      <input type="range" id="sound-vol-slider" class="settings-slider" min="0.1" max="1.0" step="0.05" value="0.9" onchange="updateSoundSettingsFromUI()">
+      <input type="range" id="sound-vol-slider" class="settings-slider" min="0.1" max="1.0" step="0.05" value="0.9" oninput="updateSoundSettingsFromUI(); clearTimeout(soundVolDebounce); soundVolDebounce = setTimeout(() => playSound('star'), 200);">
     </div>
 
     <div style="display: flex; gap: 10px; margin-top: 14px; justify-content: flex-end;">
-      <button class="btn-nav-mini" onclick="testCurrentSound()" style="background: #fff0f5; color: #d81b60; border: 2px solid #ffccd9; padding: 8px 16px;">
-        ▶️ Preview Music
-      </button>
-      <button class="btn-submit-arena" onclick="closeSoundSettingsModal()" style="padding: 8px 20px; width: auto;">
+      <button class="btn-submit-arena" onclick="closeSoundSettingsModal()" style="padding: 10px 28px; width: auto;">
         Save & Done ✨
       </button>
     </div>
