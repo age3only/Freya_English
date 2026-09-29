@@ -4439,8 +4439,9 @@ function registerSpeedStrokePoint(clientX, clientY) {
         if (st) {
           st.innerHTML = `🎉 <strong>${isId ? 'Luar biasa! Semua kotak 1 sampai 0 terisi!' : 'Outstanding! All boxes 1 to 0 completed!'}</strong>`;
         }
+        clearStylusCanvas();
         setTimeout(() => {
-          finishSpeedWritingSession();
+          finishSpeedWritingSession(true);
         }, 300);
       } else {
         // Missing intermediate blocks: activity not done yet
@@ -4458,8 +4459,9 @@ function registerSpeedStrokePoint(clientX, clientY) {
           if (st) {
             st.innerHTML = `🎉 <strong>${isId ? 'Hebat! Semua kotak kini terisi lengkap!' : 'Great! All boxes are now completed!'}</strong>`;
           }
+          clearStylusCanvas();
           setTimeout(() => {
-            finishSpeedWritingSession();
+            finishSpeedWritingSession(true);
           }, 300);
         }
       }
@@ -4534,12 +4536,8 @@ function renderSpeedWritingArena() {
         <button class="btn-pink-pill btn-pink-reset" onclick="clearStylusCanvas()">
           🧹 ${currentLang === 'id' ? 'Hapus Tulisan' : 'Clear Pad'}
         </button>
-
-        <button class="btn-submit-arena" id="btn-finish-speed-tab" onclick="finishSpeedWritingSession()" style="padding: 10px 18px; font-size: 1rem; background: linear-gradient(135deg, #ff4081 0%, #d81b60 100%); box-shadow: 0 4px 14px rgba(216, 27, 96, 0.4);">
-          🏁 ${currentLang === 'id' ? 'Selesai Menulis!' : 'Finish Writing!'}
-        </button>
         <button class="btn-nav-mini" onclick="toggleSpeedHand()" style="font-size: 0.9rem;">
-          🔄 ${speedHandMode === 'left' ? 'Switch Right' : 'Switch Left'}
+          🔄 ${speedHandMode === 'right' ? (currentLang === 'id' ? 'Ganti Tangan Kiri' : 'Switch Left') : (currentLang === 'id' ? 'Ganti Tangan Kanan' : 'Switch Right')}
         </button>
       </div>
       <div id="speed-writing-status" style="font-size: 0.9rem; font-weight: 700; color: #b83280; margin-top: 6px; min-height: 22px;"></div>
@@ -4609,9 +4607,13 @@ function finishSpeedWritingSession(bypassCheck = false) {
   showCelebrationOverlay(isLevelComplete ? '🏆' : '👑', title, sub);
   speakPraiseCustom(vocal);
 
+  // Requirement: Automatically clear pad upon turn completion & appreciation message
+  clearStylusCanvas();
+
   setTimeout(() => {
     speedHandMode = nextHand;
     renderSpeedWritingArena();
+    clearStylusCanvas(); // Ensure canvas is pristine clean for next turn
   }, 1800);
 }
 
