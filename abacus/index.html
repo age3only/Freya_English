@@ -86,6 +86,13 @@
     background: #fff5f8;
   }
 
+  .icon-toggle-btn.muted {
+    background: #ffebee !important;
+    border-color: #ef5350 !important;
+    color: #c62828 !important;
+    box-shadow: 0 4px 10px rgba(239, 83, 80, 0.25) !important;
+  }
+
   .lang-switcher-box {
     display: flex;
     gap: 8px;
@@ -2022,8 +2029,9 @@
 <!-- Top Bar with Sound/Voice and Language Switcher -->
 <div class="top-bar">
   <div class="top-left-controls">
+    <button class="icon-toggle-btn" id="btn-sound-mute" title="Mute / Unmute Sound" onclick="toggleMasterMute()"><span id="ico-mute">🔊</span> <span id="lbl-mute">Sound: ON</span></button>
     <button class="icon-toggle-btn" id="btn-toggle-voice" title="Voice Characters & Settings" onclick="openVoiceSettingsModal()">🗣️ <span id="lbl-voice">Voice</span></button>
-    <button class="icon-toggle-btn" id="btn-toggle-sound" title="Musical Sounds & Themes" onclick="openSoundSettingsModal()">🔊 <span id="lbl-sound">Sound</span></button>
+    <button class="icon-toggle-btn" id="btn-toggle-sound" title="Musical Sounds & Themes" onclick="openSoundSettingsModal()">🎵 <span id="lbl-sound">Sound</span></button>
     <button class="icon-toggle-btn" id="btn-open-cert" title="Certificate & Trophy">🏆 <span id="lbl-trophy">Trophy</span></button>
   </div>
 
@@ -2306,6 +2314,9 @@ const I18N = {
     lblVoice: "Voice",
     lblSound: "Sound",
     lblTrophy: "Trophy",
+    soundOn: "Sound: ON",
+    soundOff: "Muted 🔇",
+    soundMuteTitle: "Mute / Unmute Sound",
     speedTitle: "Speed Writing Lab",
     speedSub: "Left & Right Hand (Apple Pencil)",
     testTitle: "Final Test Paper",
@@ -2358,6 +2369,9 @@ const I18N = {
     lblVoice: "Suara",
     lblSound: "Musik",
     lblTrophy: "Piala",
+    soundOn: "Suara: ON",
+    soundOff: "Bisu 🔇",
+    soundMuteTitle: "Bisukan / Aktifkan Suara",
     speedTitle: "Tulis Cepat Angka",
     speedSub: "Tangan Kiri & Kanan (Apple Pencil)",
     testTitle: "Ujian Akhir Level-1",
@@ -2399,6 +2413,7 @@ function setLanguage(lang) {
   const dict = I18N[lang];
 
   // Top Bar buttons
+  updateMuteButtonUI();
   const vEl = document.getElementById('lbl-voice');
   if (vEl) vEl.innerText = dict.lblVoice || (lang === 'id' ? 'Suara' : 'Voice');
   const sEl = document.getElementById('lbl-sound');
@@ -2553,7 +2568,64 @@ function numberToWordsBahasa(num) {
 
 let voiceEnabled = true;
 let soundEnabled = true;
+let masterMuted = false;
+try {
+  if (localStorage.getItem('abacus_master_muted') === 'true') {
+    masterMuted = true;
+    soundEnabled = false;
+    voiceEnabled = false;
+  }
+} catch(e) {}
 let audioCtx = null;
+
+function toggleMasterMute() {
+  masterMuted = !masterMuted;
+  try {
+    localStorage.setItem('abacus_master_muted', masterMuted ? 'true' : 'false');
+  } catch(e) {}
+
+  if (masterMuted) {
+    soundEnabled = false;
+    voiceEnabled = false;
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.cancel();
+    }
+  } else {
+    soundEnabled = true;
+    voiceEnabled = true;
+  }
+
+  updateMuteButtonUI();
+
+  const voiceToggle = document.getElementById('voice-toggle-switch');
+  const soundToggle = document.getElementById('sound-toggle-switch');
+  if (voiceToggle) voiceToggle.checked = !masterMuted;
+  if (soundToggle) soundToggle.checked = !masterMuted;
+
+  if (!masterMuted) {
+    playSweetTone(4);
+  }
+}
+
+function updateMuteButtonUI() {
+  const btn = document.getElementById('btn-sound-mute');
+  const ico = document.getElementById('ico-mute');
+  const lbl = document.getElementById('lbl-mute');
+  if (!btn || !ico || !lbl) return;
+
+  const dict = I18N[currentLang] || I18N.en;
+  if (masterMuted) {
+    btn.classList.add('muted');
+    ico.innerText = '🔇';
+    lbl.innerText = dict.soundOff || 'Muted 🔇';
+    btn.setAttribute('title', dict.soundMuteTitle || 'Unmute Sound');
+  } else {
+    btn.classList.remove('muted');
+    ico.innerText = '🔊';
+    lbl.innerText = dict.soundOn || 'Sound: ON';
+    btn.setAttribute('title', dict.soundMuteTitle || 'Mute Sound');
+  }
+}
 
 function initAudio() {
   if (!audioCtx) {
@@ -2562,7 +2634,7 @@ function initAudio() {
 }
 
 function playSweetTone(noteIndex = 0) {
-  if (!soundEnabled) return;
+  if (!soundEnabled || masterMuted) return;
   try {
     initAudio();
     const now = audioCtx.currentTime;
@@ -3180,7 +3252,7 @@ function focusBeadCardSection() {
 }
 
 function playSound(type) {
-  if (!soundEnabled) return;
+  if (!soundEnabled || masterMuted) return;
   try {
     initAudio();
     const now = audioCtx.currentTime;
@@ -3302,7 +3374,7 @@ function playSound(type) {
 
 let speechDebounceTimer = null;
 function speakValueSweetly(val, force = false) {
-  if (!voiceEnabled || !('speechSynthesis' in window)) return;
+  if (!voiceEnabled || masterMuted || !('speechSynthesis' in window)) return;
   clearTimeout(speechDebounceTimer);
   speechDebounceTimer = setTimeout(() => {
     window.speechSynthesis.cancel();
@@ -3333,7 +3405,7 @@ function speakValueSweetly(val, force = false) {
 }
 
 function speakPraiseCustom(text) {
-  if (!voiceEnabled || !('speechSynthesis' in window)) return;
+  if (!voiceEnabled || masterMuted || !('speechSynthesis' in window)) return;
   window.speechSynthesis.cancel();
   const utter = new SpeechSynthesisUtterance(text);
   utter.rate = voiceSettings.rate || 1.0;
@@ -3441,7 +3513,7 @@ function resetAllScoresManually() {
 let hasPlayedWelcomeMusic = false;
 
 function playWelcomeMusic() {
-  if (!soundEnabled) return;
+  if (!soundEnabled || masterMuted) return;
   try {
     initAudio();
     if (audioCtx.state === 'suspended') {
@@ -4770,7 +4842,7 @@ function start16SecSpeedSession() {
   const rhythmNotes = [523.25, 659.25, 783.99, 659.25];
   let noteIdx = 0;
   speedMusicInterval = setInterval(() => {
-    if (soundEnabled && audioCtx) {
+    if (!masterMuted && soundEnabled && audioCtx) {
       const now = audioCtx.currentTime;
       const osc = audioCtx.createOscillator();
       const gain = audioCtx.createGain();
@@ -5217,6 +5289,11 @@ function updateVoiceSettingsFromUI() {
   if (enableEl) {
     voiceSettings.enabled = enableEl.checked;
     voiceEnabled = enableEl.checked;
+    if (voiceEnabled && masterMuted) {
+      masterMuted = false;
+      try { localStorage.setItem('abacus_master_muted', 'false'); } catch(e) {}
+      updateMuteButtonUI();
+    }
   }
 
   localStorage.setItem('freya_voice_pitch', voiceSettings.pitch);
@@ -5231,6 +5308,11 @@ function updateSoundSettingsFromUI() {
   if (enableEl) {
     soundSettings.enabled = enableEl.checked;
     soundEnabled = enableEl.checked;
+    if (soundEnabled && masterMuted) {
+      masterMuted = false;
+      try { localStorage.setItem('abacus_master_muted', 'false'); } catch(e) {}
+      updateMuteButtonUI();
+    }
   }
   localStorage.setItem('freya_sound_volume', soundSettings.volume);
 }
@@ -5295,7 +5377,7 @@ function testCurrentSound() {
 
 /* Synthesizer theme preview melody */
 function playThemePreviewMusic() {
-  if (!soundEnabled) return;
+  if (!soundEnabled || masterMuted) return;
   try {
     initAudio();
     const now = audioCtx.currentTime + 0.03;
@@ -5455,6 +5537,9 @@ document.addEventListener('DOMContentLoaded', () => {
   window.addEventListener('keydown', unlockAudioOnFirstGesture, { once: true });
 
   document.getElementById('btn-open-cert').addEventListener('click', openCertModal);
+
+  // Initialize mute button state
+  updateMuteButtonUI();
 
   // Load Lesson 1 (First Question, Card #1) by default
   beadCountCurrentNum = 1;
