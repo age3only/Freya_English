@@ -1868,6 +1868,99 @@
     box-sizing: border-box !important;
   }
 
+
+/* Animations for Bead Drawing & Settings Cards */
+@keyframes beadShake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-6px); }
+  40%, 80% { transform: translateX(6px); }
+}
+.shake-anim {
+  animation: beadShake 0.4s ease-in-out !important;
+}
+
+@keyframes starPopAnim {
+  0% { transform: scale(0.85); }
+  50% { transform: scale(1.15); }
+  100% { transform: scale(1.0); }
+}
+.star-pop-anim {
+  animation: starPopAnim 0.35s ease-out !important;
+}
+
+/* Voice & Sound Settings Modals */
+.settings-preset-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 10px;
+  margin: 12px 0;
+}
+.preset-card {
+  background: #fff5f8;
+  border: 2px solid #ffccd9;
+  border-radius: 14px;
+  padding: 10px 8px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+.preset-card:hover {
+  transform: translateY(-2px);
+  border-color: #ff5e97;
+  box-shadow: 0 4px 12px rgba(255, 94, 151, 0.2);
+}
+.preset-card.active {
+  background: linear-gradient(135deg, #fff0f5 0%, #ffe4ee 100%);
+  border-color: #d81b60;
+  box-shadow: 0 0 12px rgba(216, 27, 96, 0.4);
+}
+.preset-card-icon {
+  font-size: 1.6rem;
+  margin-bottom: 4px;
+}
+.preset-card-title {
+  font-size: 0.88rem;
+  font-weight: 900;
+  color: #d81b60;
+}
+.preset-card-sub {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #880e4f;
+  margin-top: 2px;
+}
+.settings-control-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 10px 0;
+  padding: 6px 10px;
+  background: #fff8fa;
+  border-radius: 10px;
+  border: 1px solid #ffe0ea;
+}
+.settings-label {
+  font-size: 0.9rem;
+  font-weight: 800;
+  color: #c2185b;
+}
+.settings-slider {
+  accent-color: #ff4081;
+  cursor: pointer;
+  width: 140px;
+}
+.settings-select {
+  padding: 6px 10px;
+  border-radius: 10px;
+  border: 2px solid #ffccd9;
+  background: #ffffff;
+  color: #d81b60;
+  font-weight: 700;
+  font-size: 0.85rem;
+  max-width: 180px;
+}
+
 </style>
 </head>
 <body>
@@ -1877,8 +1970,8 @@
 <!-- Top Bar with Sound/Voice and Language Switcher -->
 <div class="top-bar">
   <div class="top-left-controls">
-    <button class="icon-toggle-btn" id="btn-toggle-voice" title="Voice Appreciation (On/Off)">🗣️ <span id="lbl-voice">Voice</span></button>
-    <button class="icon-toggle-btn" id="btn-toggle-sound" title="Sound Effects (On/Off)">🔊 <span id="lbl-sound">Sound</span></button>
+    <button class="icon-toggle-btn" id="btn-toggle-voice" title="Voice Characters & Settings" onclick="openVoiceSettingsModal()">🗣️ <span id="lbl-voice">Voice</span></button>
+    <button class="icon-toggle-btn" id="btn-toggle-sound" title="Musical Sounds & Themes" onclick="openSoundSettingsModal()">🔊 <span id="lbl-sound">Sound</span></button>
     <button class="icon-toggle-btn" id="btn-open-cert" title="Certificate & Trophy">🏆 <span id="lbl-trophy">Trophy</span></button>
   </div>
 
@@ -2722,8 +2815,8 @@ const COURSE_SECTIONS = [
     icon: '✍️',
     lessonKey: 'sec-speed-writing',
     subsections: [
-      { key: 'sec-speed-writing-left', titleEn: 'Left Hand Sessions', titleId: 'Sesi Tangan Kiri', total: 5, range: [0, 4] },
-      { key: 'sec-speed-writing-right', titleEn: 'Right Hand Sessions', titleId: 'Sesi Tangan Kanan', total: 5, range: [0, 4] }
+      { key: 'sec-speed-writing-left', titleEn: 'Left Hand Turn', titleId: 'Giliran Tangan Kiri', total: 1, range: [0, 0] },
+      { key: 'sec-speed-writing-right', titleEn: 'Right Hand Turn', titleId: 'Giliran Tangan Kanan', total: 1, range: [0, 0] }
     ]
   },
   {
@@ -2899,12 +2992,13 @@ function openSectionProgressModal(focusSecIdx = null) {
 
       const subRowsHtml = sec.subsections.map(sub => {
         const subTitle = isId ? sub.titleId : sub.titleEn;
+        const isBeadDraw = sec.id === 'sec-bead-draw';
         return `
           <div class="prog-sub-row">
             <span style="color: #4a5568;">• ${subTitle}</span>
             <div style="display: flex; align-items: center; gap: 8px;">
               <span style="font-weight: 800; color: ${sub.solved === sub.total && sub.total > 0 ? '#16a34a' : '#d81b60'}; font-size: 0.82rem;">
-                ${sub.solved} / ${sub.total}
+                ${isBeadDraw ? `⭐ ${sub.solved} / 30 Stars` : `${sub.solved} / ${sub.total}`}
               </span>
               <div class="prog-sub-bar-bg">
                 <div class="prog-sub-bar-fill" style="width: ${sub.percent}%;"></div>
@@ -3039,6 +3133,22 @@ function playSound(type) {
   try {
     initAudio();
     const now = audioCtx.currentTime;
+    const vol = soundSettings.volume || 0.9;
+
+    if (type === 'tryagain') {
+      const o = audioCtx.createOscillator();
+      const g = audioCtx.createGain();
+      o.type = 'sine';
+      o.frequency.setValueAtTime(320, now);
+      o.frequency.exponentialRampToValueAtTime(260, now + 0.28);
+      g.gain.setValueAtTime(0.18 * vol, now);
+      g.gain.exponentialRampToValueAtTime(0.001, now + 0.28);
+      o.connect(g);
+      g.connect(audioCtx.destination);
+      o.start(now);
+      o.stop(now + 0.28);
+      return;
+    }
 
     if (type === 'tick') {
       const o = audioCtx.createOscillator();
@@ -3147,11 +3257,14 @@ function speakValueSweetly(val, force = false) {
     window.speechSynthesis.cancel();
     const words = numberToWords(val);
     const utter = new SpeechSynthesisUtterance(words);
-    utter.rate = 0.94;
-    utter.pitch = 1.35;
+    utter.rate = voiceSettings.rate || 0.95;
+    utter.pitch = voiceSettings.pitch || 1.35;
 
     const voices = window.speechSynthesis.getVoices();
-    if (currentLang === 'id') {
+    if (voiceSettings.voiceUri) {
+      const customVoice = voices.find(v => v.voiceURI === voiceSettings.voiceUri);
+      if (customVoice) utter.voice = customVoice;
+    } else if (currentLang === 'id') {
       const idVoice = voices.find(v => v.lang && (v.lang.startsWith('id') || v.lang.startsWith('ms')));
       if (idVoice) utter.voice = idVoice;
     } else {
@@ -3172,11 +3285,14 @@ function speakPraiseCustom(text) {
   if (!voiceEnabled || !('speechSynthesis' in window)) return;
   window.speechSynthesis.cancel();
   const utter = new SpeechSynthesisUtterance(text);
-  utter.rate = 1.0;
-  utter.pitch = 1.35;
+  utter.rate = voiceSettings.rate || 1.0;
+  utter.pitch = voiceSettings.pitch || 1.35;
 
   const voices = window.speechSynthesis.getVoices();
-  if (currentLang === 'id') {
+  if (voiceSettings.voiceUri) {
+    const customVoice = voices.find(v => v.voiceURI === voiceSettings.voiceUri);
+    if (customVoice) utter.voice = customVoice;
+  } else if (currentLang === 'id') {
     const idVoice = voices.find(v => v.lang && (v.lang.startsWith('id') || v.lang.startsWith('ms')));
     if (idVoice) utter.voice = idVoice;
   }
@@ -3484,7 +3600,8 @@ function updateDisplayAndSpeech(triggerVoice = true) {
 
   // Requirement 2: Never speak "zero" automatically on clear or transition!
   // Only speak if triggerVoice is explicitly true AND total > 0.
-  if (triggerVoice && total > 0) {
+  // Requirement: Mute automatic voice prompting during Bead Drawing lesson
+  if (triggerVoice && total > 0 && activeLessonKey !== 'sec-bead-draw') {
     speakValueSweetly(total);
   }
 }
@@ -4207,7 +4324,7 @@ function renderSpeedWritingArena() {
             ${currentLang === 'id' ? 'Gunakan Apple Pencil / Stylus' : 'Use Apple Pencil or Finger'}
           </div>
           <div style="font-size: 0.85rem; color: #718096;">
-            ${currentLang === 'id' ? 'Tulis angka 1 2 3 4 5 6 7 8 9 0 di pad bawah!' : 'Write 1 2 3 4 5 6 7 8 9 0 on the pad below!'}
+            ${currentLang === 'id' ? 'Mulai menulis 1 sampai 0 pada pad! Timer 16 detik otomatis menyala begitu kamu menyentuh pad.' : 'Write 1 2 3 4 5 6 7 8 9 0 on the pad! 16s timer starts automatically as soon as you touch the pad!'}
           </div>
         </div>
       </div>
@@ -4234,9 +4351,7 @@ function renderSpeedWritingArena() {
         <button class="btn-pink-pill btn-pink-reset" onclick="clearStylusCanvas()">
           🧹 ${currentLang === 'id' ? 'Hapus Tulisan' : 'Clear Pad'}
         </button>
-        <button class="btn-submit-arena" id="btn-start-speed-session" onclick="start16SecSpeedSession()" style="padding: 10px 16px; font-size: 0.95rem;">
-          ▶️ ${currentLang === 'id' ? 'Mulai 16 Detik!' : 'Start 16s Timer & Music!'}
-        </button>
+
         <button class="btn-submit-arena" id="btn-finish-speed-tab" onclick="finishSpeedWritingSession()" style="padding: 10px 18px; font-size: 1rem; background: linear-gradient(135deg, #ff4081 0%, #d81b60 100%); box-shadow: 0 4px 14px rgba(216, 27, 96, 0.4);">
           🏁 ${currentLang === 'id' ? 'Selesai Menulis!' : 'Finish Writing!'}
         </button>
@@ -4254,22 +4369,43 @@ function renderSpeedWritingArena() {
 function finishSpeedWritingSession() {
   if (speedTimerInterval) clearInterval(speedTimerInterval);
   if (speedMusicInterval) clearInterval(speedMusicInterval);
+  speedTimerInterval = null;
+  speedMusicInterval = null;
 
-  // Requirement 3: ONLY when pressing Finish tab does the Outstanding Freya message and crown appear!
-  totalStars += 3;
-  totalCrowns += 1;
+  // Mark completion for current hand:
+  if (speedHandMode === 'left') {
+    lessonSolvedMap['sec-speed-writing-left_0'] = true;
+  } else {
+    lessonSolvedMap['sec-speed-writing-right_0'] = true;
+  }
+
+  const isLeftDone = !!lessonSolvedMap['sec-speed-writing-left_0'];
+  const isRightDone = !!lessonSolvedMap['sec-speed-writing-right_0'];
+  const isLevelComplete = isLeftDone && isRightDone;
+
+  totalStars += isLevelComplete ? 3 : 1;
+  if (isLevelComplete) totalCrowns += 1;
   savePersistentStats();
   updateStatsUI();
+  renderOverallProgressStars();
+
   playSound('crown');
   launchConfetti();
 
   const nextHand = speedHandMode === 'left' ? 'right' : 'left';
-  const msg = currentLang === 'id'
-    ? `Luar biasa Freya! Sekarang ganti ke tangan ${nextHand === 'right' ? 'KANAN' : 'KIRI'}!`
-    : `Outstanding Freya! Great ${speedHandMode} hand practice! Now get ready for ${nextHand} hand!`;
+  const isId = (currentLang === 'id');
 
-  showCelebrationOverlay('👑', 'Outstanding Freya!', `Practice Completed! Switched to ${nextHand.toUpperCase()} Hand!`);
-  speakPraiseCustom(msg);
+  let title = isId ? 'Luar biasa Freya!' : 'Outstanding Freya!';
+  let sub = isLevelComplete 
+    ? (isId ? '🎉 Level Menulis Cepat Selesai! Kedua tangan hebat!' : '🎉 Speed Writing Level Complete! Both hands mastered!')
+    : (isId ? `Bagus! Giliran tangan ${speedHandMode === 'left' ? 'Kiri' : 'Kanan'} selesai!` : `Great ${speedHandMode} hand turn completed!`);
+
+  let vocal = isLevelComplete
+    ? (isId ? 'Luar biasa Freya! Level menulis cepat selesai, kedua tangan hebat!' : 'Outstanding Freya! Speed writing level complete, both hands mastered!')
+    : (isId ? `Bagus Freya! Sekarang ganti ke tangan ${nextHand === 'right' ? 'KANAN' : 'KIRI'}!` : `Great job Freya! Now get ready for ${nextHand} hand!`);
+
+  showCelebrationOverlay('👑', title, sub);
+  speakPraiseCustom(vocal);
 
   setTimeout(() => {
     speedHandMode = nextHand;
@@ -4316,6 +4452,12 @@ function initStylusCanvas() {
     // Pressure sensitivity for Apple Pencil
     if (e.pressure && e.pressure > 0) {
       canvasCtx.lineWidth = Math.max(2, e.pressure * 8);
+    }
+    // Requirement: Automatically start 16s Timer & Music on first stroke!
+    if (!speedTimerInterval) {
+      start16SecSpeedSession();
+      const st = document.getElementById('speed-writing-status');
+      if (st) st.innerText = currentLang === 'id' ? '⏱️ Timer 16 detik & musik sedang berjalan!' : '⏱️ 16s Timer & Music running! Write fast!';
     }
   }
 
@@ -4430,7 +4572,7 @@ function renderBeadLessonArena(lessonKey) {
       <div style="width: 100%;">
         <h3 style="color: #d81b60; margin-bottom: 8px;">✏️ ${isId ? 'Pasang Manik pada Sempoa!' : 'Build Beads on the Abacus!'}</h3>
         <p style="font-size: 0.98rem; font-weight: 700; color: #ff5e97; line-height: 1.5; margin-bottom: 14px;">
-          ${isId ? 'Pasang salah satu angka dari daftar pada sempoa, lalu klik angka tersebut untuk memeriksa jawabanmu!' : 'Select a number from the list on the abacus, then click on that number to verify your answer.'}
+          ${isId ? 'Pasang salah satu angka pada sempoa, lalu klik angka tersebut untuk memeriksa jawabanmu!' : 'Select a number on the abacus, then click on that number to verify your answer.'}
         </p>
         <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(70px, 1fr)); gap: 8px; max-height: 380px; overflow-y: auto;">
           ${[27, 45, 81, 66, 39, 13, 22, 74, 92, 53, 71, 80, 29, 50, 55, 78, 63, 47, 36, 99, 84, 57, 11, 10, 35, 80, 76, 44, 22, 19].map((n, i) => {
@@ -4729,6 +4871,261 @@ function closeCertModal() {
    INITIALIZATION
    ========================================================================= */
 
+
+/* =========================================================================
+   VOICE & SOUND CUSTOMIZATION STATE & PRESETS
+   ========================================================================= */
+
+let voiceSettings = {
+  enabled: true,
+  preset: localStorage.getItem('freya_voice_preset') || 'fairy',
+  pitch: parseFloat(localStorage.getItem('freya_voice_pitch') || '1.35'),
+  rate: parseFloat(localStorage.getItem('freya_voice_rate') || '1.0'),
+  voiceUri: localStorage.getItem('freya_voice_uri') || ''
+};
+
+let soundSettings = {
+  enabled: true,
+  theme: localStorage.getItem('freya_sound_theme') || 'celesta',
+  volume: parseFloat(localStorage.getItem('freya_sound_volume') || '0.9')
+};
+
+const VOICE_PRESETS = {
+  fairy:    { nameEn: "Freya's Fairy 🧚‍♀️", nameId: "Peri Freya 🧚‍♀️", pitch: 1.45, rate: 1.05, desc: "Sweet & Magical" },
+  princess: { nameEn: "Cute Princess 🎀", nameId: "Putri Imut 🎀", pitch: 1.25, rate: 1.00, desc: "Bright & Cheerful" },
+  teacher:  { nameEn: "Gentle Teacher 👩‍🏫", nameId: "Guru Ramah 👩‍🏫", pitch: 1.00, rate: 0.92, desc: "Clear & Encouraging" },
+  buddy:    { nameEn: "Friendly Buddy 🤖", nameId: "Teman Ceria 🤖", pitch: 0.85, rate: 1.10, desc: "Playful & Lively" }
+};
+
+const SOUND_THEMES = {
+  celesta:  { nameEn: "Magical Celesta ✨", nameId: "Celesta Ajaib ✨", desc: "Pure sweet fairy chimes" },
+  musicbox: { nameEn: "Toy Music Box 🧸", nameId: "Kotak Musik 🧸", desc: "Delicate lullaby bell notes" },
+  piano:    { nameEn: "Happy Piano 🎹", nameId: "Piano Bahagia 🎹", desc: "Warm acoustic piano chords" },
+  marimba:  { nameEn: "Crystal Marimba 🌟", nameId: "Marimba Kristal 🌟", desc: "Bright playful wooden bells" },
+  arcade:   { nameEn: "Arcade 8-Bit Joy 🎮", nameId: "Game Arkade 8-Bit 🎮", desc: "Fun retro gaming arpeggios" }
+};
+
+function setVoicePreset(presetKey) {
+  const p = VOICE_PRESETS[presetKey];
+  if (!p) return;
+  voiceSettings.preset = presetKey;
+  voiceSettings.pitch = p.pitch;
+  voiceSettings.rate = p.rate;
+  localStorage.setItem('freya_voice_preset', presetKey);
+  localStorage.setItem('freya_voice_pitch', p.pitch);
+  localStorage.setItem('freya_voice_rate', p.rate);
+
+  const pitchEl = document.getElementById('voice-pitch-slider');
+  const rateEl = document.getElementById('voice-rate-slider');
+  if (pitchEl) pitchEl.value = p.pitch;
+  if (rateEl) rateEl.value = p.rate;
+
+  document.querySelectorAll('.voice-preset-card').forEach(c => {
+    c.classList.toggle('active', c.getAttribute('data-preset') === presetKey);
+  });
+}
+
+function setSoundTheme(themeKey) {
+  if (!SOUND_THEMES[themeKey]) return;
+  soundSettings.theme = themeKey;
+  localStorage.setItem('freya_sound_theme', themeKey);
+
+  document.querySelectorAll('.sound-theme-card').forEach(c => {
+    c.classList.toggle('active', c.getAttribute('data-theme') === themeKey);
+  });
+}
+
+function updateVoiceSettingsFromUI() {
+  const pitchEl = document.getElementById('voice-pitch-slider');
+  const rateEl = document.getElementById('voice-rate-slider');
+  const selectEl = document.getElementById('voice-select-dropdown');
+  const enableEl = document.getElementById('voice-toggle-switch');
+
+  if (pitchEl) voiceSettings.pitch = parseFloat(pitchEl.value);
+  if (rateEl) voiceSettings.rate = parseFloat(rateEl.value);
+  if (selectEl) voiceSettings.voiceUri = selectEl.value;
+  if (enableEl) {
+    voiceSettings.enabled = enableEl.checked;
+    voiceEnabled = enableEl.checked;
+  }
+
+  localStorage.setItem('freya_voice_pitch', voiceSettings.pitch);
+  localStorage.setItem('freya_voice_rate', voiceSettings.rate);
+  localStorage.setItem('freya_voice_uri', voiceSettings.voiceUri);
+}
+
+function updateSoundSettingsFromUI() {
+  const volEl = document.getElementById('sound-vol-slider');
+  const enableEl = document.getElementById('sound-toggle-switch');
+  if (volEl) soundSettings.volume = parseFloat(volEl.value);
+  if (enableEl) {
+    soundSettings.enabled = enableEl.checked;
+    soundEnabled = enableEl.checked;
+  }
+  localStorage.setItem('freya_sound_volume', soundSettings.volume);
+}
+
+function openVoiceSettingsModal() {
+  const modal = document.getElementById('voice-selector-modal');
+  if (!modal) return;
+  populateVoiceSelectDropdown();
+  setVoicePreset(voiceSettings.preset);
+  const enableEl = document.getElementById('voice-toggle-switch');
+  if (enableEl) enableEl.checked = voiceEnabled;
+  modal.style.display = 'flex';
+}
+
+function closeVoiceSettingsModal() {
+  const modal = document.getElementById('voice-selector-modal');
+  if (modal) modal.style.display = 'none';
+}
+
+function openSoundSettingsModal() {
+  const modal = document.getElementById('sound-selector-modal');
+  if (!modal) return;
+  setSoundTheme(soundSettings.theme);
+  const volEl = document.getElementById('sound-vol-slider');
+  if (volEl) volEl.value = soundSettings.volume;
+  const enableEl = document.getElementById('sound-toggle-switch');
+  if (enableEl) enableEl.checked = soundEnabled;
+  modal.style.display = 'flex';
+}
+
+function closeSoundSettingsModal() {
+  const modal = document.getElementById('sound-selector-modal');
+  if (modal) modal.style.display = 'none';
+}
+
+function populateVoiceSelectDropdown() {
+  const sel = document.getElementById('voice-select-dropdown');
+  if (!sel || !('speechSynthesis' in window)) return;
+  const voices = window.speechSynthesis.getVoices() || [];
+  sel.innerHTML = `<option value="">-- ${currentLang === 'id' ? 'Default Otomatis' : 'Automatic Best Voice'} --</option>`;
+  voices.forEach(v => {
+    const opt = document.createElement('option');
+    opt.value = v.voiceURI;
+    opt.innerText = `${v.name} (${v.lang})`;
+    if (v.voiceURI === voiceSettings.voiceUri) opt.selected = true;
+    sel.appendChild(opt);
+  });
+}
+
+function testCurrentVoice() {
+  updateVoiceSettingsFromUI();
+  const sample = currentLang === 'id'
+    ? 'Halo Freya! Suara ini siap menemanimu belajar sempoa!'
+    : 'Hello Freya! This sweet voice is ready for your magical abacus!';
+  speakPraiseCustom(sample);
+}
+
+function testCurrentSound() {
+  updateSoundSettingsFromUI();
+  playThemePreviewMusic();
+}
+
+/* Synthesizer theme preview melody */
+function playThemePreviewMusic() {
+  if (!soundEnabled) return;
+  try {
+    initAudio();
+    const now = audioCtx.currentTime + 0.03;
+    const notes = [523.25, 659.25, 783.99, 1046.50];
+    const theme = soundSettings.theme || 'celesta';
+    const vol = soundSettings.volume || 0.9;
+
+    notes.forEach((freq, idx) => {
+      const t = now + idx * 0.14;
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+
+      if (theme === 'arcade') {
+        osc.type = 'square';
+      } else if (theme === 'piano') {
+        osc.type = 'triangle';
+      } else if (theme === 'marimba') {
+        osc.type = 'sine';
+      } else if (theme === 'musicbox') {
+        osc.type = 'sine';
+      } else {
+        osc.type = 'sine';
+      }
+
+      osc.frequency.setValueAtTime(theme === 'musicbox' ? freq * 2 : freq, t);
+      gain.gain.setValueAtTime(0, t);
+      gain.gain.linearRampToValueAtTime(0.25 * vol, t + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.0001, t + (theme === 'marimba' ? 0.25 : 0.45));
+
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start(t);
+      osc.stop(t + 0.5);
+    });
+  } catch(e) {
+    console.warn(e);
+  }
+}
+
+/* =========================================================================
+   BEAD DRAWING VERIFICATION & PROGRESS INTEGRATION
+   ========================================================================= */
+
+function verifyOrSetBeadDrawNumber(targetNum, idx) {
+  const currentTotal = getCurrentSorobanTotal();
+  const isId = (currentLang === 'id');
+  const btn = document.getElementById(`btn-bead-draw-${idx}`);
+
+  if (currentTotal === targetNum) {
+    // Correct!
+    if (!lessonSolvedMap[`sec-bead-draw_${idx}`]) {
+      lessonSolvedMap[`sec-bead-draw_${idx}`] = true;
+      totalCorrect++;
+      totalQuestions++;
+    }
+    totalStars += 1;
+    savePersistentStats();
+    updateStatsUI();
+    renderOverallProgressStars();
+
+    playSound('fanfare');
+    playSound('star');
+
+    if (btn) {
+      btn.style.background = 'linear-gradient(135deg, #ff5e97 0%, #ff85ad 100%)';
+      btn.style.border = '2px solid #d81b60';
+      btn.style.color = '#ffffff';
+      btn.style.boxShadow = '0 0 16px rgba(255, 94, 151, 0.7)';
+      btn.innerHTML = `${targetNum} ⭐`;
+      btn.classList.add('star-pop-anim');
+    }
+
+    showCelebrationOverlay(
+      '⭐',
+      isId ? 'Bagus sekali Freya!' : 'Good job Freya!',
+      isId ? `✨ Angka ${targetNum} cocok di sempoa! ✨` : `✨ ${targetNum} matched on the abacus! ✨`
+    );
+    speakPraiseCustom(isId ? 'Bagus sekali Freya!' : 'Good job Freya!');
+    launchConfetti();
+  } else {
+    // Mismatch: Say "try again please" and shake button without destroying abacus beads!
+    playSound('tryagain');
+    speakPraiseCustom(isId ? 'Coba lagi ya!' : 'Try again please!');
+
+    if (btn) {
+      btn.classList.remove('shake-anim');
+      void btn.offsetWidth; // trigger reflow
+      btn.classList.add('shake-anim');
+      const origBorder = btn.style.borderColor;
+      btn.style.borderColor = '#f59e0b';
+      setTimeout(() => {
+        if (btn && !btn.innerHTML.includes('⭐')) {
+          btn.style.borderColor = origBorder || '#ffccd9';
+        }
+      }, 1000);
+    }
+  }
+}
+
+
 document.addEventListener('DOMContentLoaded', () => {
   setLanguage(currentLang);
   initRods(5);
@@ -4745,22 +5142,29 @@ document.addEventListener('DOMContentLoaded', () => {
     alert(I18N[currentLang].howBeadsMsg);
   });
 
-  // Top Left: Click on Voice plays sweet voice greeting
-  document.getElementById('btn-toggle-voice').addEventListener('click', function() {
-    voiceEnabled = true;
-    this.style.opacity = '1';
-    const welcomeVoiceMsg = currentLang === 'id'
-      ? "Halo Freya! Selamat datang di Sempoa Ajaib! Suara aktif, ayo kita mulai belajar!"
-      : "Hello Freya! Welcome to your Magical Abacus! Voice is active, let's learn together!";
-    speakPraiseCustom(welcomeVoiceMsg);
-  });
+  // Top Left: Click on Voice opens voice character & engine selector modal
+  const btnVoice = document.getElementById('btn-toggle-voice');
+  if (btnVoice) {
+    btnVoice.addEventListener('click', function(e) {
+      e.stopPropagation();
+      openVoiceSettingsModal();
+    });
+  }
 
-  // Top Left: Click on Sound plays sweet musical chime tune
-  document.getElementById('btn-toggle-sound').addEventListener('click', function() {
-    soundEnabled = true;
-    this.style.opacity = '1';
-    playWelcomeMusic();
-  });
+  // Top Left: Click on Sound opens musical sounds & theme selector modal
+  const btnSound = document.getElementById('btn-toggle-sound');
+  if (btnSound) {
+    btnSound.addEventListener('click', function(e) {
+      e.stopPropagation();
+      openSoundSettingsModal();
+    });
+  }
+
+  if ('speechSynthesis' in window) {
+    window.speechSynthesis.onvoiceschanged = () => {
+      populateVoiceSelectDropdown();
+    };
+  }
 
   // Welcome music on page open (handles browser autoplay policies smoothly)
   triggerWelcomeMusicSafely();
@@ -4803,6 +5207,142 @@ document.addEventListener('DOMContentLoaded', () => {
     <div style="margin-top: 14px; text-align: center;">
       <button class="btn-submit-arena" onclick="closeSectionProgressModal()" style="padding: 8px 24px; font-size: 1rem; width: auto;" id="t-prog-modal-btn">
         Got it! Keep Learning 🚀
+      </button>
+    </div>
+  </div>
+</div>
+
+
+<!-- Voice Settings & Character Selector Modal -->
+<div class="modal-overlay" id="voice-selector-modal" onclick="closeVoiceSettingsModal()" style="display: none;">
+  <div class="modal-box" onclick="event.stopPropagation()" style="max-width: 520px; padding: 22px 24px; text-align: left; border: 4px solid #ff85ad;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-bottom: 2px solid #ffccd9; padding-bottom: 8px;">
+      <h2 style="font-size: 1.25rem; font-weight: 900; color: #d81b60; margin: 0; display: flex; align-items: center; gap: 8px;">
+        <span>🗣️</span> <span>Voice Characters & Options</span>
+      </h2>
+      <button onclick="closeVoiceSettingsModal()" style="background: none; border: none; font-size: 1.5rem; color: #ff5e97; cursor: pointer;">✖</button>
+    </div>
+
+    <!-- Toggle Voice On/Off -->
+    <div class="settings-control-row">
+      <span class="settings-label">Enable Voice Appreciation</span>
+      <input type="checkbox" id="voice-toggle-switch" checked onchange="updateVoiceSettingsFromUI()" style="transform: scale(1.3); accent-color: #ff4081; cursor: pointer;">
+    </div>
+
+    <div style="font-weight: 800; color: #d81b60; margin: 10px 0 4px 0; font-size: 0.92rem;">
+      Choose Freya's Voice Character:
+    </div>
+
+    <div class="settings-preset-grid">
+      <div class="preset-card voice-preset-card active" data-preset="fairy" onclick="setVoicePreset('fairy')">
+        <div class="preset-card-icon">🧚‍♀️</div>
+        <div class="preset-card-title">Freya's Fairy</div>
+        <div class="preset-card-sub">Sweet & Magical</div>
+      </div>
+      <div class="preset-card voice-preset-card" data-preset="princess" onclick="setVoicePreset('princess')">
+        <div class="preset-card-icon">🎀</div>
+        <div class="preset-card-title">Cute Princess</div>
+        <div class="preset-card-sub">Bright & Cheerful</div>
+      </div>
+      <div class="preset-card voice-preset-card" data-preset="teacher" onclick="setVoicePreset('teacher')">
+        <div class="preset-card-icon">👩‍🏫</div>
+        <div class="preset-card-title">Gentle Teacher</div>
+        <div class="preset-card-sub">Calm & Clear</div>
+      </div>
+      <div class="preset-card voice-preset-card" data-preset="buddy" onclick="setVoicePreset('buddy')">
+        <div class="preset-card-icon">🤖</div>
+        <div class="preset-card-title">Friendly Buddy</div>
+        <div class="preset-card-sub">Playful & Fast</div>
+      </div>
+    </div>
+
+    <!-- Voice Engine Dropdown -->
+    <div class="settings-control-row">
+      <span class="settings-label">Speech Engine:</span>
+      <select id="voice-select-dropdown" class="settings-select" onchange="updateVoiceSettingsFromUI()"></select>
+    </div>
+
+    <!-- Sliders -->
+    <div class="settings-control-row">
+      <span class="settings-label">Voice Pitch (High/Low):</span>
+      <input type="range" id="voice-pitch-slider" class="settings-slider" min="0.6" max="1.8" step="0.05" value="1.35" onchange="updateVoiceSettingsFromUI()">
+    </div>
+    <div class="settings-control-row">
+      <span class="settings-label">Speaking Speed:</span>
+      <input type="range" id="voice-rate-slider" class="settings-slider" min="0.7" max="1.3" step="0.05" value="1.0" onchange="updateVoiceSettingsFromUI()">
+    </div>
+
+    <div style="display: flex; gap: 10px; margin-top: 14px; justify-content: flex-end;">
+      <button class="btn-nav-mini" onclick="testCurrentVoice()" style="background: #fff0f5; color: #d81b60; border: 2px solid #ffccd9; padding: 8px 16px;">
+        ▶️ Test Voice
+      </button>
+      <button class="btn-submit-arena" onclick="closeVoiceSettingsModal()" style="padding: 8px 20px; width: auto;">
+        Save & Done ✨
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Sound & Musical Themes Selector Modal -->
+<div class="modal-overlay" id="sound-selector-modal" onclick="closeSoundSettingsModal()" style="display: none;">
+  <div class="modal-box" onclick="event.stopPropagation()" style="max-width: 520px; padding: 22px 24px; text-align: left; border: 4px solid #ff85ad;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-bottom: 2px solid #ffccd9; padding-bottom: 8px;">
+      <h2 style="font-size: 1.25rem; font-weight: 900; color: #d81b60; margin: 0; display: flex; align-items: center; gap: 8px;">
+        <span>🔊</span> <span>Musical Sound Themes</span>
+      </h2>
+      <button onclick="closeSoundSettingsModal()" style="background: none; border: none; font-size: 1.5rem; color: #ff5e97; cursor: pointer;">✖</button>
+    </div>
+
+    <!-- Toggle Sound On/Off -->
+    <div class="settings-control-row">
+      <span class="settings-label">Enable Sound & Music</span>
+      <input type="checkbox" id="sound-toggle-switch" checked onchange="updateSoundSettingsFromUI()" style="transform: scale(1.3); accent-color: #ff4081; cursor: pointer;">
+    </div>
+
+    <div style="font-weight: 800; color: #d81b60; margin: 10px 0 4px 0; font-size: 0.92rem;">
+      Select Musical Synthesizer Style:
+    </div>
+
+    <div class="settings-preset-grid">
+      <div class="preset-card sound-theme-card active" data-theme="celesta" onclick="setSoundTheme('celesta')">
+        <div class="preset-card-icon">✨</div>
+        <div class="preset-card-title">Magical Celesta</div>
+        <div class="preset-card-sub">Sweet Fairy Bells</div>
+      </div>
+      <div class="preset-card sound-theme-card" data-theme="musicbox" onclick="setSoundTheme('musicbox')">
+        <div class="preset-card-icon">🧸</div>
+        <div class="preset-card-title">Music Box</div>
+        <div class="preset-card-sub">Delicate Lullaby</div>
+      </div>
+      <div class="preset-card sound-theme-card" data-theme="piano" onclick="setSoundTheme('piano')">
+        <div class="preset-card-icon">🎹</div>
+        <div class="preset-card-title">Happy Piano</div>
+        <div class="preset-card-sub">Warm Acoustic</div>
+      </div>
+      <div class="preset-card sound-theme-card" data-theme="marimba" onclick="setSoundTheme('marimba')">
+        <div class="preset-card-icon">🌟</div>
+        <div class="preset-card-title">Crystal Marimba</div>
+        <div class="preset-card-sub">Wooden Playful Chimes</div>
+      </div>
+      <div class="preset-card sound-theme-card" data-theme="arcade" onclick="setSoundTheme('arcade')">
+        <div class="preset-card-icon">🎮</div>
+        <div class="preset-card-title">Arcade 8-Bit</div>
+        <div class="preset-card-sub">Retro Video Game</div>
+      </div>
+    </div>
+
+    <!-- Volume Slider -->
+    <div class="settings-control-row">
+      <span class="settings-label">Master Volume:</span>
+      <input type="range" id="sound-vol-slider" class="settings-slider" min="0.1" max="1.0" step="0.05" value="0.9" onchange="updateSoundSettingsFromUI()">
+    </div>
+
+    <div style="display: flex; gap: 10px; margin-top: 14px; justify-content: flex-end;">
+      <button class="btn-nav-mini" onclick="testCurrentSound()" style="background: #fff0f5; color: #d81b60; border: 2px solid #ffccd9; padding: 8px 16px;">
+        ▶️ Preview Music
+      </button>
+      <button class="btn-submit-arena" onclick="closeSoundSettingsModal()" style="padding: 8px 20px; width: auto;">
+        Save & Done ✨
       </button>
     </div>
   </div>
