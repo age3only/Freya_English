@@ -2006,8 +2006,8 @@
   <div class="hero-banner" id="main-hero-banner" title="Click 5 times to reset scores">
     <span class="corner-unicorn left">🦄</span>
     <span class="corner-unicorn right">🦄</span>
-    <h1 class="hero-title">✨ <span id="t-app-title">FREYA'S MAGICAL ABACUS</span> ✨</h1>
-    <p class="hero-subtitle" id="t-app-subtitle">Welcome, Freya! Let's learn Abacus together! 🎀</p>
+    <h1 class="hero-title" onclick="handleHeadingClick(event)" style="cursor: pointer;">✨ <span id="t-app-title">FREYA'S MAGICAL ABACUS</span> ✨</h1>
+    <p class="hero-subtitle" id="t-app-subtitle" onclick="handleHeadingClick(event)" style="cursor: pointer;">Welcome, Freya! Let's learn Abacus together! 🎀</p>
 
     <!-- 10 Stars Overall Progress Bar (Persists until Reset) -->
     <div class="banner-overall-progress" id="banner-overall-progress" title="Overall Progress (10 Stars) - Click to view detailed section right answers!" onclick="event.stopPropagation(); openSectionProgressModal();" style="cursor: pointer;">
@@ -2828,13 +2828,12 @@ const COURSE_SECTIONS = [
   },
   {
     id: 'sec-speed-writing',
-    titleEn: 'Speed Writing Lab',
-    titleId: 'Lab Menulis Cepat',
+    titleEn: 'Speed Writing Lab (12 Turns)',
+    titleId: 'Lab Menulis Cepat (12 Giliran)',
     icon: '✍️',
     lessonKey: 'sec-speed-writing',
     subsections: [
-      { key: 'sec-speed-writing-left', titleEn: 'Left Hand Turn', titleId: 'Giliran Tangan Kiri', total: 1, range: [0, 0] },
-      { key: 'sec-speed-writing-right', titleEn: 'Right Hand Turn', titleId: 'Giliran Tangan Kanan', total: 1, range: [0, 0] }
+      { key: 'sec-speed-writing', titleEn: '12 Practice Turns (R/L)', titleId: '12 Latihan (Kanan/Kiri)', total: 12, range: [0, 11] }
     ]
   },
   {
@@ -3372,12 +3371,33 @@ function resetAllScoresManually() {
   totalStars = 0;
   totalCrowns = 0;
   lessonSolvedMap = {};
+  speedWritingTurnCount = 0;
+  speedHandMode = 'right';
+
+  localStorage.removeItem('freya_speed_turn_count');
+  localStorage.removeItem('freya_speed_left_done');
+  localStorage.removeItem('freya_speed_right_done');
+  localStorage.removeItem('freya_correct_ans');
+  localStorage.removeItem('freya_total_qs');
+  localStorage.removeItem('freya_stars');
+  localStorage.removeItem('freya_crowns');
+  localStorage.removeItem('freya_solved_map');
+
   savePersistentStats();
   updateStatsUI();
+  renderOverallProgressStars(); // Requirement: Reset all 10 stars in overall progress banner!
   playSound('clear');
-  clearSoroban();
-  renderActiveChallenge();
-  alert("🔄 All scores and stars have been manually reset for Freya! Fresh start!");
+  clearSoroban(false);
+
+  if (activeLessonKey === 'sec-speed-writing') {
+    renderSpeedWritingArena();
+  } else if (activeLessonKey.startsWith('sec-bead-count') || activeLessonKey === 'sec-bead-draw') {
+    renderBeadLessonArena(activeLessonKey);
+  } else {
+    renderActiveChallenge();
+  }
+
+  showCelebrationOverlay('🔄', 'All Scores & Stars Reset!', 'All 10 stars and overall progress have been reset to 0! Fresh start ✨');
 }
 
 /* =========================================================================
@@ -4314,7 +4334,8 @@ function animateAbacusSteps(nums) {
    16-SECOND COUNTDOWN TIMER, RHYTHMIC MUSIC, AND APPLE PENCIL DRAWING PAD!
    ========================================================================= */
 
-let speedHandMode = 'left'; // 'left' or 'right'
+let speedWritingTurnCount = parseInt(localStorage.getItem('freya_speed_turn_count') || '0', 10);
+let speedHandMode = (speedWritingTurnCount % 2 === 0) ? 'right' : 'left'; // Right hand first, then left, alternating till 12 times
 let speedTimer16 = 16;
 let speedTimerInterval = null;
 let speedMusicInterval = null;
@@ -4451,12 +4472,30 @@ function renderSpeedWritingArena() {
   const cardContainer = document.getElementById('active-challenge-card');
   if (!cardContainer) return;
 
-  const handTitle = speedHandMode === 'left'
-    ? (currentLang === 'id' ? '🖐️ Latihan Tangan KIRI (16 Detik)' : '🖐️ LEFT HAND TURN (16s Timer)')
-    : (currentLang === 'id' ? '🖐️ Latihan Tangan KANAN (16 Detik)' : '🖐️ RIGHT HAND TURN (16s Timer)');
+  // Determine hand based on current turn count: Right first (even), then Left (odd)
+  speedHandMode = (speedWritingTurnCount % 2 === 0) ? 'right' : 'left';
+  const currentTurn = Math.min(12, speedWritingTurnCount + 1);
+  const remaining = Math.max(0, 12 - speedWritingTurnCount);
+  const isLevelComplete = speedWritingTurnCount >= 12;
+
+  const handTitle = speedHandMode === 'right'
+    ? (currentLang === 'id' ? '🖐️ Giliran Tangan KANAN (16 Detik)' : '🖐️ RIGHT HAND TURN (16s Timer)')
+    : (currentLang === 'id' ? '🖐️ Giliran Tangan KIRI (16 Detik)' : '🖐️ LEFT HAND TURN (16s Timer)');
+
+  const isId = (currentLang === 'id');
 
   cardContainer.innerHTML = `
     <div class="writing-pad-container">
+      <!-- 12-Practice Turns Countdown Banner -->
+      <div style="display: flex; gap: 8px; justify-content: center; align-items: center; flex-wrap: wrap; margin-bottom: 8px;">
+        <span style="background: linear-gradient(135deg, #ff4081, #d81b60); color: #fff; font-weight: 900; font-size: 0.95rem; padding: 6px 16px; border-radius: 20px; box-shadow: 0 4px 10px rgba(216,27,96,0.3);">
+          🎯 ${isId ? `Latihan: Giliran ${currentTurn} dari 12` : `Practice: Turn ${currentTurn} of 12`}
+        </span>
+        <span style="background: ${remaining === 0 ? '#dcfce7' : '#fff0f5'}; color: ${remaining === 0 ? '#15803d' : '#d81b60'}; font-weight: 900; font-size: 0.92rem; padding: 6px 16px; border-radius: 20px; border: 2px solid ${remaining === 0 ? '#86efac' : '#ffccd9'};">
+          ${remaining === 0 ? (isId ? '🎉 12 Sesi Selesai (Level Selesai!)' : '🎉 12 Turns Done (Level Complete!)') : (isId ? `⏳ Sisa: ${remaining} Giliran Menuju Selesai` : `⏳ Countdown: ${remaining} Turns Left`)}
+        </span>
+      </div>
+
       <div class="hand-indicator-banner">
         ${handTitle}
       </div>
@@ -4531,19 +4570,26 @@ function finishSpeedWritingSession(bypassCheck = false) {
     }
   }
 
-  // Mark completion for current hand:
-  if (speedHandMode === 'left') {
-    lessonSolvedMap['sec-speed-writing-left_0'] = true;
+  // Requirement: Increment turn count towards 12 total practice sessions
+  const solvedIndex = Math.min(11, speedWritingTurnCount);
+  lessonSolvedMap[`sec-speed-writing_${solvedIndex}`] = true;
+
+  speedWritingTurnCount++;
+  localStorage.setItem('freya_speed_turn_count', speedWritingTurnCount);
+
+  const isLevelComplete = (speedWritingTurnCount >= 12);
+  const remaining = Math.max(0, 12 - speedWritingTurnCount);
+  const nextHand = (speedWritingTurnCount % 2 === 0) ? 'right' : 'left';
+  const isId = (currentLang === 'id');
+
+  if (isLevelComplete) {
+    totalStars += 3;
+    totalCrowns += 1;
+    totalCorrect += 1;
   } else {
-    lessonSolvedMap['sec-speed-writing-right_0'] = true;
+    totalStars += 1;
   }
 
-  const isLeftDone = !!lessonSolvedMap['sec-speed-writing-left_0'];
-  const isRightDone = !!lessonSolvedMap['sec-speed-writing-right_0'];
-  const isLevelComplete = isLeftDone && isRightDone;
-
-  totalStars += isLevelComplete ? 3 : 1;
-  if (isLevelComplete) totalCrowns += 1;
   savePersistentStats();
   updateStatsUI();
   renderOverallProgressStars();
@@ -4551,19 +4597,16 @@ function finishSpeedWritingSession(bypassCheck = false) {
   playSound('crown');
   launchConfetti();
 
-  const nextHand = speedHandMode === 'left' ? 'right' : 'left';
-  const isId = (currentLang === 'id');
-
   let title = isId ? 'Luar biasa Freya!' : 'Outstanding Freya!';
-  let sub = isLevelComplete 
-    ? (isId ? '🎉 Level Menulis Cepat Selesai! Kedua tangan hebat!' : '🎉 Speed Writing Level Complete! Both hands mastered!')
-    : (isId ? `Bagus! Giliran tangan ${speedHandMode === 'left' ? 'Kiri' : 'Kanan'} selesai!` : `Great ${speedHandMode} hand turn completed!`);
+  let sub = isLevelComplete
+    ? (isId ? '🎉 Level Selesai! Kamu telah menyelesaikan 12 latihan tangan kanan dan kiri!' : '🎉 Level Complete! You mastered all 12 practice turns!')
+    : (isId ? `Latihan ${speedWritingTurnCount}/12 selesai! Sisa ${remaining} giliran lagi.` : `Turn ${speedWritingTurnCount} of 12 complete! ${remaining} turns remaining.`);
 
   let vocal = isLevelComplete
-    ? (isId ? 'Luar biasa Freya! Level menulis cepat selesai, kedua tangan hebat!' : 'Outstanding Freya! Speed writing level complete, both hands mastered!')
-    : (isId ? `Bagus Freya! Sekarang ganti ke tangan ${nextHand === 'right' ? 'KANAN' : 'KIRI'}!` : `Great job Freya! Now get ready for ${nextHand} hand!`);
+    ? (isId ? 'Luar biasa Freya! 12 sesi menulis cepat selesai, level berhasil dituntaskan!' : 'Outstanding Freya! All 12 speed writing turns complete! Level mastered!')
+    : (isId ? `Bagus Freya! Latihan selesai. Sekarang giliran tangan ${nextHand === 'right' ? 'KANAN' : 'KIRI'}, tersisa ${remaining} kali!` : `Great job Freya! Next is ${nextHand} hand turn, ${remaining} turns to go!`);
 
-  showCelebrationOverlay('👑', title, sub);
+  showCelebrationOverlay(isLevelComplete ? '🏆' : '👑', title, sub);
   speakPraiseCustom(vocal);
 
   setTimeout(() => {
