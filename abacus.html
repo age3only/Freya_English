@@ -2579,6 +2579,18 @@ try {
 let audioCtx = null;
 let masterGainNode = null;
 
+function syncMasterGain() {
+  if (masterGainNode && audioCtx) {
+    const targetGain = masterMuted ? 0 : 1.0;
+    try {
+      if (Math.abs(masterGainNode.gain.value - targetGain) > 0.001) {
+        masterGainNode.gain.cancelScheduledValues(audioCtx.currentTime);
+        masterGainNode.gain.setValueAtTime(targetGain, audioCtx.currentTime);
+      }
+    } catch(e) {}
+  }
+}
+
 function initAudio() {
   try {
     const AudioCtxClass = window.AudioContext || window.webkitAudioContext;
@@ -2594,9 +2606,7 @@ function initAudio() {
     if (audioCtx.state === 'suspended' || audioCtx.state === 'interrupted') {
       audioCtx.resume().catch(() => {});
     }
-    if (masterGainNode && audioCtx) {
-      masterGainNode.gain.setValueAtTime(masterMuted ? 0 : 1.0, audioCtx.currentTime);
-    }
+    syncMasterGain();
   } catch(e) {
     console.warn('initAudio error:', e);
   }
@@ -2613,9 +2623,6 @@ function ensureAudioRunning() {
     initAudio();
     if (audioCtx && (audioCtx.state === 'suspended' || audioCtx.state === 'interrupted')) {
       audioCtx.resume().catch(() => {});
-    }
-    if (masterGainNode && audioCtx) {
-      masterGainNode.gain.setValueAtTime(masterMuted ? 0 : 1.0, audioCtx.currentTime);
     }
   } catch(e) {}
 }
@@ -2682,15 +2689,27 @@ function playSweetTone(noteIndex = 0) {
   try {
     ensureAudioRunning();
     if (!audioCtx) return;
+    if (audioCtx.state === 'suspended' || audioCtx.state === 'interrupted') {
+      audioCtx.resume().catch(() => {});
+      return;
+    }
     const dest = getAudioDestination();
     if (!dest) return;
-    const now = Math.max(audioCtx.currentTime, 0) + 0.008;
+    const now = Math.max(audioCtx.currentTime, 0.01) + 0.008;
     const scale = [523.25, 587.33, 659.25, 783.99, 880.00, 1046.50, 1174.66, 1318.51, 1567.98];
     const freq = scale[Math.abs(noteIndex) % scale.length];
+    const vol = (typeof soundSettings !== 'undefined' && soundSettings.volume) ? soundSettings.volume : 0.9;
+    const theme = (typeof soundSettings !== 'undefined' && soundSettings.theme) ? soundSettings.theme : 'celesta';
 
     const osc = audioCtx.createOscillator();
     const gain = audioCtx.createGain();
-    osc.type = 'sine';
+    if (theme === 'arcade') {
+      osc.type = 'square';
+    } else if (theme === 'piano') {
+      osc.type = 'triangle';
+    } else {
+      osc.type = 'sine';
+    }
     osc.frequency.setValueAtTime(freq, now);
 
     const overtone = audioCtx.createOscillator();
@@ -2699,11 +2718,11 @@ function playSweetTone(noteIndex = 0) {
     overtone.frequency.setValueAtTime(freq * 2.756, now);
 
     gain.gain.setValueAtTime(0.001, now);
-    gain.gain.linearRampToValueAtTime(0.24, now + 0.012);
+    gain.gain.linearRampToValueAtTime(0.24 * vol, now + 0.012);
     gain.gain.linearRampToValueAtTime(0.0001, now + 0.38);
 
     overGain.gain.setValueAtTime(0.001, now);
-    overGain.gain.linearRampToValueAtTime(0.09, now + 0.01);
+    overGain.gain.linearRampToValueAtTime(0.09 * vol, now + 0.01);
     overGain.gain.linearRampToValueAtTime(0.0001, now + 0.22);
 
     osc.connect(gain);
@@ -3305,9 +3324,13 @@ function playSound(type) {
   try {
     ensureAudioRunning();
     if (!audioCtx) return;
+    if (audioCtx.state === 'suspended' || audioCtx.state === 'interrupted') {
+      audioCtx.resume().catch(() => {});
+      return;
+    }
     const dest = getAudioDestination();
     if (!dest) return;
-    const now = Math.max(audioCtx.currentTime, 0) + 0.008;
+    const now = Math.max(audioCtx.currentTime, 0.01) + 0.008;
     const vol = (soundSettings && soundSettings.volume) ? soundSettings.volume : 0.9;
 
     if (type === 'tryagain') {
@@ -3555,11 +3578,20 @@ let hasPlayedWelcomeMusic = false;
 function playWelcomeMusic() {
   if (!soundEnabled || masterMuted) return;
   try {
-    ensureAudioRunning();
+    initAudio();
     if (!audioCtx) return;
+    if (audioCtx.state === 'suspended' || audioCtx.state === 'interrupted') {
+      audioCtx.resume().then(() => {
+        if (!hasPlayedWelcomeMusic && audioCtx.state === 'running' && soundEnabled && !masterMuted) {
+          playWelcomeMusic();
+        }
+      }).catch(() => {});
+      return;
+    }
     const dest = getAudioDestination();
     if (!dest) return;
-    const now = Math.max(audioCtx.currentTime, 0) + 0.05;
+    const now = Math.max(audioCtx.currentTime, 0.02) + 0.05;
+    const masterVol = (typeof soundSettings !== 'undefined' && soundSettings.volume) ? soundSettings.volume : 0.9;
     // Magical sweet welcome melody (Celesta + Music Box chime)
     const melody = [
       { freq: 523.25, time: 0.0, dur: 0.35, vol: 0.24 }, // C5
@@ -3594,12 +3626,13 @@ function playWelcomeMusic() {
       overtone.type = 'sine';
       overtone.frequency.setValueAtTime(note.freq * 2, t);
 
+      const computedVol = note.vol * masterVol;
       gain.gain.setValueAtTime(0.001, t);
-      gain.gain.linearRampToValueAtTime(note.vol, t + 0.02);
+      gain.gain.linearRampToValueAtTime(computedVol, t + 0.02);
       gain.gain.linearRampToValueAtTime(0.0001, t + note.dur);
 
       overGain.gain.setValueAtTime(0.001, t);
-      overGain.gain.linearRampToValueAtTime(note.vol * 0.35, t + 0.015);
+      overGain.gain.linearRampToValueAtTime(computedVol * 0.35, t + 0.015);
       overGain.gain.linearRampToValueAtTime(0.0001, t + note.dur * 0.7);
 
       osc.connect(gain);
@@ -3622,12 +3655,12 @@ function playWelcomeMusic() {
 }
 
 function triggerWelcomeMusicSafely() {
-  if (hasPlayedWelcomeMusic) return;
+  if (hasPlayedWelcomeMusic || !soundEnabled || masterMuted) return;
   initAudio();
   if (audioCtx) {
     if (audioCtx.state === 'suspended' || audioCtx.state === 'interrupted') {
       audioCtx.resume().then(() => {
-        if (!hasPlayedWelcomeMusic && audioCtx.state === 'running') {
+        if (!hasPlayedWelcomeMusic && audioCtx.state === 'running' && soundEnabled && !masterMuted) {
           playWelcomeMusic();
         }
       }).catch(() => {});
@@ -4061,6 +4094,9 @@ let challengeTimerInterval = null;
 let challengeTimerSeconds = 10;
 
 function loadLesson(lessonKey, shouldScroll = false, autoFocus = true) {
+  if (typeof stopSpeedSessionTimers === 'function') {
+    stopSpeedSessionTimers();
+  }
   activeLessonKey = lessonKey;
   activeQuestionIndex = 0;
 
@@ -4598,10 +4634,7 @@ function registerSpeedStrokePoint(clientX, clientY) {
     // Requirement: Timer and music stop when writing in block ZERO
     if (digit === 0 && speedActivityStarted && !speedActivityFinished && speedBoxStrokes[0] >= 3) {
       // Immediately stop timer and rhythmic music
-      if (speedTimerInterval) clearInterval(speedTimerInterval);
-      if (speedMusicInterval) clearInterval(speedMusicInterval);
-      speedTimerInterval = null;
-      speedMusicInterval = null;
+      stopSpeedSessionTimers();
 
       // Requirement: "also make sure there is sumthing ritten in blocks 2,3,4,5,6,7,8,9 then only it is considering as activity done"
       const requiredIntermediate = [2, 3, 4, 5, 6, 7, 8, 9];
@@ -4727,10 +4760,7 @@ function renderSpeedWritingArena() {
 }
 
 function finishSpeedWritingSession(bypassCheck = false) {
-  if (speedTimerInterval) clearInterval(speedTimerInterval);
-  if (speedMusicInterval) clearInterval(speedMusicInterval);
-  speedTimerInterval = null;
-  speedMusicInterval = null;
+  stopSpeedSessionTimers();
 
   // Verify that all blocks 1 to 9 and 0 have been written
   if (!bypassCheck) {
@@ -4910,44 +4940,44 @@ function start16SecSpeedSession() {
     if (masterMuted || !soundEnabled) return;
     ensureAudioRunning();
     if (!audioCtx) return;
+    if (audioCtx.state === 'suspended' || audioCtx.state === 'interrupted') {
+      audioCtx.resume().catch(() => {});
+      return;
+    }
     const dest = getAudioDestination();
     if (!dest) return;
 
-    const now = Math.max(audioCtx.currentTime, 0) + 0.008;
+    const now = Math.max(audioCtx.currentTime, 0.01) + 0.008;
+    const vol = (typeof soundSettings !== 'undefined' && soundSettings.volume) ? soundSettings.volume : 0.9;
     const osc = audioCtx.createOscillator();
     const gain = audioCtx.createGain();
     osc.type = 'triangle';
     osc.frequency.setValueAtTime(rhythmNotes[noteIdx % rhythmNotes.length], now);
     gain.gain.setValueAtTime(0.001, now);
-    gain.gain.linearRampToValueAtTime(0.09, now + 0.01);
-    gain.gain.linearRampToValueAtTime(0.0001, now + 0.15);
+    gain.gain.linearRampToValueAtTime(0.10 * vol, now + 0.01);
+    gain.gain.linearRampToValueAtTime(0.0001, now + 0.16);
     osc.connect(gain);
     gain.connect(dest);
     osc.start(now);
-    osc.stop(now + 0.15);
+    osc.stop(now + 0.16);
     osc.onended = () => { try { osc.disconnect(); gain.disconnect(); } catch(e) {} };
     noteIdx++;
   }, 400);
 
   const statusEl = document.getElementById('speed-writing-status');
-  if (statusEl) statusEl.innerText = currentLang === 'id' ? '⏳ Menulis sekarang! Setelah selesai, tekan tombol "🏁 Selesai Menulis"!' : '⏳ Writing in progress! When finished, press "🏁 Finish Writing" tab!';
+  if (statusEl) statusEl.innerText = currentLang === 'id' ? '⏳ Menulis sekarang! Tulis di kotak 1 sampai 0!' : '⏳ Writing in progress! Fill boxes 1 through 0!';
 
   speedTimerInterval = setInterval(() => {
     speedTimer16--;
     if (disp) disp.innerText = speedTimer16;
-    if (!masterMuted) playSound('tick');
+    if (!masterMuted && soundEnabled) playSound('tick');
 
     if (speedTimer16 <= 0) {
       stopSpeedSessionTimers();
 
-      // Timer completed: Prompt Freya to press Finish Writing tab!
+      // Timer completed: Prompt Freya
       if (statusEl) {
-        statusEl.innerHTML = `⏰ <strong>${currentLang === 'id' ? 'Waktu habis! Tekan tombol "🏁 Selesai Menulis" sekarang!' : "Time's up! Press '🏁 Finish Writing' tab now!"}</strong>`;
-      }
-      const finishBtn = document.getElementById('btn-finish-speed-tab');
-      if (finishBtn) {
-        finishBtn.style.animation = 'pulse 1s infinite alternate';
-        finishBtn.focus();
+        statusEl.innerHTML = `⏰ <strong>${currentLang === 'id' ? 'Waktu 16 detik habis! Lanjutkan mengisi sisa kotak!' : "16s Time's up! Continue filling any remaining boxes!"}</strong>`;
       }
     }
   }, 1000);
@@ -5451,9 +5481,13 @@ function playThemePreviewMusic() {
   try {
     ensureAudioRunning();
     if (!audioCtx) return;
+    if (audioCtx.state === 'suspended' || audioCtx.state === 'interrupted') {
+      audioCtx.resume().catch(() => {});
+      return;
+    }
     const dest = getAudioDestination();
     if (!dest) return;
-    const now = Math.max(audioCtx.currentTime, 0) + 0.03;
+    const now = Math.max(audioCtx.currentTime, 0.01) + 0.03;
     const notes = [523.25, 659.25, 783.99, 1046.50];
     const theme = (soundSettings && soundSettings.theme) ? soundSettings.theme : 'celesta';
     const vol = (soundSettings && soundSettings.volume) ? soundSettings.volume : 0.9;
