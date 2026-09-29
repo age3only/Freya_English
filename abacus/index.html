@@ -1317,6 +1317,365 @@
     background: #fffdfd;
     position: relative;
   }
+
+  /* Eliminate native browser number stepper arrows */
+  input[type="number"]::-webkit-outer-spin-button,
+  input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none !important;
+    margin: 0 !important;
+  }
+  input[type="number"] {
+    -moz-appearance: textfield !important;
+    appearance: textfield !important;
+  }
+
+  /* Number Wheel Drum Container - Freya Pink Sparkle Styling */
+  .wheel-picker-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 130px;
+    background: linear-gradient(180deg, #fff5f8 0%, #ffffff 50%, #fff0f5 100%);
+    border: 3.5px solid #ff5e97;
+    border-radius: 18px;
+    box-shadow: 0 4px 18px rgba(255, 94, 151, 0.25), inset 0 2px 4px rgba(255, 255, 255, 0.9);
+    padding: 4px 6px;
+    cursor: ns-resize;
+    user-select: none;
+    touch-action: none;
+    outline: none;
+    transition: all 0.2s cubic-bezier(0.2, 0.9, 0.3, 1);
+    position: relative;
+  }
+
+  .wheel-picker-wrap:focus,
+  .wheel-picker-wrap.is-focused {
+    border-color: #d81b60;
+    box-shadow: 0 0 0 4px rgba(255, 94, 151, 0.35), 0 6px 22px rgba(216, 27, 96, 0.3);
+  }
+
+  .wheel-nudge-btn {
+    background: transparent;
+    border: none;
+    color: #ff5e97;
+    font-size: 0.9rem;
+    line-height: 1;
+    cursor: pointer;
+    padding: 3px 0;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    user-select: none;
+    opacity: 0.75;
+    transition: transform 0.15s, opacity 0.15s, color 0.15s;
+  }
+
+  .wheel-nudge-btn:hover {
+    opacity: 1;
+    color: #d81b60;
+    transform: scale(1.25);
+  }
+
+  .wheel-nudge-btn:active {
+    transform: scale(0.9);
+  }
+
+  /* Roller Viewport with 3D Drum cylinder effect */
+  .wheel-roller-viewport {
+    position: relative;
+    width: 100%;
+    height: 52px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .wheel-roller-viewport::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 14px;
+    background: linear-gradient(180deg, rgba(255, 240, 245, 0.95) 0%, transparent 100%);
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  .wheel-roller-viewport::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 14px;
+    background: linear-gradient(0deg, rgba(255, 240, 245, 0.95) 0%, transparent 100%);
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  .wheel-slot-bracket {
+    position: absolute;
+    width: calc(100% - 16px);
+    height: 38px;
+    border-top: 1.5px solid rgba(216, 27, 96, 0.4);
+    border-bottom: 1.5px solid rgba(216, 27, 96, 0.4);
+    background: rgba(255, 94, 151, 0.08);
+    border-radius: 8px;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .wheel-roller-track {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    transition: transform 0.12s cubic-bezier(0.2, 0.9, 0.3, 1);
+  }
+
+  .wheel-digit {
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    font-family: 'Comic Sans MS', 'Chalkboard SE', 'Nunito', sans-serif;
+    font-size: 1.85rem;
+    font-weight: 900;
+    color: #d81b60;
+    text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
+    user-select: none;
+  }
+
+  .wheel-digit.wheel-prev,
+  .wheel-digit.wheel-next {
+    font-size: 1.15rem;
+    opacity: 0.35;
+    filter: blur(0.5px);
+    transform: scale(0.85);
+    color: #ff85ad;
+  }
+
+  .wheel-digit.wheel-curr {
+    font-size: 2rem;
+    opacity: 1;
+    color: #d81b60;
+    font-weight: 900;
+    z-index: 2;
+  }
+
+  /* 10 Stars Overall Progress Bar in Banner */
+  .banner-overall-progress {
+    margin-top: 10px;
+    background: rgba(255, 255, 255, 0.35);
+    border: 2px solid rgba(255, 255, 255, 0.9);
+    border-radius: 20px;
+    padding: 8px 14px;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    box-shadow: 0 4px 16px rgba(216, 27, 96, 0.2);
+    backdrop-filter: blur(6px);
+    user-select: none;
+    max-width: 95%;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+
+  .banner-overall-progress:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(216, 27, 96, 0.3);
+  }
+
+  .banner-stars-track {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(4px, 1.2vw, 10px);
+    flex-wrap: wrap;
+  }
+
+  .banner-star-item {
+    font-size: clamp(1.45rem, 2.6vw, 1.85rem);
+    line-height: 1;
+    transition: transform 0.25s cubic-bezier(0.2, 0.9, 0.3, 1), filter 0.25s ease;
+    cursor: pointer;
+    filter: grayscale(100%) opacity(30%);
+  }
+
+  .banner-star-item.earned {
+    filter: drop-shadow(0 0 6px #ffbe0b) drop-shadow(0 0 12px #ff007f);
+    transform: scale(1.12);
+    animation: starGoldTwinkle 2.5s infinite alternate ease-in-out;
+  }
+
+  .banner-star-item.partial {
+    filter: drop-shadow(0 0 4px rgba(255, 190, 11, 0.6)) opacity(75%);
+  }
+
+  @keyframes starGoldTwinkle {
+    0% { transform: scale(1.08); filter: drop-shadow(0 0 4px #ffbe0b); }
+    100% { transform: scale(1.18); filter: drop-shadow(0 0 10px #ffbe0b) drop-shadow(0 0 14px #ff007f); }
+  }
+
+  .banner-stars-caption {
+    font-size: clamp(0.78rem, 1.6vw, 0.92rem);
+    font-weight: 800;
+    color: #ffffff;
+    letter-spacing: 0.5px;
+    text-shadow: 0 1px 3px rgba(180, 0, 70, 0.8);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  /* Responsive screen sizing & focus neon glow */
+  @keyframes beadCardFocusPulse {
+    0% {
+      box-shadow: 0 0 0 0 rgba(255, 94, 151, 0.7);
+      border-color: #ff5e97;
+    }
+    70% {
+      box-shadow: 0 0 0 16px rgba(255, 94, 151, 0);
+      border-color: #d81b60;
+    }
+    100% {
+      box-shadow: 0 0 0 0 rgba(255, 94, 151, 0);
+      border-color: #ffccd9;
+    }
+  }
+
+  .bead-card-focus-highlight {
+    animation: beadCardFocusPulse 1.4s cubic-bezier(0.2, 0.9, 0.3, 1) !important;
+  }
+
+  /* Currently Learning Lesson Selector Widget */
+  .current-lesson-selector-widget {
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    width: 100%;
+  }
+
+  .big-lesson-arrow-btn {
+    background: linear-gradient(135deg, #ff5e97 0%, #d81b60 100%);
+    color: #ffffff;
+    border: 2px solid #ffffff;
+    border-radius: 14px;
+    width: clamp(42px, 6vw, 52px);
+    height: clamp(52px, 8vw, 64px);
+    font-size: clamp(1.4rem, 2.5vw, 1.8rem);
+    font-weight: 900;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(255, 94, 151, 0.35);
+    transition: transform 0.15s, box-shadow 0.15s;
+    user-select: none;
+    flex-shrink: 0;
+  }
+
+  .big-lesson-arrow-btn:hover {
+    transform: scale(1.06);
+    box-shadow: 0 6px 18px rgba(216, 27, 96, 0.45);
+  }
+
+  .current-lesson-tile-display {
+    flex: 1;
+    background: linear-gradient(135deg, #fff5f8 0%, #ffeaf1 100%);
+    border: 2.5px solid #ff85ad;
+    border-radius: 16px;
+    padding: clamp(8px, 1.5vw, 12px) clamp(10px, 2vw, 16px);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(255, 94, 151, 0.15);
+    transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+  }
+
+  .current-lesson-tile-display:hover {
+    border-color: #d81b60;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(255, 94, 151, 0.3);
+  }
+
+  .curr-tile-icon {
+    font-size: clamp(1.6rem, 3.2vw, 2.2rem);
+  }
+
+  .curr-tile-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+    text-align: left;
+  }
+
+  .curr-tile-badge {
+    font-size: 0.68rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    color: #ffffff;
+    background: linear-gradient(135deg, #ff5e97, #d81b60);
+    padding: 2px 8px;
+    border-radius: 10px;
+    display: inline-block;
+  }
+
+  .curr-tile-title {
+    font-size: clamp(0.92rem, 1.8vw, 1.15rem);
+    font-weight: 900;
+    color: #d81b60;
+  }
+
+  .curr-tile-sub {
+    font-size: clamp(0.72rem, 1.4vw, 0.85rem);
+    font-weight: 700;
+    color: #880e4f;
+  }
+
+  /* Progress Breakdown Modal */
+  .prog-sec-card {
+    background: #fff5f8;
+    border: 1.5px solid #ffccd9;
+    border-radius: 12px;
+    padding: 10px 12px;
+    transition: all 0.2s ease;
+  }
+  .prog-sec-card:hover {
+    border-color: #ff5e97;
+  }
+  .prog-sub-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.8rem;
+    padding: 2px 0;
+  }
+  .prog-sub-bar-bg {
+    width: 60px;
+    height: 6px;
+    background: #ffe4ee;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .prog-sub-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #ff5e97, #ffbe0b);
+    border-radius: 4px;
+  }
+
 </style>
 </head>
 <body>
@@ -1346,6 +1705,16 @@
     <span class="corner-unicorn right">🦄</span>
     <h1 class="hero-title">✨ <span id="t-app-title">FREYA'S MAGICAL ABACUS</span> ✨</h1>
     <p class="hero-subtitle" id="t-app-subtitle">Welcome, Freya! Let's learn Abacus together! 🎀</p>
+
+    <!-- 10 Stars Overall Progress Bar (Persists until Reset) -->
+    <div class="banner-overall-progress" id="banner-overall-progress" title="Overall Progress (10 Stars) - Click to view detailed section right answers!" onclick="event.stopPropagation(); openSectionProgressModal();" style="cursor: pointer;">
+      <div class="banner-stars-track" id="banner-stars-track">
+        <!-- 10 Stars Injected Dynamically -->
+      </div>
+      <div class="banner-stars-caption" id="banner-stars-caption">
+        ⭐ <span id="banner-stars-counter">0 / 10</span> <span id="t-overall-progress">Overall Progress</span> ⭐
+      </div>
+    </div>
   </div>
 
   <!-- 4 Stats Cards: Correct, Total, Stars, Crowns -->
@@ -1368,6 +1737,26 @@
     </div>
   </div>
 
+  <!-- Currently Learning Lesson Selector with Two Big Arrow Marks on both sides -->
+  <div class="current-lesson-selector-widget">
+    <button type="button" class="big-lesson-arrow-btn left" onclick="navigateActiveLesson(-1)" title="Previous Lesson">
+      ◀
+    </button>
+    
+    <div class="current-lesson-tile-display" id="current-lesson-tile" onclick="focusBeadCardSection()" title="Click to focus Bead Card">
+      <span class="curr-tile-icon" id="tile-lesson-icon">🎀</span>
+      <div class="curr-tile-info">
+        <div class="curr-tile-badge" id="t-curr-learning-badge">Currently Learning</div>
+        <div class="curr-tile-title" id="tile-lesson-title">Lesson 1: Bead Counting</div>
+        <div class="curr-tile-sub" id="tile-lesson-sub">Count 1-30 & 31-50</div>
+      </div>
+    </div>
+
+    <button type="button" class="big-lesson-arrow-btn right" onclick="navigateActiveLesson(1)" title="Next Lesson">
+      ▶
+    </button>
+  </div>
+
   <!-- Choose Your Lesson Section -->
   <div class="lessons-box">
     <div class="section-heading">
@@ -1378,56 +1767,56 @@
 
     <div class="lesson-cards-grid">
       <!-- Lesson 1 -->
-      <div class="lesson-card-item active" onclick="loadLesson('sec-bead-count-1')">
+      <div class="lesson-card-item active" onclick="loadLesson(\'sec-bead-count-1\', true)">
         <div class="lesson-card-icon">🎀</div>
         <div class="lesson-card-title" id="t-l1-title">Lesson 1: Bead Counting</div>
         <div class="lesson-card-sub" id="t-l1-sub">Count 1-30 & 31-50</div>
       </div>
 
       <!-- Lesson 2 -->
-      <div class="lesson-card-item" onclick="loadLesson('sec-lesson-2')">
+      <div class="lesson-card-item" onclick="loadLesson(\'sec-lesson-2\', true)">
         <div class="lesson-card-icon">💖</div>
         <div class="lesson-card-title" id="t-l2-title">Lesson 2: Addition +1 to +5</div>
         <div class="lesson-card-sub" id="t-l2-sub">Adding 1-5</div>
       </div>
 
       <!-- Lesson 3 -->
-      <div class="lesson-card-item" onclick="loadLesson('sec-practice-6')">
+      <div class="lesson-card-item" onclick="loadLesson(\'sec-practice-6\', true)">
         <div class="lesson-card-icon">✨</div>
         <div class="lesson-card-title" id="t-l3-title">Lesson 3: Addition +6 to +9</div>
         <div class="lesson-card-sub" id="t-l3-sub">Adding 6-9</div>
       </div>
 
       <!-- Lesson 4 -->
-      <div class="lesson-card-item" onclick="loadLesson('sec-practice-sub6')">
+      <div class="lesson-card-item" onclick="loadLesson(\'sec-practice-sub6\', true)">
         <div class="lesson-card-icon">🌸</div>
         <div class="lesson-card-title" id="t-l4-title">Lesson 4: Subtraction -1 to -5</div>
         <div class="lesson-card-sub" id="t-l4-sub">Subtracting 1-5</div>
       </div>
 
       <!-- Lesson 5 -->
-      <div class="lesson-card-item" onclick="loadLesson('sec-practice-sub7')">
+      <div class="lesson-card-item" onclick="loadLesson(\'sec-practice-sub7\', true)">
         <div class="lesson-card-icon">🌺</div>
         <div class="lesson-card-title" id="t-l5-title">Lesson 5: Subtraction -6 to -9</div>
         <div class="lesson-card-sub" id="t-l5-sub">Subtracting 6-9</div>
       </div>
 
       <!-- Lesson 6 -->
-      <div class="lesson-card-item" onclick="loadLesson('sec-friends-1')">
+      <div class="lesson-card-item" onclick="loadLesson(\'sec-friends-1\', true)">
         <div class="lesson-card-icon">🎯</div>
         <div class="lesson-card-title" id="t-l6-title">Lesson 6: Small Friends</div>
         <div class="lesson-card-sub" id="t-l6-sub">Formulas (+1, +2, +3, +4)</div>
       </div>
 
       <!-- Speed Writing -->
-      <div class="lesson-card-item" onclick="loadLesson('sec-speed-writing')">
+      <div class="lesson-card-item" onclick="loadLesson(\'sec-speed-writing\', true)">
         <div class="lesson-card-icon">✍️</div>
         <div class="lesson-card-title" id="t-speed-title">Speed Writing Lab</div>
         <div class="lesson-card-sub" id="t-speed-sub">Left & Right Hand (Apple Pencil)</div>
       </div>
 
       <!-- Final Test & Revision -->
-      <div class="lesson-card-item" onclick="loadLesson('sec-test-paper')">
+      <div class="lesson-card-item" onclick="loadLesson(\'sec-test-paper\', true)">
         <div class="lesson-card-icon">🏆</div>
         <div class="lesson-card-title" id="t-test-title">Final Test Paper</div>
         <div class="lesson-card-sub" id="t-test-sub">200 Marks & Certificate</div>
@@ -1436,15 +1825,15 @@
 
     <!-- Extra Worksheets Pill Selectors -->
     <div class="extra-tabs-row">
-      <button class="extra-tab-btn" onclick="loadLesson('sec-tool-intro')" id="t-tab-basics">🧮 Abacus Basics</button>
-      <button class="extra-tab-btn" onclick="loadLesson('sec-finger-tech')" id="t-tab-fingers">🖐️ Finger Tech</button>
-      <button class="extra-tab-btn" onclick="loadLesson('sec-bead-draw')" id="t-tab-draw">✏️ Bead Drawing (30 Qs)</button>
-      <button class="extra-tab-btn" onclick="loadLesson('sec-practice-8')" id="t-tab-p8">🪄 Practice +8 (4-Rows)</button>
-      <button class="extra-tab-btn" onclick="loadLesson('sec-practice-sub89')" id="t-tab-p89">🔥 Practice -8, -9</button>
-      <button class="extra-tab-btn" onclick="loadLesson('sec-friends-2')" id="t-tab-f2">💛 Friend +2</button>
-      <button class="extra-tab-btn" onclick="loadLesson('sec-friends-3')" id="t-tab-f3">💚 Friend +3</button>
-      <button class="extra-tab-btn" onclick="loadLesson('sec-friends-4')" id="t-tab-f4">💙 Friend +4</button>
-      <button class="extra-tab-btn" onclick="loadLesson('sec-revision')" id="t-tab-rev">📚 8-Min Revision</button>
+      <button class="extra-tab-btn" onclick="loadLesson(\'sec-tool-intro\', true)" id="t-tab-basics">🧮 Abacus Basics</button>
+      <button class="extra-tab-btn" onclick="loadLesson(\'sec-finger-tech\', true)" id="t-tab-fingers">🖐️ Finger Tech</button>
+      <button class="extra-tab-btn" onclick="loadLesson(\'sec-bead-draw\', true)" id="t-tab-draw">✏️ Bead Drawing (30 Qs)</button>
+      <button class="extra-tab-btn" onclick="loadLesson(\'sec-practice-8\', true)" id="t-tab-p8">🪄 Practice +8 (4-Rows)</button>
+      <button class="extra-tab-btn" onclick="loadLesson(\'sec-practice-sub89\', true)" id="t-tab-p89">🔥 Practice -8, -9</button>
+      <button class="extra-tab-btn" onclick="loadLesson(\'sec-friends-2\', true)" id="t-tab-f2">💛 Friend +2</button>
+      <button class="extra-tab-btn" onclick="loadLesson(\'sec-friends-3\', true)" id="t-tab-f3">💚 Friend +3</button>
+      <button class="extra-tab-btn" onclick="loadLesson(\'sec-friends-4\', true)" id="t-tab-f4">💙 Friend +4</button>
+      <button class="extra-tab-btn" onclick="loadLesson(\'sec-revision\', true)" id="t-tab-rev">📚 8-Min Revision</button>
     </div>
   </div>
 
@@ -1875,13 +2264,609 @@ function playSweetTone(noteIndex = 0) {
   }
 }
 
+
+/* =============================================================
+   3D NUMBER WHEEL DRUM CONTROLLER
+   ============================================================= */
+let activeNumberWheels = {};
+
+class NumberWheelController {
+  constructor(wheelId, inputId, onEnterCallback, minVal = 0, maxVal = 100) {
+    this.wheelId = wheelId;
+    this.inputId = inputId;
+    this.onEnter = onEnterCallback;
+    this.minVal = minVal;
+    this.maxVal = maxVal;
+    this.value = null; // null displays '?'
+    this.container = document.getElementById(`${wheelId}-wheel-box`);
+    this.track = document.getElementById(`${wheelId}-wheel-track`);
+    this.prevEl = document.getElementById(`${wheelId}-wheel-prev`);
+    this.currEl = document.getElementById(`${wheelId}-wheel-curr`);
+    this.nextEl = document.getElementById(`${wheelId}-wheel-next`);
+    this.inputEl = document.getElementById(inputId);
+    this.typedBuffer = '';
+    this.typedTimer = null;
+    this.startY = null;
+    this.dragThreshold = 14;
+    this.isDragging = false;
+    this.wheelAccumulator = 0;
+
+    this.initEvents();
+    this.render();
+  }
+
+  render(animDirection = 0) {
+    if (!this.currEl) return;
+
+    if (this.value === null) {
+      this.currEl.innerText = '?';
+      if (this.prevEl) this.prevEl.innerText = '0';
+      if (this.nextEl) this.nextEl.innerText = '1';
+      if (this.inputEl) this.inputEl.value = '';
+    } else {
+      this.currEl.innerText = this.value;
+      if (this.prevEl) this.prevEl.innerText = (this.value > this.minVal) ? (this.value - 1) : '-';
+      if (this.nextEl) this.nextEl.innerText = (this.value < this.maxVal) ? (this.value + 1) : '-';
+      if (this.inputEl) this.inputEl.value = this.value;
+    }
+
+    if (animDirection !== 0 && this.track) {
+      const offset = animDirection > 0 ? -12 : 12;
+      this.track.style.transition = 'none';
+      this.track.style.transform = `translateY(${offset}px)`;
+      requestAnimationFrame(() => {
+        this.track.style.transition = 'transform 0.12s cubic-bezier(0.2, 0.9, 0.3, 1)';
+        this.track.style.transform = 'translateY(0)';
+      });
+    }
+  }
+
+  setValue(val, triggerSound = true, animDirection = 0) {
+    if (val === null || val === '' || isNaN(val)) {
+      this.value = null;
+    } else {
+      let num = parseInt(val, 10);
+      num = Math.max(this.minVal, Math.min(this.maxVal, num));
+      if (this.value !== null && animDirection === 0) {
+        animDirection = num > this.value ? 1 : (num < this.value ? -1 : 0);
+      }
+      this.value = num;
+    }
+    if (triggerSound) playSound('tick');
+    this.render(animDirection);
+  }
+
+  getValue() {
+    return this.value;
+  }
+
+  step(delta) {
+    let nextVal;
+    if (this.value === null) {
+      nextVal = delta > 0 ? (this.minVal === 0 ? 1 : this.minVal) : this.minVal;
+    } else {
+      nextVal = this.value + delta;
+    }
+    this.setValue(nextVal, true, delta);
+  }
+
+  initEvents() {
+    if (!this.container) return;
+
+    // 1. Mouse wheel / trackpad scrolling
+    this.container.addEventListener('wheel', (e) => {
+      e.preventDefault();
+      this.wheelAccumulator += e.deltaY;
+      if (Math.abs(this.wheelAccumulator) >= 20) {
+        const delta = this.wheelAccumulator > 0 ? 1 : -1;
+        this.step(delta);
+        this.wheelAccumulator = 0;
+      }
+    }, { passive: false });
+
+    // 2. Touch / Mouse drag
+    const onPointerDown = (e) => {
+      this.startY = e.clientY;
+      this.isDragging = true;
+      try { this.container.setPointerCapture(e.pointerId); } catch(err) {}
+    };
+
+    const onPointerMove = (e) => {
+      if (!this.isDragging || this.startY === null) return;
+      const diffY = e.clientY - this.startY;
+      if (Math.abs(diffY) >= this.dragThreshold) {
+        const delta = diffY < 0 ? 1 : -1;
+        this.step(delta);
+        this.startY = e.clientY;
+      }
+    };
+
+    const onPointerUp = (e) => {
+      this.isDragging = false;
+      this.startY = null;
+      try { this.container.releasePointerCapture(e.pointerId); } catch(err) {}
+    };
+
+    this.container.addEventListener('pointerdown', onPointerDown);
+    this.container.addEventListener('pointermove', onPointerMove);
+    this.container.addEventListener('pointerup', onPointerUp);
+    this.container.addEventListener('pointercancel', onPointerUp);
+
+    // 3. Direct Keyboard input & Arrow navigation
+    this.container.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowUp' || e.key === 'ArrowRight') {
+        e.preventDefault();
+        this.step(1);
+      } else if (e.key === 'ArrowDown' || e.key === 'ArrowLeft') {
+        e.preventDefault();
+        this.step(-1);
+      } else if (e.key === 'Enter') {
+        e.preventDefault();
+        if (typeof this.onEnter === 'function') {
+          this.onEnter();
+        }
+      } else if (e.key === 'Backspace' || e.key === 'Delete') {
+        e.preventDefault();
+        this.typedBuffer = '';
+        this.setValue(null, true);
+      } else if (/^[0-9]$/.test(e.key)) {
+        e.preventDefault();
+        this.typedBuffer += e.key;
+        let typedNum = parseInt(this.typedBuffer, 10);
+        if (typedNum > this.maxVal) {
+          this.typedBuffer = e.key;
+          typedNum = parseInt(this.typedBuffer, 10);
+        }
+        this.setValue(typedNum, true);
+        if (this.typedTimer) clearTimeout(this.typedTimer);
+        this.typedTimer = setTimeout(() => {
+          this.typedBuffer = '';
+        }, 1200);
+      }
+    });
+
+    this.container.addEventListener('focus', () => {
+      this.container.classList.add('is-focused');
+    });
+    this.container.addEventListener('blur', () => {
+      this.container.classList.remove('is-focused');
+      this.typedBuffer = '';
+    });
+  }
+}
+
+function nudgeNumberWheel(wheelId, delta) {
+  const wheel = activeNumberWheels[wheelId];
+  if (wheel) {
+    wheel.step(delta);
+    const box = document.getElementById(`${wheelId}-wheel-box`);
+    if (box) box.focus({ preventScroll: true });
+  }
+}
+
+/* =============================================================
+   10-STAR OVERALL CURRICULUM PROGRESS ENGINE
+   ============================================================= */
+const COURSE_SECTIONS = [
+  {
+    id: 'sec-bead-count',
+    titleEn: 'Lesson 1: Bead Counting',
+    titleId: 'Pelajaran 1: Menghitung Manik',
+    icon: '🦄',
+    lessonKey: 'sec-bead-count-1',
+    subsections: [
+      { key: 'sec-bead-count-1', titleEn: 'Count 1-30', titleId: 'Hitung 1-30', total: 30, range: [1, 30] },
+      { key: 'sec-bead-count-2', titleEn: 'Count 31-50', titleId: 'Hitung 31-50', total: 20, range: [31, 50] }
+    ]
+  },
+  {
+    id: 'sec-lesson-2',
+    titleEn: 'Lesson 2: Addition +1 to +5',
+    titleId: 'Pelajaran 2: Tambah +1 sd +5',
+    icon: '🎀',
+    lessonKey: 'sec-lesson-2',
+    subsections: [
+      { key: 'sec-lesson-2', titleEn: 'Direct +/- 5 (Page 9)', titleId: 'Langsung +/- 5 (Halaman 9)', total: 30, range: [0, 29] }
+    ]
+  },
+  {
+    id: 'sec-practice-6',
+    titleEn: 'Lesson 3: Addition +6 to +9',
+    titleId: 'Pelajaran 3: Tambah +6 sd +9',
+    icon: '✨',
+    lessonKey: 'sec-practice-6',
+    subsections: [
+      { key: 'sec-practice-6', titleEn: 'Addition +6 (Page 11)', titleId: 'Penjumlahan +6 (Halaman 11)', total: 30, range: [0, 29] },
+      { key: 'sec-practice-7', titleEn: 'Addition +7 (Page 12)', titleId: 'Penjumlahan +7 (Halaman 12)', total: 30, range: [0, 29] },
+      { key: 'sec-practice-8', titleEn: 'Addition +8 4-Rows (Page 14)', titleId: 'Penjumlahan +8 (Halaman 14)', total: 30, range: [0, 29] }
+    ]
+  },
+  {
+    id: 'sec-practice-sub6',
+    titleEn: 'Lesson 4: Subtraction -1 to -5',
+    titleId: 'Pelajaran 4: Kurang -1 sd -5',
+    icon: '🌸',
+    lessonKey: 'sec-practice-sub6',
+    subsections: [
+      { key: 'sec-practice-sub6', titleEn: 'Subtraction -6 (Page 16)', titleId: 'Pengurangan -6 (Halaman 16)', total: 30, range: [0, 29] }
+    ]
+  },
+  {
+    id: 'sec-practice-sub7',
+    titleEn: 'Lesson 5: Subtraction -6 to -9',
+    titleId: 'Pelajaran 5: Kurang -6 sd -9',
+    icon: '⭐',
+    lessonKey: 'sec-practice-sub7',
+    subsections: [
+      { key: 'sec-practice-sub7', titleEn: 'Subtraction -7 (Page 17)', titleId: 'Pengurangan -7 (Halaman 17)', total: 30, range: [0, 29] },
+      { key: 'sec-practice-sub89', titleEn: 'Subtraction -8, -9 (Page 19)', titleId: 'Pengurangan -8, -9 (Halaman 19)', total: 30, range: [0, 29] }
+    ]
+  },
+  {
+    id: 'sec-friends-1',
+    titleEn: 'Lesson 6: Small Friends',
+    titleId: 'Pelajaran 6: Kawan Kecil',
+    icon: '💖',
+    lessonKey: 'sec-friends-1',
+    subsections: [
+      { key: 'sec-friends-1', titleEn: 'Friend +1 = +5-4 (Page 20)', titleId: 'Kawan +1 = +5-4 (Halaman 20)', total: 30, range: [0, 29] },
+      { key: 'sec-friends-2', titleEn: 'Friend +2 = +5-3 (Page 21)', titleId: 'Kawan +2 = +5-3 (Halaman 21)', total: 30, range: [0, 29] },
+      { key: 'sec-friends-3', titleEn: 'Friend +3 = +5-2 (Page 23)', titleId: 'Kawan +3 = +5-2 (Halaman 23)', total: 30, range: [0, 29] },
+      { key: 'sec-friends-4', titleEn: 'Friend +4 = +5-1 (Page 24)', titleId: 'Kawan +4 = +5-1 (Halaman 24)', total: 30, range: [0, 29] }
+    ]
+  },
+  {
+    id: 'sec-speed-writing',
+    titleEn: 'Speed Writing Lab',
+    titleId: 'Lab Menulis Cepat',
+    icon: '✍️',
+    lessonKey: 'sec-speed-writing',
+    subsections: [
+      { key: 'sec-speed-writing-left', titleEn: 'Left Hand Sessions', titleId: 'Sesi Tangan Kiri', total: 5, range: [0, 4] },
+      { key: 'sec-speed-writing-right', titleEn: 'Right Hand Sessions', titleId: 'Sesi Tangan Kanan', total: 5, range: [0, 4] }
+    ]
+  },
+  {
+    id: 'sec-bead-draw',
+    titleEn: 'Bead Drawing',
+    titleId: 'Menggambar Manik',
+    icon: '✏️',
+    lessonKey: 'sec-bead-draw',
+    subsections: [
+      { key: 'sec-bead-draw', titleEn: '30 Interactive Builds', titleId: '30 Latihan Pasang Manik', total: 30, range: [0, 29] }
+    ]
+  },
+  {
+    id: 'sec-revision',
+    titleEn: '8-Min Master Revision',
+    titleId: 'Revisi Utama 8 Menit',
+    icon: '📚',
+    lessonKey: 'sec-revision',
+    subsections: [
+      { key: 'sec-revision', titleEn: 'Master Revision (Page 25)', titleId: 'Soal Revisi (Halaman 25)', total: 30, range: [0, 29] }
+    ]
+  },
+  {
+    id: 'sec-test-paper',
+    titleEn: 'Final Test Paper (200 MM)',
+    titleId: 'Ujian Akhir (200 MM)',
+    icon: '🏆',
+    lessonKey: 'sec-test-paper',
+    subsections: [
+      { key: 'sec-test-paper', titleEn: 'Final Test (Page 26)', titleId: 'Soal Ujian Akhir (Halaman 26)', total: 30, range: [0, 29] }
+    ]
+  }
+];
+
+function calculateOverallCurriculumProgress() {
+  let totalCurriculumQuestions = 0;
+  let totalCurriculumSolved = 0;
+  let sumOfSectionRatios = 0;
+
+  const sectionDetails = COURSE_SECTIONS.map((sec, sIdx) => {
+    let secTotal = 0;
+    let secSolved = 0;
+
+    const subDetails = sec.subsections.map(sub => {
+      let subSolved = 0;
+      for (let i = sub.range[0]; i <= sub.range[1]; i++) {
+        if (lessonSolvedMap[`${sub.key}_${i}`]) {
+          subSolved++;
+        }
+      }
+      secTotal += sub.total;
+      secSolved += subSolved;
+      return {
+        ...sub,
+        solved: subSolved,
+        percent: sub.total > 0 ? Math.round((subSolved / sub.total) * 100) : 0
+      };
+    });
+
+    const secRatio = secTotal > 0 ? (secSolved / secTotal) : 0;
+    const secPercent = Math.round(secRatio * 100);
+    sumOfSectionRatios += secRatio;
+    totalCurriculumQuestions += secTotal;
+    totalCurriculumSolved += secSolved;
+
+    return {
+      ...sec,
+      secIdx: sIdx,
+      total: secTotal,
+      solved: secSolved,
+      ratio: secRatio,
+      percent: secPercent,
+      subsections: subDetails
+    };
+  });
+
+  const displaySolved = Math.max(totalCurriculumSolved, totalCorrect);
+  if (totalCurriculumSolved > totalCorrect) {
+    totalCorrect = totalCurriculumSolved;
+    localStorage.setItem('freya_correct_ans', totalCorrect);
+  }
+
+  const overallPercent = Math.min(100, Math.round((sumOfSectionRatios / 10) * 100));
+  const earnedStarsExact = Math.min(10, Math.max(0, sumOfSectionRatios));
+  const earnedStarsInt = Math.min(10, Math.floor(earnedStarsExact));
+
+  return {
+    sections: sectionDetails,
+    totalQuestions: totalCurriculumQuestions,
+    totalSolved: displaySolved,
+    overallPercent,
+    earnedStarsExact,
+    earnedStarsInt
+  };
+}
+
+function renderOverallProgressStars() {
+  const track = document.getElementById('banner-stars-track');
+  if (!track) return;
+
+  const data = calculateOverallCurriculumProgress();
+  const isId = (currentLang === 'id');
+
+  const captionEl = document.getElementById('banner-stars-caption');
+  if (captionEl) {
+    captionEl.innerHTML = `⭐ <span id="banner-stars-counter">${data.earnedStarsInt} / 10</span> <span>${isId ? 'Kemajuan' : 'Overall Progress'}</span> (${data.totalSolved} ${isId ? 'Benar' : 'Right Answers'} • ${data.overallPercent}%) ⭐`;
+  } else {
+    const counterEl = document.getElementById('banner-stars-counter');
+    if (counterEl) counterEl.innerText = `${data.earnedStarsInt} / 10`;
+  }
+
+  let html = '';
+  data.sections.forEach((sec, idx) => {
+    const starNum = idx + 1;
+    const isEarned = (sec.ratio >= 0.7);
+    const isPartial = (sec.ratio > 0.05 && sec.ratio < 0.7);
+    const titleText = `${isId ? sec.titleId : sec.titleEn} (${sec.percent}% - ${sec.solved}/${sec.total})`;
+
+    let itemClass = 'banner-star-item';
+    if (isEarned) itemClass += ' earned';
+    else if (isPartial) itemClass += ' partial';
+
+    html += `
+      <span class="${itemClass}" 
+            title="${titleText}" 
+            onclick="event.stopPropagation(); openSectionProgressModal(${idx});">
+        ⭐
+      </span>
+    `;
+  });
+
+  track.innerHTML = html;
+}
+
+function openSectionProgressModal(focusSecIdx = null) {
+  const modal = document.getElementById('progress-breakdown-modal');
+  if (!modal) return;
+
+  const isId = (currentLang === 'id');
+  const data = calculateOverallCurriculumProgress();
+
+  const titleEl = document.getElementById('t-prog-modal-title');
+  if (titleEl) {
+    titleEl.innerText = isId ? 'Kemajuan Jawaban Benar Berdasarkan Pelajaran' : 'Overall Right Answers Progress by Section';
+  }
+
+  const summaryEl = document.getElementById('prog-modal-summary');
+  if (summaryEl) {
+    summaryEl.innerHTML = `
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 8px;">
+        <span style="font-size: 1.15rem; font-weight: 900; color: #d81b60;">
+          ⭐ ${data.earnedStarsInt} / 10 ${isId ? 'Bintang Didapat' : 'Stars Earned'} (${data.overallPercent}%)
+        </span>
+        <span style="font-size: 0.92rem; font-weight: 800; color: #ff5e97; background: #fff0f5; border: 1px solid #ffccd9; padding: 4px 12px; border-radius: 20px;">
+          🎯 ${data.totalSolved} / ${data.totalQuestions} ${isId ? 'Jawaban Benar' : 'Right Answers'}
+        </span>
+      </div>
+      <div style="width: 100%; height: 12px; background: #ffe4ee; border: 1px solid #ffccd9; border-radius: 8px; overflow: hidden;">
+        <div style="width: ${data.overallPercent}%; height: 100%; background: linear-gradient(90deg, #ff5e97, #ffbe0b, #4ade80); border-radius: 8px; transition: width 0.4s ease;"></div>
+      </div>
+      <div style="font-size: 0.8rem; color: #880e4f; margin-top: 6px; text-align: right;">
+        ${isId ? 'Jawaban benar dari setiap pelajaran dan bagian menambah 10 bintangmu!' : 'Right answers from each section and subsection advance your 10 stars!'}
+      </div>
+    `;
+  }
+
+  const listEl = document.getElementById('prog-modal-sections-list');
+  if (listEl) {
+    listEl.innerHTML = data.sections.map((sec, idx) => {
+      const isFocused = (focusSecIdx === idx);
+      const secTitle = isId ? sec.titleId : sec.titleEn;
+      const isSecMastered = (sec.ratio >= 0.7);
+
+      const subRowsHtml = sec.subsections.map(sub => {
+        const subTitle = isId ? sub.titleId : sub.titleEn;
+        return `
+          <div class="prog-sub-row">
+            <span style="color: #4a5568;">• ${subTitle}</span>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span style="font-weight: 800; color: ${sub.solved === sub.total && sub.total > 0 ? '#16a34a' : '#d81b60'}; font-size: 0.82rem;">
+                ${sub.solved} / ${sub.total}
+              </span>
+              <div class="prog-sub-bar-bg">
+                <div class="prog-sub-bar-fill" style="width: ${sub.percent}%;"></div>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      return `
+        <div class="prog-sec-card" style="${isFocused ? 'border-color: #ff5e97; box-shadow: 0 0 14px rgba(255, 94, 151, 0.4);' : ''}">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; flex-wrap: wrap; gap: 6px;">
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <span style="font-size: 1.25rem;">${sec.icon}</span>
+              <strong style="color: #d81b60; font-size: 0.98rem;">${secTitle}</strong>
+              ${isSecMastered ? '<span style="font-size: 0.9rem;" title="Mastered!">⭐</span>' : ''}
+            </div>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span style="font-size: 0.88rem; font-weight: 900; color: #ff5e97;">
+                ${sec.solved} / ${sec.total} (${sec.percent}%)
+              </span>
+              <button class="extra-tab-btn" onclick="loadLesson('${sec.lessonKey}', true); closeSectionProgressModal();" style="padding: 4px 10px; font-size: 0.78rem;">
+                ${isId ? 'Latihan ➡️' : 'Practice ➡️'}
+              </button>
+            </div>
+          </div>
+          <div style="width: 100%; height: 6px; background: #ffe4ee; border-radius: 4px; overflow: hidden; margin-bottom: 6px;">
+            <div style="width: ${sec.percent}%; height: 100%; background: linear-gradient(90deg, #ff5e97, #ffbe0b); border-radius: 4px;"></div>
+          </div>
+          ${subRowsHtml}
+        </div>
+      `;
+    }).join('');
+  }
+
+  modal.classList.add('open');
+}
+
+function closeSectionProgressModal() {
+  const modal = document.getElementById('progress-breakdown-modal');
+  if (modal) modal.classList.remove('open');
+}
+
+/* =============================================================
+   LESSON NAVIGATION & WORKSPACE FOCUS HELPERS
+   ============================================================= */
+const ALL_LESSON_KEYS = [
+  'sec-bead-count-1',
+  'sec-bead-count-2',
+  'sec-lesson-2',
+  'sec-practice-6',
+  'sec-practice-7',
+  'sec-practice-8',
+  'sec-practice-sub6',
+  'sec-practice-sub7',
+  'sec-practice-sub89',
+  'sec-friends-1',
+  'sec-friends-2',
+  'sec-friends-3',
+  'sec-friends-4',
+  'sec-speed-writing',
+  'sec-bead-draw',
+  'sec-revision',
+  'sec-test-paper'
+];
+
+function updateActiveLessonTile(lessonKey) {
+  const tileIcon = document.getElementById('tile-lesson-icon');
+  const tileTitle = document.getElementById('tile-lesson-title');
+  const tileSub = document.getElementById('tile-lesson-sub');
+  if (!tileTitle) return;
+
+  const dict = I18N[currentLang] || I18N.en;
+
+  const metadata = {
+    'sec-bead-count-1': { icon: '🎀', title: dict.l1Title, sub: 'Count 1-30' },
+    'sec-bead-count-2': { icon: '🎀', title: dict.l1Title, sub: 'Count 31-50' },
+    'sec-lesson-2':     { icon: '🐹', title: dict.l2Title, sub: dict.l2Sub },
+    'sec-practice-6':   { icon: '🚲', title: dict.l3Title, sub: 'Addition +6' },
+    'sec-practice-7':   { icon: '🚲', title: dict.l3Title, sub: 'Addition +7' },
+    'sec-practice-8':   { icon: '🏎️', title: dict.tabP8,   sub: 'Addition +8 4-Rows' },
+    'sec-practice-sub6':{ icon: '🌸', title: dict.l4Title, sub: dict.l4Sub },
+    'sec-practice-sub7':{ icon: '🏍️', title: dict.l5Title, sub: 'Subtraction -7' },
+    'sec-practice-sub89':{ icon: '🔥', title: dict.tabP89,  sub: 'Subtraction -8, -9' },
+    'sec-friends-1':    { icon: '💖', title: dict.l6Title, sub: 'Friend +1' },
+    'sec-friends-2':    { icon: '💖', title: dict.tabF2,   sub: 'Friend +2 = +5-3' },
+    'sec-friends-3':    { icon: '🎀', title: dict.tabF3,   sub: 'Friend +3 = +5-2' },
+    'sec-friends-4':    { icon: '🦄', title: dict.tabF4,   sub: 'Friend +4 = +5-1' },
+    'sec-speed-writing':{ icon: '✍️', title: dict.speedTitle, sub: dict.speedSub },
+    'sec-bead-draw':    { icon: '✏️', title: dict.tabDraw,  sub: '30 Interactive Builds' },
+    'sec-revision':     { icon: '📚', title: dict.tabRev,   sub: 'Master Revision 30 Qs' },
+    'sec-test-paper':   { icon: '🏆', title: dict.testTitle, sub: dict.testSub }
+  };
+
+  const info = metadata[lessonKey] || { icon: '🎓', title: dict.chooseLesson, sub: '' };
+  if (tileIcon) tileIcon.innerText = info.icon;
+  if (tileTitle) tileTitle.innerText = info.title;
+  if (tileSub) tileSub.innerText = info.sub;
+}
+
+function navigateActiveLesson(delta) {
+  let idx = ALL_LESSON_KEYS.indexOf(activeLessonKey);
+  if (idx === -1) idx = 0;
+  idx = (idx + delta + ALL_LESSON_KEYS.length) % ALL_LESSON_KEYS.length;
+  loadLesson(ALL_LESSON_KEYS[idx], true, true);
+}
+
+function focusBeadCardSection() {
+  const beadCard = document.getElementById('active-challenge-card');
+  if (beadCard) {
+    beadCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    beadCard.classList.remove('bead-card-focus-highlight');
+    void beadCard.offsetWidth; // trigger reflow
+    beadCard.classList.add('bead-card-focus-highlight');
+  }
+
+  setTimeout(() => {
+    const beadWheel = document.getElementById('bead-wheel-box');
+    const arenaWheel = document.getElementById('arena-wheel-box');
+    const speedBtn = document.getElementById('btn-start-speed-timer');
+    if (beadWheel && beadWheel.offsetParent !== null) {
+      beadWheel.focus({ preventScroll: true });
+    } else if (arenaWheel && arenaWheel.offsetParent !== null) {
+      arenaWheel.focus({ preventScroll: true });
+    } else if (speedBtn && speedBtn.offsetParent !== null) {
+      speedBtn.focus({ preventScroll: true });
+    }
+  }, 300);
+}
+
 function playSound(type) {
   if (!soundEnabled) return;
   try {
     initAudio();
     const now = audioCtx.currentTime;
 
-    if (type === 'bead') {
+    if (type === 'tick') {
+      const o = audioCtx.createOscillator();
+      const g = audioCtx.createGain();
+      o.type = 'sine';
+      o.frequency.setValueAtTime(800, now);
+      g.gain.setValueAtTime(0.08, now);
+      g.gain.exponentialRampToValueAtTime(0.001, now + 0.04);
+      o.connect(g);
+      g.connect(audioCtx.destination);
+      o.start(now);
+      o.stop(now + 0.04);
+    } else if (type === 'fanfare') {
+      [523.25, 659.25, 783.99, 1046.50, 1318.51].forEach((freq, idx) => {
+        const o = audioCtx.createOscillator();
+        const g = audioCtx.createGain();
+        o.type = 'triangle';
+        o.frequency.value = freq;
+        g.gain.setValueAtTime(0, now + idx * 0.08);
+        g.gain.linearRampToValueAtTime(0.24, now + idx * 0.08 + 0.03);
+        g.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.08 + 0.45);
+        o.connect(g);
+        g.connect(audioCtx.destination);
+        o.start(now + idx * 0.08);
+        o.stop(now + idx * 0.08 + 0.45);
+      });
+    } else if (type === 'bead') {
       playSweetTone(Math.floor(Math.random() * 5));
     } else if (type === 'correct' || type === 'star') {
       // Golden star chime
@@ -2683,8 +3668,21 @@ function renderActiveChallenge() {
         `).join('')}
       </div>
       <div class="giant-sum-divider"></div>
-      <input type="number" id="arena-answer-input" class="giant-answer-input" placeholder="?"
-        onkeydown="handleAnswerEnter(event, ${correctSum})">
+      <div style="display: flex; flex-direction: column; align-items: center; gap: 8px;">
+      <div class="wheel-picker-wrap" id="arena-wheel-box" tabindex="0" title="Scroll Wheel / Use Arrow Keys / Touch Drag">
+        <button type="button" class="wheel-nudge-btn wheel-up" onclick="nudgeNumberWheel('arena', 1)" title="Scroll Up">▲</button>
+        <div class="wheel-roller-viewport">
+          <div class="wheel-slot-bracket"></div>
+          <div class="wheel-roller-track" id="arena-wheel-track">
+            <div class="wheel-digit wheel-prev" id="arena-wheel-prev">0</div>
+            <div class="wheel-digit wheel-curr" id="arena-wheel-curr">?</div>
+            <div class="wheel-digit wheel-next" id="arena-wheel-next">1</div>
+          </div>
+        </div>
+        <button type="button" class="wheel-nudge-btn wheel-down" onclick="nudgeNumberWheel('arena', -1)" title="Scroll Down">▼</button>
+        <input type="hidden" id="arena-answer-input" value="">
+      </div>
+    </div>
     </div>
 
     <!-- Actions -->
@@ -3196,19 +4194,23 @@ function renderBeadLessonArena(lessonKey) {
   const end = lessonKey === 'sec-bead-count-2' ? 50 : 30;
 
   if (lessonKey === 'sec-bead-draw') {
+    const isId = (currentLang === 'id');
     cardContainer.innerHTML = `
       <div style="width: 100%;">
-        <h3 style="color: #d81b60; margin-bottom: 8px;">✏️ ${currentLang === 'id' ? 'Pasang Manik di Sempoa!' : 'Build Beads on the Abacus!'}</h3>
-        <p style="font-size: 0.95rem; color: #4a5568; margin-bottom: 14px;">
-          ${currentLang === 'id' ? 'Klik angka untuk memasangnya langsung di sempoa sebelah!' : 'Click any number below to set it directly on the abacus beside!'}
+        <h3 style="color: #d81b60; margin-bottom: 8px;">✏️ ${isId ? 'Pasang Manik pada Sempoa!' : 'Build Beads on the Abacus!'}</h3>
+        <p style="font-size: 0.98rem; font-weight: 700; color: #ff5e97; line-height: 1.5; margin-bottom: 14px;">
+          ${isId ? 'Pasang salah satu angka dari daftar pada sempoa, lalu klik angka tersebut untuk memeriksa jawabanmu!' : 'Select a number from the list on the abacus, then click on that number to verify your answer.'}
         </p>
         <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(70px, 1fr)); gap: 8px; max-height: 380px; overflow-y: auto;">
-          ${[27, 45, 81, 66, 39, 13, 22, 74, 92, 53, 71, 80, 29, 50, 55, 78, 63, 47, 36, 99, 84, 57, 11, 10, 35, 80, 76, 44, 22, 19].map((n, i) => `
-            <button style="background: white; border: 2px solid #ffccd9; border-radius: 12px; padding: 10px 4px; font-size: 1.25rem; font-weight: 900; color: #ff4081; cursor: pointer;"
-              onclick="setSorobanNumber(${n}); totalStars++; savePersistentStats(); updateStatsUI(); showCelebrationOverlay('⭐', 'Good job Freya!', '+1 Golden Star'); speakPraiseCustom('Good job Freya!');">
-              ${n}
-            </button>
-          `).join('')}
+          ${[27, 45, 81, 66, 39, 13, 22, 74, 92, 53, 71, 80, 29, 50, 55, 78, 63, 47, 36, 99, 84, 57, 11, 10, 35, 80, 76, 44, 22, 19].map((n, i) => {
+            const isSolved = lessonSolvedMap[`sec-bead-draw_${i}`];
+            return `
+              <button id="btn-bead-draw-${i}" style="background: ${isSolved ? 'linear-gradient(135deg, #ff5e97 0%, #ff85ad 100%)' : '#fff5f8'}; border: 2px solid ${isSolved ? '#d81b60' : '#ffccd9'}; border-radius: 12px; padding: 10px 4px; font-size: 1.25rem; font-weight: 900; color: ${isSolved ? '#ffffff' : '#d81b60'}; cursor: pointer; transition: all 0.2s ease; ${isSolved ? 'box-shadow: 0 0 12px rgba(255, 94, 151, 0.6);' : ''}"
+                onclick="verifyOrSetBeadDrawNumber(${n}, ${i})">
+                ${n}${isSolved ? ' ⭐' : ''}
+              </button>
+            `;
+          }).join('')}
         </div>
       </div>
     `;
@@ -3293,8 +4295,21 @@ function renderBeadLessonArena(lessonKey) {
       ${currentLang === 'id' ? 'Berapa nilai manik ini?' : 'What is the value of these beads?'}
     </div>
 
-    <input type="number" id="bead-answer-input" class="giant-answer-input" placeholder="?"
-      onkeydown="if(event.key === 'Enter') checkBeadCountAnswer(${beadCountCurrentNum}, ${start}, ${end})">
+    <div style="display: flex; flex-direction: column; align-items: center; gap: 8px;">
+      <div class="wheel-picker-wrap" id="bead-wheel-box" tabindex="0" title="Scroll Wheel / Use Arrow Keys / Touch Drag">
+        <button type="button" class="wheel-nudge-btn wheel-up" onclick="nudgeNumberWheel('bead', 1)" title="Scroll Up">▲</button>
+        <div class="wheel-roller-viewport">
+          <div class="wheel-slot-bracket"></div>
+          <div class="wheel-roller-track" id="bead-wheel-track">
+            <div class="wheel-digit wheel-prev" id="bead-wheel-prev">0</div>
+            <div class="wheel-digit wheel-curr" id="bead-wheel-curr">?</div>
+            <div class="wheel-digit wheel-next" id="bead-wheel-next">1</div>
+          </div>
+        </div>
+        <button type="button" class="wheel-nudge-btn wheel-down" onclick="nudgeNumberWheel('bead', -1)" title="Scroll Down">▼</button>
+        <input type="hidden" id="bead-answer-input" value="">
+      </div>
+    </div>
 
     <div class="challenge-action-buttons" style="margin-top: 14px;">
       <button class="btn-submit-arena" onclick="checkBeadCountAnswer(${beadCountCurrentNum}, ${start}, ${end})">
@@ -3321,11 +4336,20 @@ function renderBeadLessonArena(lessonKey) {
     </div>
   `;
 
+  // Mount Number Wheel Controller for Bead Counting Lesson
+  activeNumberWheels['bead'] = new NumberWheelController(
+    'bead',
+    'bead-answer-input',
+    () => checkBeadCountAnswer(beadCountCurrentNum, start, end),
+    0,
+    100
+  );
+
   setTimeout(() => {
     const peek = document.getElementById('btn-abacus-val-peek-bead');
     if (peek) peek.innerText = getCurrentSorobanTotal();
-    const inp = document.getElementById('bead-answer-input');
-    if (inp) inp.focus();
+    const wheelBox = document.getElementById('bead-wheel-box');
+    if (wheelBox) wheelBox.focus({ preventScroll: true });
   }, 100);
 }
 
@@ -3516,8 +4540,29 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Load Lesson 1 (First Question, Card #1) by default
   beadCountCurrentNum = 1;
+  renderOverallProgressStars();
   loadLesson('sec-bead-count-1');
 });
 </script>
+
+<!-- Overall Right Answers Progress Breakdown Modal -->
+<div class="modal-overlay" id="progress-breakdown-modal" onclick="closeSectionProgressModal()">
+  <div class="modal-box" onclick="event.stopPropagation()" style="max-width: 680px; max-height: 88vh; display: flex; flex-direction: column; overflow: hidden; padding: 22px 24px; text-align: left; border: 4px solid #ff85ad;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-bottom: 2px solid #ffccd9; padding-bottom: 8px;">
+      <h2 style="font-size: 1.35rem; font-weight: 900; color: #d81b60; margin: 0; display: flex; align-items: center; gap: 8px;">
+        <span>⭐</span> <span id="t-prog-modal-title">Overall Right Answers Progress</span>
+      </h2>
+      <button onclick="closeSectionProgressModal()" style="background: none; border: none; font-size: 1.5rem; color: #ff5e97; cursor: pointer;">✖</button>
+    </div>
+    <div id="prog-modal-summary" style="background: #fff5f8; border: 2px solid #ffccd9; border-radius: 14px; padding: 12px 16px; margin-bottom: 14px;"></div>
+    <div id="prog-modal-sections-list" style="overflow-y: auto; flex: 1; display: flex; flex-direction: column; gap: 10px; padding-right: 4px;"></div>
+    <div style="margin-top: 14px; text-align: center;">
+      <button class="btn-submit-arena" onclick="closeSectionProgressModal()" style="padding: 8px 24px; font-size: 1rem; width: auto;" id="t-prog-modal-btn">
+        Got it! Keep Learning 🚀
+      </button>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
